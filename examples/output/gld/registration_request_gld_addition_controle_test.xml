@@ -1,0 +1,99 @@
+<registrationRequest xmlns:wml2="http://www.opengis.net/waterml/2.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:om="http://www.opengis.net/om/2.0" xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:brocom="http://www.broservices.nl/xsd/brocommon/3.0" xmlns:gldcom="http://www.broservices.nl/xsd/gldcommon/1.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.broservices.nl/xsd/isgld/1.0" xsi:schemaLocation="http://www.broservices.nl/xsd/isgld/1.0 https://schema.broservices.nl/xsd/isgld/1.0/isgld-messages.xsd">
+  <brocom:requestReference>11_GLD_Addition_sensorisch</brocom:requestReference>
+  <brocom:deliveryAccountableParty>27376655</brocom:deliveryAccountableParty>
+  <brocom:broId>GLD000000000153</brocom:broId>
+  <brocom:qualityRegime>IMBRO</brocom:qualityRegime>
+  <sourceDocument>
+    <GLD_Addition gml:id="id_0001">
+      <observation>
+        <om:OM_Observation gml:id="_e7dec0db-2e5c-4268-8429-a50133079eae">
+          <om:type xlink:href="http://www.opengis.net/def/observationType/waterml/2.0/MeasurementTimeseriesTVPObservation"/>
+          <om:metadata>
+            <wml2:ObservationMetadata>
+              <gmd:contact>
+                <gmd:CI_ResponsibleParty>
+                  <gmd:organisationName>
+                    <gco:CharacterString/>
+                  </gmd:organisationName>
+                  <gmd:role>
+                    <gmd:CI_RoleCode codeList="urn:ISO:19115:CI_RoleCode" codeListValue="principalInvestigator">principalInvestigator </gmd:CI_RoleCode>
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:contact>
+              <gmd:dateStamp>
+                <gco:Date>2021-11-19</gco:Date>
+              </gmd:dateStamp>
+              <gmd:identificationInfo gco:nilReason="unknown"/>
+              <wml2:parameter>
+                <om:NamedValue>
+                  <om:name xlink:href="urn:bro:gld:ObservationMetadata:principalInvestigator"/>
+                  <om:value xsi:type="gldcom:OrganizationType">
+                    <gldcom:chamberOfCommerceNumber>27376655</gldcom:chamberOfCommerceNumber>
+                  </om:value>
+                </om:NamedValue>
+              </wml2:parameter>
+              <wml2:parameter>
+                <om:NamedValue>
+                  <om:name xlink:href="urn:bro:gld:ObservationMetadata:observationType"/>
+                  <om:value xsi:type="gml:CodeWithAuthorityType" codeSpace="urn:bro:gld:ObservationType">controlemeting</om:value>
+                </om:NamedValue>
+              </wml2:parameter>
+            </wml2:ObservationMetadata>
+          </om:metadata>
+          <om:phenomenonTime>
+            <gml:TimePeriod gml:id="id_0002">
+              <gml:beginPosition>2018-04-15</gml:beginPosition>
+              <gml:endPosition>2018-04-15</gml:endPosition>
+            </gml:TimePeriod>
+          </om:phenomenonTime>
+          <om:resultTime>
+            <gml:TimeInstant gml:id="id_0003">
+              <gml:timePosition>2018-04-15T08:05:42+02:00</gml:timePosition>
+            </gml:TimeInstant>
+          </om:resultTime>
+          <om:procedure>
+            <wml2:ObservationProcess gml:id="_4963f46d-dbea-4c10-b09c-ea7e49a10513">
+              <wml2:processType xlink:href="http://www.opengis.net/def/waterml/2.0/processType/Algorithm"/>
+              <wml2:processReference xlink:href="urn:bro:gld:ProcessReference:NEN5120v1991"/>
+              <wml2:parameter>
+                <om:NamedValue>
+                  <om:name xlink:href="urn:bro:gld:ObservationProcess:evaluationProcedure"/>
+                  <om:value xsi:type="gml:CodeWithAuthorityType" codeSpace="urn:bro:gld:EvaluationProcedure">oordeelDeskundige</om:value>
+                </om:NamedValue>
+              </wml2:parameter>
+              <wml2:parameter>
+                <om:NamedValue>
+                  <om:name xlink:href="urn:bro:gld:ObservationProcess:measurementInstrumentType"/>
+                  <om:value xsi:type="gml:CodeWithAuthorityType" codeSpace="urn:bro:gld:MeasurementInstrumentType">analoogPeilklokje</om:value>
+                </om:NamedValue>
+              </wml2:parameter>
+            </wml2:ObservationProcess>
+          </om:procedure>
+          <om:observedProperty/>
+          <om:featureOfInterest/>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="_e204d605-3f1c-4493-9058-cc98d0e21382">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2018-04-15T08:05:42+02:00</wml2:time>
+                  <wml2:value>-4.35</wml2:value>
+                  <wml2:metadata>
+                    <wml2:TVPMeasurementMetadata>
+                      <wml2:qualifier>
+                        <swe:Category>
+                          <swe:codeSpace xlink:href="urn:bro:gld:StatusQualityControl"/>
+                          <swe:value>goedgekeurd</swe:value>
+                        </swe:Category>
+                      </wml2:qualifier>
+                      <wml2:interpolationType xlink:href="http://www.opengis.net/def/waterml/2.0/interpolationType/Discontinuous"/>
+                    </wml2:TVPMeasurementMetadata>
+                  </wml2:metadata>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </om:OM_Observation>
+      </observation>
+    </GLD_Addition>
+  </sourceDocument>
+</registrationRequest>

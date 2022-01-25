@@ -1,0 +1,26 @@
+<registrationRequest xmlns:brocom="http://www.broservices.nl/xsd/brocommon/3.0" xmlns:gldcom="http://www.broservices.nl/xsd/gldcommon/1.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.broservices.nl/xsd/isgld/1.0" xsi:schemaLocation="http://www.broservices.nl/xsd/isgld/1.0 https://schema.broservices.nl/xsd/isgld/1.0/isgld-messages.xsd">
+  <brocom:requestReference>10_GLD_StartRegistration</brocom:requestReference>
+  <brocom:deliveryAccountableParty>27376655</brocom:deliveryAccountableParty>
+  <brocom:qualityRegime>IMBRO</brocom:qualityRegime>
+  <sourceDocument>
+    <GLD_StartRegistration gml:id="id_0001">
+      <objectIdAccountableParty>Meetpunt1</objectIdAccountableParty>
+      <groundwaterMonitoringNet>
+        <gldcom:GroundwaterMonitoringNet gml:id="id_0002">
+          <gldcom:broId>GMN000000000083</gldcom:broId>
+        </gldcom:GroundwaterMonitoringNet>
+      </groundwaterMonitoringNet>
+      <groundwaterMonitoringNet>
+        <gldcom:GroundwaterMonitoringNet gml:id="id_0003">
+          <gldcom:broId>GMN000000000084</gldcom:broId>
+        </gldcom:GroundwaterMonitoringNet>
+      </groundwaterMonitoringNet>
+      <monitoringPoint>
+        <gldcom:GroundwaterMonitoringTube gml:id="id_0004">
+          <gldcom:broId>GMW000000016118</gldcom:broId>
+          <gldcom:tubeNumber>1</gldcom:tubeNumber>
+        </gldcom:GroundwaterMonitoringTube>
+      </monitoringPoint>
+    </GLD_StartRegistration>
+  </sourceDocument>
+</registrationRequest>

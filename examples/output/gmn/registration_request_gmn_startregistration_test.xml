@@ -1,0 +1,39 @@
+<registrationRequest xmlns:brocom="http://www.broservices.nl/xsd/brocommon/3.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.broservices.nl/xsd/isgmn/1.0" xsi:schemaLocation="http://www.broservices.nl/xsd/isgmn/1.0 https://schema.broservices.nl/xsd/isgmn/1.0/isgmn-messages.xsd">
+  <brocom:requestReference>Groningen_01</brocom:requestReference>
+  <brocom:deliveryAccountableParty>27376655</brocom:deliveryAccountableParty>
+  <brocom:qualityRegime>IMBRO/A</brocom:qualityRegime>
+  <sourceDocument>
+    <GMN_StartRegistration gml:id="id_0001">
+      <objectIdAccountableParty>Meetnet_07</objectIdAccountableParty>
+      <name>Provinciaal meetnet grondwater Groningen; Delfzijl</name>
+      <deliveryContext codeSpace="urn:bro:gmn:DeliveryContext">kaderrichtlijnWater</deliveryContext>
+      <monitoringPurpose codeSpace="urn:bro:gmn:MonitoringPurpose">strategischBeheerKwaliteitRegionaal</monitoringPurpose>
+      <groundwaterAspect codeSpace="urn:bro:gmn:GroundwaterAspect">kwantiteit</groundwaterAspect>
+      <startDateMonitoring>
+        <brocom:year>2021</brocom:year>
+      </startDateMonitoring>
+      <measuringPoint>
+        <MeasuringPoint gml:id="id_mp0">
+          <measuringPointCode>GMW07F000001</measuringPointCode>
+          <monitoringTube>
+            <GroundwaterMonitoringTube gml:id="id_mpgwmt0">
+              <broId>GMW000000026289</broId>
+              <tubeNumber>2</tubeNumber>
+            </GroundwaterMonitoringTube>
+          </monitoringTube>
+        </MeasuringPoint>
+      </measuringPoint>
+      <measuringPoint>
+        <MeasuringPoint gml:id="id_mp1">
+          <measuringPointCode>GMW07F000002</measuringPointCode>
+          <monitoringTube>
+            <GroundwaterMonitoringTube gml:id="id_mpgwmt1">
+              <broId>GMW000000026288</broId>
+              <tubeNumber>3</tubeNumber>
+            </GroundwaterMonitoringTube>
+          </monitoringTube>
+        </MeasuringPoint>
+      </measuringPoint>
+    </GMN_StartRegistration>
+  </sourceDocument>
+</registrationRequest>
