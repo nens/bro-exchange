@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from gwmpy import check_missing_args
+from gwmpy.broxml.mappings import ns_regreq_map_gld1,ns_regreq_map_gld2,ns_regreq_map_gld3, xsi_regreq_map_gld1, codespace_map_gld1 # mappings
 
 from lxml import etree
 import uuid
@@ -93,12 +94,12 @@ def gen_metadata_parameters(data, nsmap, codespacemap):
     principalInvestigator_namevalue = etree.SubElement(parameterlist['principalInvestigator'],("{%s}" % nsmap['om']) + 'NamedValue', nsmap=nsmap) 
     principalInvestigator_omname = etree.SubElement(principalInvestigator_namevalue,("{%s}" % nsmap['om']) + 'name', nsmap=nsmap,
                                                     attrib = {
-                                                                ("{%s}" % nsmap['xlink'])+'href':"urn:bro:gld:ObservationMetadata:principalInvestigator"                                                               
+                                                                ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1["principalInvestigator"]                                                               
                                                         }) 
     
     principalInvestigator_omvalue = etree.SubElement(principalInvestigator_namevalue,("{%s}" % nsmap['om']) + 'value', nsmap=nsmap,
                                                     attrib = {
-                                                                ("{%s}" % nsmap['xsi'])+'type':"gldcom:OrganizationType"                                                             
+                                                                ("{%s}" % nsmap['xsi'])+'type':"gldcom:OrganizationType"
                                                         })   
     if 'principalInvestigator' in parameters:
         if type(data['metadata']['parameters']['principalInvestigator'])!=dict:
@@ -117,13 +118,13 @@ def gen_metadata_parameters(data, nsmap, codespacemap):
     observationType_namevalue = etree.SubElement(parameterlist['observationType'],("{%s}" % nsmap['om']) + 'NamedValue', nsmap=nsmap) 
     observationType_omname  =  etree.SubElement(observationType_namevalue,("{%s}" % nsmap['om']) + 'name', nsmap=nsmap,
                                                      attrib = {
-                                                                 ("{%s}" % nsmap['xlink'])+'href':"urn:bro:gld:ObservationMetadata:observationType"                                                               
+                                                                 ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1["observationType"]                                                               
                                                          }) 
     
     observationType_omvalue = etree.SubElement(observationType_namevalue,("{%s}" % nsmap['om']) + 'value', nsmap=nsmap,
                                                     attrib = {
                                                                 ("{%s}" % nsmap['xsi'])+'type':"gml:CodeWithAuthorityType" ,
-                                                                'codeSpace':"urn:bro:gld:ObservationType"
+                                                                'codeSpace':codespace_map_gld1["ObservationType"] 
                                                         })   
     
     observationType_omvalue.text = data['metadata']['parameters']['observationType']
@@ -136,7 +137,7 @@ def gen_metadata(data, nsmap, codespacemap):
     
 
     arglist = {'contact':'optional', # Defaults to default values, however there are restricted arguments
-                'dateStamp':'obligated', # derive it from timeseries
+                'dateStamp':'optional', # derive it from timeseries
                 'identificationInfo':'optional', # fixed, unknown
                 'status':'optional', # geeft aan of het controle, voorlopige of gevalideerde meting is
                 'parameters':'obligated'} # construcatble with restrictions      
@@ -172,10 +173,10 @@ def gen_metadata(data, nsmap, codespacemap):
     dateStamp = etree.SubElement(ObservationMetadata, ("{%s}" % nsmap['gmd']) + 'dateStamp', nsmap=nsmap) 
     Date = etree.SubElement(dateStamp, ("{%s}" % nsmap['gco']) + 'Date', nsmap=nsmap)
     
-    #if 'dateStamp' in data['metadata'].keys():
-    Date.text = data['metadata']['dateStamp']
-    #else:
-    #    Date.text = str(datetime.datetime.now().date()) # Creation Date of Metadata
+    if 'dateStamp' in data['metadata'].keys():
+        Date.text = data['metadata']['dateStamp']
+    else:
+        Date.text = str(datetime.datetime.now().date()) # Creation Date of Metadata
     
     # identificationInfo
     if 'identificationInfo' in data['metadata'].keys():
@@ -194,7 +195,7 @@ def gen_metadata(data, nsmap, codespacemap):
             if data['metadata']['parameters']['observationType'] != 'controlemeting':
                 status = etree.SubElement(ObservationMetadata, ("{%s}" % nsmap['wml2']) + 'status', nsmap=nsmap,
                                                       attrib ={
-                                                          ("{%s}" % nsmap['xlink'])+'href':'urn:bro:gld:StatusCode:{}'.format(data['metadata']['status'])
+                                                          ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1['StatusCode']+':{}'.format(data['metadata']['status'])
                                                           })    
             else:
                 raise Exception("argument 'status' in observation metadata while 'controlemeting' as observationType: controlemeting \
@@ -247,27 +248,27 @@ def gen_phenomenontime(data, nsmap, codespacemap, count):
 
 def gen_resulttime(data, nsmap, codespacemap, count):
     
-    try:
+    # try:
         
-        if 'status' in data['metadata'].keys():
-            if  data['metadata']['status']=='volledigBeoordeeld':
-                dif = 1
+    #     if 'status' in data['metadata'].keys():
+    #         if  data['metadata']['status']=='volledigBeoordeeld':
+    #             dif = 1
             
-            else:
-                dif = 0
-        else:
-            dif = 0
+    #         else:
+    #             dif = 0
+    #     else:
+    #         dif = 0
         
-        timeseriesdata = pd.DataFrame(data['result'])
-        timeseriesdata.index=pd.to_datetime(timeseriesdata['time'],format = '%Y-%m-%dT%H:%M:%S')   
-        timeseriesdata['datetime']=timeseriesdata.index
-        endPosition = str(timeseriesdata['time'][len(timeseriesdata)-1])[:10]
+    #     timeseriesdata = pd.DataFrame(data['result'])
+    #     timeseriesdata.index=pd.to_datetime(timeseriesdata['time'],format = '%Y-%m-%dT%H:%M:%S')   
+    #     timeseriesdata['datetime']=timeseriesdata.index
+    #     endPosition = str(timeseriesdata['time'][len(timeseriesdata)-1])[:10]
         
-        timeposition = str(timeseriesdata['datetime'][len(timeseriesdata)-1]+datetime.timedelta(seconds=dif)).replace(' ','T')  # datumtijd verkrijgen data, automatisch een seconde naar laatste observatie in reeksje
+    #     timeposition = str(timeseriesdata['datetime'][len(timeseriesdata)-1]+datetime.timedelta(seconds=dif)).replace(' ','T')  # datumtijd verkrijgen data, automatisch een seconde naar laatste observatie in reeksje
 
-    except:
-        raise Exception('Error: resultTime cannot be derived from timeseries')
-
+    # except:
+    #     raise Exception('Error: resultTime cannot be derived from timeseries')
+    timeposition = data['resultTime']
     resultTime = etree.Element(("{%s}" % nsmap['om']) + 'resultTime', nsmap=nsmap)    
     TimeInstant = etree.SubElement(resultTime, ("{%s}" % nsmap['gml']) + 'TimeInstant', nsmap=nsmap,
                                            attrib={
@@ -298,13 +299,13 @@ def gen_procedure_parameters(data, nsmap, codespacemap):
         
         airPressureCompensationType_name =  etree.SubElement(airPressureCompensationType_namevalue,("{%s}" % nsmap['om']) + 'name', nsmap=nsmap,
                                                          attrib = {
-                                                                     ("{%s}" % nsmap['xlink'])+'href':"urn:bro:gld:ObservationProcess:airPressureCompensationType"                                                               
+                                                                     ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1["airPressureCompensationType"]                                                               
                                                              })
         
         airPressureCompensationType_value =  etree.SubElement(airPressureCompensationType_namevalue,("{%s}" % nsmap['om']) + 'value', nsmap=nsmap,
                                                          attrib = {
                                                                      ("{%s}" % nsmap['xsi'])+'type':"gml:CodeWithAuthorityType",
-                                                                     'codeSpace':"urn:bro:gld:AirPressureCompensationType",
+                                                                     'codeSpace':codespace_map_gld1["AirPressureCompensationType"]
                                                              }) 
         
         airPressureCompensationType_value.text = data['procedure']['parameters']['airPressureCompensationType']
@@ -316,13 +317,13 @@ def gen_procedure_parameters(data, nsmap, codespacemap):
         
         evaluationProcedure_name =  etree.SubElement(evaluationProcedure_namevalue,("{%s}" % nsmap['om']) + 'name', nsmap=nsmap,
                                                          attrib = {
-                                                                     ("{%s}" % nsmap['xlink'])+'href':"urn:bro:gld:ObservationProcess:evaluationProcedure"                                                               
+                                                                     ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1["evaluationProcedure"]                                                              
                                                              })
         
         evaluationProcedure_value =  etree.SubElement(evaluationProcedure_namevalue,("{%s}" % nsmap['om']) + 'value', nsmap=nsmap,
                                                          attrib = {
                                                                      ("{%s}" % nsmap['xsi'])+'type':"gml:CodeWithAuthorityType",
-                                                                     'codeSpace':"urn:bro:gld:EvaluationProcedure",
+                                                                     'codeSpace':codespace_map_gld1["EvaluationProcedure"]
                                                              }) 
         
         evaluationProcedure_value.text = data['procedure']['parameters']['evaluationProcedure']        
@@ -334,13 +335,13 @@ def gen_procedure_parameters(data, nsmap, codespacemap):
         
         measurementInstrumentType_name =  etree.SubElement(measurementInstrumentType_namevalue,("{%s}" % nsmap['om']) + 'name', nsmap=nsmap,
                                                          attrib = {
-                                                                     ("{%s}" % nsmap['xlink'])+'href':"urn:bro:gld:ObservationProcess:measurementInstrumentType"                                                               
+                                                                     ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1["measurementInstrumentType"]                                                               
                                                              })
         
         measurementInstrumentType_value =  etree.SubElement(measurementInstrumentType_namevalue,("{%s}" % nsmap['om']) + 'value', nsmap=nsmap,
                                                          attrib = {
                                                                      ("{%s}" % nsmap['xsi'])+'type':"gml:CodeWithAuthorityType",
-                                                                     'codeSpace':"urn:bro:gld:MeasurementInstrumentType",
+                                                                     'codeSpace':codespace_map_gld1["MeasurementInstrumentType"]
                                                              }) 
         
         measurementInstrumentType_value.text = data['procedure']['parameters']['measurementInstrumentType'] 
@@ -369,9 +370,9 @@ def gen_procedure(data, nsmap, codespacemap):
                                                }
                                            )
     if 'processReference' not in data['procedure'].keys():
-        processReferencestr = "urn:bro:gld:ProcessReference:NEN5120v1991"  
+        processReferencestr = codespace_map_gld1["ProcessReference"]+":NEN5120v1991"  
     else:
-        processReferencestr = data['procedure']['processReference']
+        processReferencestr = codespace_map_gld1["ProcessReference"]+':'+data['procedure']['processReference']
         
     processReference = etree.SubElement(ObservationProcess, ("{%s}" % nsmap['wml2']) + 'processReference', nsmap=nsmap,
                                            attrib={
@@ -404,7 +405,7 @@ def gen_point_metadata_qualifiers(data, rec, nsmap, codespacemap, count):
         StatusQualityControl_category = etree.SubElement(qualifierlist['StatusQualityControl'],("{%s}" % nsmap['swe']) + 'Category', nsmap=nsmap) 
         StatusQualityControl_codeSpace =  etree.SubElement(StatusQualityControl_category,("{%s}" % nsmap['swe']) + 'codeSpace', nsmap=nsmap,
                                                          attrib = {
-                                                                     ("{%s}" % nsmap['xlink'])+'href':"urn:bro:gld:StatusQualityControl"                                                               
+                                                                     ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1["StatusQualityControl"]                                                               
                                                              })
         
         StatusQualityControl_value = etree.SubElement(StatusQualityControl_category,("{%s}" % nsmap['swe']) + 'value', nsmap=nsmap) 
@@ -416,7 +417,7 @@ def gen_point_metadata_qualifiers(data, rec, nsmap, codespacemap, count):
         censoringLimitvalue_category = etree.SubElement(qualifierlist['censoringLimitvalue'],("{%s}" % nsmap['swe']) + 'Category', nsmap=nsmap) 
         censoringLimitvalue_codeSpace =  etree.SubElement(censoringLimitvalue_category,("{%s}" % nsmap['swe']) + 'codeSpace', nsmap=nsmap,
                                                          attrib = {
-                                                                     ("{%s}" % nsmap['xlink'])+'href':"urn:bro:gld:censoringLimitvalue"                                                               
+                                                                     ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1["censoringLimitvalue"]                                                               
                                                              })
         
         censoringLimitvalue_value = etree.SubElement(censoringLimitvalue_category,("{%s}" % nsmap['swe']) + 'value', nsmap=nsmap) 

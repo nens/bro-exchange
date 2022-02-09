@@ -76,7 +76,7 @@ def gen_gld_addition(data, nsmap, codespacemap):
     
     arglist =  {'metadata':'obligated',
                 'phenomenonTime':'fixed', # fixed: automatically generated, all input will be neglected
-                'resultTime':'fixed', # fixed: automatically generated, all input will be neglected
+                'resultTime':'obligated', # fixed: automatically generated, all input will be neglected
                 'procedure':'obligated',
                 'observedProperty':'fixed',
                 'featureOfInterest':'fixed',

@@ -32,6 +32,8 @@ codespace_map_gmw1 = {
                 'localVerticalReferencePoint':'urn:bro:gmw:LocalVerticalReferencePoint',
                 'wellStability':'urn:bro:gmw:WellStability'
                 }   
+
+
  
 # =============================================================================
 # GMN
@@ -91,4 +93,17 @@ xsi_regreq_map_gld1 = {"schemaLocation": "http://www.broservices.nl/xsd/isgld/1.
 
 codespace_map_gld1 = {
                     "codeList":"urn:ISO:19115:CI_RoleCode",
+                    "principalInvestigator":"urn:bro:gld:ObservationMetadata:principalInvestigator",
+                    "observationType":"urn:bro:gld:ObservationMetadata:observationType",
+                    "ObservationType":"urn:bro:gld:ObservationType",
+                    "StatusCode":"urn:bro:gld:StatusCode",
+                    "airPressureCompensationType":"urn:bro:gld:ObservationProcess:airPressureCompensationType",
+                    "AirPressureCompensationType":"urn:bro:gld:AirPressureCompensationType",
+                    "evaluationProcedure":"urn:bro:gld:ObservationProcess:evaluationProcedure",
+                    "EvaluationProcedure":"urn:bro:gld:EvaluationProcedure",
+                    "measurementInstrumentType":"urn:bro:gld:ObservationProcess:measurementInstrumentType",
+                    "MeasurementInstrumentType":"urn:bro:gld:MeasurementInstrumentType",
+                    "ProcessReference":"urn:bro:gld:ProcessReference",
+                    "StatusQualityControl":"urn:bro:gld:StatusQualityControl",
+                    "censoringLimitvalue":"urn:bro:gld:censoringLimitvalue" 
                 }   

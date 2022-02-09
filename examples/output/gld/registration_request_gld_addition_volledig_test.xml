@@ -6,7 +6,7 @@
   <sourceDocument>
     <GLD_Addition gml:id="id_0001">
       <observation>
-        <om:OM_Observation gml:id="_9412b594-22d7-46ba-a17c-23c8546bc789">
+        <om:OM_Observation gml:id="_8ee41480-3485-4492-9948-cb8a7ed87655">
           <om:type xlink:href="http://www.opengis.net/def/observationType/waterml/2.0/MeasurementTimeseriesTVPObservation"/>
           <om:metadata>
             <wml2:ObservationMetadata>
@@ -21,7 +21,7 @@
                 </gmd:CI_ResponsibleParty>
               </gmd:contact>
               <gmd:dateStamp>
-                <gco:Date>2021-11-19</gco:Date>
+                <gco:Date>2022-02-09</gco:Date>
               </gmd:dateStamp>
               <gmd:identificationInfo gco:nilReason="unknown"/>
               <wml2:status xlink:href="urn:bro:gld:StatusCode:volledigBeoordeeld"/>
@@ -49,18 +49,18 @@
           </om:phenomenonTime>
           <om:resultTime>
             <gml:TimeInstant gml:id="id_0003">
-              <gml:timePosition>2018-01-28T16:58:08+01:00</gml:timePosition>
+              <gml:timePosition>2018-05-28T16:58:07+01:00</gml:timePosition>
             </gml:TimeInstant>
           </om:resultTime>
           <om:procedure xlink:href="_047e1b31-5406-4c68-af73-303e3f057881"/>
           <om:observedProperty/>
           <om:featureOfInterest/>
           <om:result>
-            <wml2:MeasurementTimeseries gml:id="_3cc91495-d031-4989-9962-56de58599926">
+            <wml2:MeasurementTimeseries gml:id="_f2f4e4f8-fac6-4e7d-a537-376353bafc67">
               <wml2:point>
                 <wml2:MeasurementTVP>
                   <wml2:time>2018-01-07T08:14:38+01:00</wml2:time>
-                  <wml2:value>-4.345</wml2:value>
+                  <wml2:value uom="m">-4.345</wml2:value>
                   <wml2:metadata>
                     <wml2:TVPMeasurementMetadata>
                       <wml2:qualifier>
@@ -77,7 +77,7 @@
               <wml2:point>
                 <wml2:MeasurementTVP>
                   <wml2:time>2018-01-21T10:01:52+01:00</wml2:time>
-                  <wml2:value>-4.987</wml2:value>
+                  <wml2:value uom="m">-4.987</wml2:value>
                   <wml2:metadata>
                     <wml2:TVPMeasurementMetadata>
                       <wml2:qualifier>
@@ -94,7 +94,7 @@
               <wml2:point>
                 <wml2:MeasurementTVP>
                   <wml2:time>2018-01-28T16:58:07+01:00</wml2:time>
-                  <wml2:value>-4.788</wml2:value>
+                  <wml2:value uom="m">-4.788</wml2:value>
                   <wml2:metadata>
                     <wml2:TVPMeasurementMetadata>
                       <wml2:qualifier>
