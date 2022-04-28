@@ -44,7 +44,11 @@ class gmw_registration_request():
         
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
         
-        self.allowed_srcdocs = ['GMW_Construction']
+        self.allowed_srcdocs = ['GMW_Construction','GMW_WellHeadProtector','GMW_Lengthening',
+                                'GMW_GroundLevel','GMW_Owner','GMW_Shortening','GMW_Positions',
+                                'GMW_ElectrodeStatus','GMW_Maintainer','GMW_TubeStatus',
+                                'GMW_Insertion','GMW_Shift','GMW_Removal','GMW_GroundLevelMeasuring',
+                                'GMW_PositionsMeasuring','GMW_ConstructionWithHistory']
         
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")   
@@ -105,9 +109,107 @@ class gmw_registration_request():
             if 'broId' in list(self.kwargs.keys()):
                 raise Exception("Registration request argument 'broId' not allowed in combination with given sourcedocument")
             else:
-                sourceDocument=gen_gmw_construction(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1)
+                sourceDocument=gen_gmw_construction(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
                 req.append(sourceDocument)
         
+        if self.srcdoc == 'GMW_Owner':
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmw_owner(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                req.append(sourceDocument)           
+    
+        if self.srcdoc == 'GMW_WellHeadProtector':
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmw_wellheadprotector(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                req.append(sourceDocument)            
+            
+        if self.srcdoc in ['GMW_Lengthening','GMW_Shortening']:
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmw_lengthening_shortening(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                req.append(sourceDocument)    
+
+        if self.srcdoc == 'GMW_GroundLevel':
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmw_groundlevel(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                req.append(sourceDocument) 
+
+        if self.srcdoc == 'GMW_Positions':
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmw_positions(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                req.append(sourceDocument) 
+
+        if self.srcdoc == 'GMW_ElectrodeStatus':
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmw_electrodestatus(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                req.append(sourceDocument) 
+                
+        if self.srcdoc == 'GMW_Maintainer':
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmw_maintainer(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                req.append(sourceDocument) 
+                
+        if self.srcdoc == 'GMW_TubeStatus':
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmw_tubestatus(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                req.append(sourceDocument) 
+                
+        if self.srcdoc == 'GMW_Insertion':
+             if 'broId' not in list(self.kwargs.keys()):
+                 raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+             else:
+                 sourceDocument=gen_gmw_insertion(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                 req.append(sourceDocument)                
+
+        if self.srcdoc == 'GMW_Shift':
+             if 'broId' not in list(self.kwargs.keys()):
+                 raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+             else:
+                 sourceDocument=gen_gmw_shift(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                 req.append(sourceDocument)    
+
+        if self.srcdoc == 'GMW_Removal':
+             if 'broId' not in list(self.kwargs.keys()):
+                 raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+             else:
+                 sourceDocument=gen_gmw_removal(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                 req.append(sourceDocument)    
+                
+        if self.srcdoc == 'GMW_GroundLevelMeasuring':
+             if 'broId' not in list(self.kwargs.keys()):
+                 raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+             else:
+                 sourceDocument=gen_gmw_groundlevelmeasuring(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                 req.append(sourceDocument)                  
+
+        if self.srcdoc == 'GMW_PositionsMeasuring':
+             if 'broId' not in list(self.kwargs.keys()):
+                 raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+             else:
+                 sourceDocument=gen_gmw_positionsmeasuring(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                 req.append(sourceDocument)   
+
+        if self.srcdoc == 'GMW_ConstructionWithHistory':
+            if 'broId' in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' not allowed in combination with given sourcedocument")
+            else:
+                 sourceDocument=gen_gmw_constructionwithhistory(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
+                 req.append(sourceDocument)  
+                
         self.requesttree = etree.ElementTree(req)
         self.request = etree.tostring(self.requesttree, encoding='utf8', method='xml')
         #print(etree.tostring(req, pretty_print=True,encoding='unicode'))
