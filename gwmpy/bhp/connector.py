@@ -132,7 +132,6 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     # Step 3: Deliver upload
     try:
         upload_id = upload_url_id.split('/')[len(upload_url_id.split('/'))-1]    
-        #delivery_url = 'https://demo.bronhouderportaal-bro.nl/api/leveringen'
         delivery_url = os.path.join(base_url,'leveringen')
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
