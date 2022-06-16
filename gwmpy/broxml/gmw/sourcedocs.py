@@ -165,7 +165,7 @@ def gen_gmw_lengthening_shortening(data, nsmap, codespacemap, sourcedoctype):
     constructables = ['eventDate','monitoringTubes']
       
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_lenghtening - gen_gmw_lenghtening')
     
     if sourcedoctype == 'GMW_Lengthening':
         sourceDocument = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
@@ -231,7 +231,7 @@ def gen_gmw_groundlevel(data, nsmap, codespacemap, sourcedoctype):
     constructables = ['eventDate','deliveredVerticalPosition']
       
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_groundlevel')
     
     if sourcedoctype == "GMW_GroundLevel":
         sourceDocument = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
@@ -288,7 +288,7 @@ def gen_gmw_owner(data, nsmap, codespacemap, sourcedoctype):
     constructables = ['eventDate']
       
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_owner')
     
     if sourcedoctype == 'GMW_Owner':
         sourceDocument = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
@@ -338,7 +338,7 @@ def gen_gmw_positions(data, nsmap, codespacemap, sourcedoctype):
     constructables = ['eventDate','deliveredVerticalPosition','monitoringTubes']
       
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_positions')
     
     
     if sourcedoctype == "GMW_Positions":
@@ -409,7 +409,7 @@ def gen_gmw_electrodestatus(data, nsmap, codespacemap, sourcedoctype):
     constructables = ['eventDate','electrodes']
       
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_electrodestatus')
     
     if sourcedoctype == "GMW_ElectrodeStatus":
         sourceDocument = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
@@ -467,7 +467,7 @@ def gen_gmw_maintainer(data, nsmap, codespacemap, sourcedoctype):
                 }    
               
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_maintainer')
     
     if sourcedoctype == "GMW_Maintainer":
         sourceDocument = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
@@ -515,7 +515,7 @@ def gen_gmw_tubestatus(data, nsmap, codespacemap, sourcedoctype):
                 }    
               
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_tubestatus')
     
     if sourcedoctype== "GMW_TubeStatus":
         sourceDocument = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
@@ -577,7 +577,7 @@ def gen_gmw_insertion(data, nsmap, codespacemap, sourcedoctype):
                 }    
               
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_insertion')
     
     
     if sourcedoctype == "GMW_Insertion":
@@ -644,7 +644,7 @@ def gen_gmw_shift(data, nsmap, codespacemap, sourcedoctype):
                 }    
               
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_shift')
     
     if sourcedoctype == "GMW_Shift":
         sourceDocument = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
@@ -701,7 +701,7 @@ def gen_gmw_removal(data, nsmap, codespacemap, sourcedoctype):
                 }    
               
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_removal')
     
     
     if sourcedoctype == "GMW_Removal":
@@ -751,7 +751,7 @@ def gen_gmw_groundlevelmeasuring(data, nsmap, codespacemap, sourcedoctype):
                 }    
                            
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_groundlevelmeasuring')
     
     
     if sourcedoctype =="GMW_GroundLevelMeasuring":
@@ -816,7 +816,7 @@ def gen_gmw_positionsmeasuring(data, nsmap, codespacemap, sourcedoctype):
     constructables = ['eventDate','deliveredVerticalPosition','monitoringTubes']
       
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_positionsmeasuring')
     
     if sourcedoctype == "GMW_PositionsMeasuring":
         sourceDocument = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
@@ -886,7 +886,7 @@ def gen_gmw_constructionwithhistory(data, nsmap, codespacemap, sourcedoctype):
     
       
     # Check wether all obligated arguments are in data
-    check_missing_args(data, arglist, 'gen_gmw_lenghtening')
+    check_missing_args(data, arglist, 'gen_gmw_constructionwithhistory')
     
     sourceDocument_main = etree.Element(("{%s}" % nsmap['ns']) + "sourceDocument", nsmap=nsmap) 
     GMW_ConstructionWithHistory = etree.SubElement(sourceDocument_main, ("{%s}" % nsmap['ns']) + "GMW_ConstructionWithHistory", nsmap=nsmap)

@@ -38,14 +38,20 @@ def validate_sourcedoc(sourcedoc, token, demo=False):
     if demo==True:
         upload_url = 'https://demo.bronhouderportaal-bro.nl/api/validatie'
     else:
-        upload_url = 'https://bronhouderportaal-bro.nl/api/validatie'
+        upload_url = 'https://www.bronhouderportaal-bro.nl/api/validatie'
     
 
     payload = sourcedoc
     
-    headers = {'Content-type': 'application/xml'}
-    res = requests.post(url=upload_url, auth=requests.auth.HTTPBasicAuth(token['user'], token['pass']), data = payload,headers =headers)
- 
+    res = requests.post(upload_url,
+        data=payload,
+        headers={
+            "Content-Type": "application/xml"
+        },
+        cookies={},
+        auth=(token['user'],token['pass']),
+    ) 
+    
     requestinfo = res.json()
     
     return(requestinfo)
@@ -78,14 +84,19 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     if demo==True:
         base_url = 'https://demo.bronhouderportaal-bro.nl/api'
     else:
-        base_url = 'https://bronhouderportaal-bro.nl/api'
+        base_url = 'https://www.bronhouderportaal-bro.nl/api'
     
     # Step 1: Create upload
     upload_url = base_url+'/uploads'
     
     try:
-        res = requests.post(url=upload_url, auth=requests.auth.HTTPBasicAuth(token['user'], token['pass']))
-        
+        res = requests.post(upload_url,
+            headers={
+                "Content-Type": "application/xml"
+            },
+            cookies={},
+            auth=(token['user'],token['pass']),
+        )         
     except:
         print('Error: unable to create an upload')
         return('Error')
@@ -103,8 +114,13 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
                 headers = {'Content-type': 'application/xml'}
                 params = {'filename':sourcedoc}
                 payload = sourcedocs[sourcedoc]
-                res = requests.post(url=upload_url_id+'/brondocumenten', auth=requests.auth.HTTPBasicAuth(token['user'], token['pass']), data = payload,headers =headers,  params=params)
-        
+                res = requests.post(upload_url_id+'/brondocumenten',
+                    data=payload,
+                    headers=headers,
+                    cookies={},
+                    auth=(token['user'],token['pass']),
+                    params = params
+                )         
         except:
             print('Error: Cannot add source documents to upload')                   
     
@@ -119,10 +135,16 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
         delivery_url = 'https://demo.bronhouderportaal-bro.nl/api/leveringen'
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
-        endresponse = requests.post(url=delivery_url, auth=requests.auth.HTTPBasicAuth(token['user'], token['pass']), data = json.dumps(payload),headers =headers)
+        endresponse = requests.post(delivery_url,
+            data=json.dumps(payload),
+            headers=headers,
+            cookies={},
+            auth=(token['user'],token['pass']),
+        )  
         delivery_url_id = endresponse.headers['Location']
-        delivery = requests.get(url=delivery_url_id, auth=requests.auth.HTTPBasicAuth(token['user'], token['pass']))#.content
-
+        delivery = requests.get(url=delivery_url_id,
+            auth=(token['user'],token['pass']),
+        ) 
     except:
         print('Error: failed to deliver upload')
         return('Error')
@@ -131,7 +153,7 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     return(delivery)
 
 
-def upload_sourcedocs_from_dir(input_folder, acces_token_bro_portal, specific_file = None):
+def upload_sourcedocs_from_dir(input_folder, token, specific_file = None):
     """
     
     Parameters
@@ -157,8 +179,13 @@ def upload_sourcedocs_from_dir(input_folder, acces_token_bro_portal, specific_fi
     upload_url = 'https://demo.bronhouderportaal-bro.nl/api/uploads'
     
     try:
-        res = requests.post(url=upload_url, auth=requests.auth.HTTPBasicAuth(acces_token_bro_portal['user'], acces_token_bro_portal['pass']))
-        
+        res = requests.post(upload_url,
+            headers={
+                "Content-Type": "application/xml"
+            },
+            cookies={},
+            auth=(token['user'],token['pass']),
+        )          
     except:
         print('Error: unable to create an upload')
     
@@ -178,8 +205,13 @@ def upload_sourcedocs_from_dir(input_folder, acces_token_bro_portal, specific_fi
                         payload = file.read()
                     headers = {'Content-type': 'application/xml'}
                     params = {'filename':source_document}
-                    res = requests.post(url=upload_url_id+'/brondocumenten', auth=requests.auth.HTTPBasicAuth(acces_token_bro_portal['user'], acces_token_bro_portal['pass']), data = payload,headers =headers,  params=params)
-            
+                    res = requests.post(upload_url_id+'/brondocumenten',
+                        data=payload,
+                        headers=headers,
+                        cookies={},
+                        auth=(token['user'],token['pass']),
+                        params = params
+                    )             
             except:
                 print('Error: Cannot add source documents to upload')                   
         
@@ -198,7 +230,13 @@ def upload_sourcedocs_from_dir(input_folder, acces_token_bro_portal, specific_fi
                     payload = file.read()
                     headers = {'Content-type': 'application/xml'}
                     params = {'filename':specific_file}
-                    res = requests.post(url=upload_url_id+'/brondocumenten', auth=requests.auth.HTTPBasicAuth(acces_token_bro_portal['user'], acces_token_bro_portal['pass']), data = payload,headers =headers,  params=params)
+                    res = requests.post(upload_url_id+'/brondocumenten',
+                        data=payload,
+                        headers=headers,
+                        cookies={},
+                        auth=(token['user'],token['pass']),
+                        params = params
+                    )
             except:
                 print('Error: Cannot add source documents to upload')    
         except:
@@ -211,10 +249,16 @@ def upload_sourcedocs_from_dir(input_folder, acces_token_bro_portal, specific_fi
         delivery_url = 'https://demo.bronhouderportaal-bro.nl/api/leveringen'
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
-        endresponse = requests.post(url=delivery_url, auth=requests.auth.HTTPBasicAuth(acces_token_bro_portal['user'], acces_token_bro_portal['pass']), data = json.dumps(payload),headers =headers)
+        endresponse = requests.post(delivery_url,
+            data=json.dumps(payload),
+            headers=headers,
+            cookies={},
+            auth=(token['user'],token['pass']),
+        )  
         delivery_url_id = endresponse.headers['Location']
-        delivery = requests.get(url=delivery_url_id, auth=requests.auth.HTTPBasicAuth(acces_token_bro_portal['user'], acces_token_bro_portal['pass']))#.content
-
+        delivery = requests.get(url=delivery_url_id,
+            auth=(token['user'],token['pass']),
+        ) 
     except:
         print('Error: failed to deliver upload')
     
@@ -245,11 +289,12 @@ def check_delivery_status(identifier, token, demo=False):
     if demo==True:
         base_url = 'https://demo.bronhouderportaal-bro.nl/api'
     else:
-        base_url = 'https://bronhouderportaal-bro.nl/api'
+        base_url = 'https://www.bronhouderportaal-bro.nl/api'
     
     delivery_url_id = base_url+'/leveringen/{}'.format(identifier)
-    delivery = requests.get(url=delivery_url_id, auth=requests.auth.HTTPBasicAuth(token['user'], token['pass']))#.content
-    
+    delivery = requests.get(url=delivery_url_id,
+        auth=(token['user'],token['pass']),
+    )     
     return(delivery)
     
 
@@ -277,10 +322,11 @@ def get_sourcedocument(identifier, token, demo=False):
     if demo==True:
         base_url = 'https://demo.bronhouderportaal-bro.nl/api'
     else:
-        base_url = 'https://bronhouderportaal-bro.nl/api'
+        base_url = 'https://www.bronhouderportaal-bro.nl/api'
     
     delivery_url_id = base_url+'/brondocumenten/{}'.format(identifier)
-    delivery = requests.get(url=delivery_url_id, auth=requests.auth.HTTPBasicAuth(token['user'], token['pass']))#.content
-    
+    delivery = requests.get(url=delivery_url_id,
+        auth=(token['user'],token['pass']),
+    )     
     return(delivery)
      
