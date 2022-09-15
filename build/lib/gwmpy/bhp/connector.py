@@ -132,7 +132,7 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     # Step 3: Deliver upload
     try:
         upload_id = upload_url_id.split('/')[len(upload_url_id.split('/'))-1]    
-        delivery_url = 'https://demo.bronhouderportaal-bro.nl/api/leveringen'
+        delivery_url = os.path.join(base_url,'leveringen')
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
         endresponse = requests.post(delivery_url,
@@ -153,7 +153,7 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     return(delivery)
 
 
-def upload_sourcedocs_from_dir(input_folder, token, specific_file = None):
+def upload_sourcedocs_from_dir(input_folder, token, specific_file = None,demo=False):
     """
     
     Parameters
@@ -176,7 +176,13 @@ def upload_sourcedocs_from_dir(input_folder, token, specific_file = None):
     """
 
     # Step 1: Create upload
-    upload_url = 'https://demo.bronhouderportaal-bro.nl/api/uploads'
+    if demo==True:
+        base_url = 'https://demo.bronhouderportaal-bro.nl/api'
+    else:
+        base_url = 'https://www.bronhouderportaal-bro.nl/api'    
+    
+    
+    upload_url = base_url+'/uploads'
     
     try:
         res = requests.post(upload_url,
@@ -246,7 +252,7 @@ def upload_sourcedocs_from_dir(input_folder, token, specific_file = None):
     # Step 3: Deliver upload
     try:
         upload_id = upload_url_id.split('/')[len(upload_url_id.split('/'))-1]    
-        delivery_url = 'https://demo.bronhouderportaal-bro.nl/api/leveringen'
+        delivery_url = os.path.join(base_url,'leveringen')
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
         endresponse = requests.post(delivery_url,

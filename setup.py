@@ -23,6 +23,6 @@ setup(
           description='this package contains some tools for data exchange with the BRO, specificly for the groundwatermonitoring domain',
           author='',
           packages=find_packages(exclude=['tests','examples']),
-          install_requires=['requests>=2.24.0','lxml>=4.6.1','uuid']
+          install_requires=['requests>=2.24.0','lxml>=4.6.1','uuid', 'xmltodict>=0.13.0', 'pandas>=1.4.3']
           
           )

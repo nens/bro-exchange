@@ -1,5 +1,6 @@
 requests >= 2.24.0
 lxml >= 4.6.1
 uuid
-
+xmltodict >= 0.13.0
+pandas >= 1.4.3
 
