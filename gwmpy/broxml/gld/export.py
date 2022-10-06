@@ -50,13 +50,13 @@ def get_gld_json_data(startDate, endDate, objectID, fullObservationPeriod=True):
 
 
     #Return data, depending on fullObservationPeriod value. If False, the data is filtered on the exact period between startDate and endDate
-    if fullObservationPeriod == True:
-        return df
-    else:
+    if fullObservationPeriod == False:
         startDate = datetime.strptime(startDate, '%Y-%m-%d')
         endDate = datetime.strptime(endDate, '%Y-%m-%d')
         df = df[(df['timestamp'] >= startDate) & (df['timestamp'] < endDate)]
-        return df
+        
+    
+    return df
         
 
 
