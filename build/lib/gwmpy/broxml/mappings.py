@@ -57,6 +57,7 @@ codespace_map_gmn1 = {
                 'deliveryContext':"urn:bro:gmn:DeliveryContext",      
                 'monitoringPurpose':"urn:bro:gmn:MonitoringPurpose",  
                 'groundwaterAspect':"urn:bro:gmn:GroundwaterAspect",  
+                'correctionReason':"urn:bro:gmn:CorrectionReason"
     
                 }   
 

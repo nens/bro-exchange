@@ -13,7 +13,7 @@ import os
 # Validation
 # =============================================================================
 
-def validate_sourcedoc(sourcedoc, token, demo=False):
+def validate_sourcedoc(payload, token, demo=False):
     """
     
 
@@ -40,8 +40,6 @@ def validate_sourcedoc(sourcedoc, token, demo=False):
     else:
         upload_url = 'https://www.bronhouderportaal-bro.nl/api/validatie'
     
-
-    payload = sourcedoc
     
     res = requests.post(upload_url,
         data=payload,
@@ -161,7 +159,7 @@ def upload_sourcedocs_from_dir(input_folder, token, specific_file = None,demo=Fa
     input_folder : string
         Input folder to load sourcedocuments from
         
-    acces_token_bro_portal : json
+    token : json
         Acces token for connecting with bronhouderportal project
                
     specific_file : string, optional

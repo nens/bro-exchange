@@ -497,10 +497,7 @@ class gmw_move_request():
 
         correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
         correctionReason.text = self.kwargs['correctionReason']
-        
-        dateToBeCorrected=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "dateToBeCorrected", nsmap=ns_regreq_map_gmw1)
-        dateToBeCorrected.text = self.kwargs['dateToBeCorrected']      
-        
+                
         try:
             self.kwargs['underPrivilege']
             underPrivilege=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "underPrivilege", nsmap=ns_regreq_map_gmw1)
@@ -607,6 +604,10 @@ class gmw_move_request():
              else:
                  sourceDocument=gen_gmw_removal(self.kwargs['srcdocdata'], ns_regreq_map_gmw1, codespace_map_gmw1, self.srcdoc)
                  req.append(sourceDocument)    
+
+        dateToBeCorrected=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "dateToBeCorrected", nsmap=ns_regreq_map_gmw1)
+        date = etree.SubElement(dateToBeCorrected, ("{%s}" % ns_regreq_map_gmw1['ns1']) + 'date', nsmap=ns_regreq_map_gmw1)
+        date.text = self.kwargs['dateToBeCorrected']  
                 
         self.requesttree = etree.ElementTree(req)
         self.request = etree.tostring(self.requesttree, encoding='utf8', method='xml')
