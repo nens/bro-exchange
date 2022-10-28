@@ -300,15 +300,15 @@ class gmw_replace_request():
         qualityRegime=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "qualityRegime", nsmap=ns_regreq_map_gmw1)
         qualityRegime.text = self.kwargs['qualityRegime']
 
-        correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
-        correctionReason.text = self.kwargs['correctionReason']
-        
         try:
             self.kwargs['underPrivilege']
             underPrivilege=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "underPrivilege", nsmap=ns_regreq_map_gmw1)
             underPrivilege.text = self.kwargs['underPrivilege']
         except:
             pass
+
+        correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
+        correctionReason.text = self.kwargs['correctionReason']
         
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == 'GMW_Construction':
@@ -495,15 +495,15 @@ class gmw_move_request():
         qualityRegime=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "qualityRegime", nsmap=ns_regreq_map_gmw1)
         qualityRegime.text = self.kwargs['qualityRegime']
 
-        correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
-        correctionReason.text = self.kwargs['correctionReason']
-                
         try:
             self.kwargs['underPrivilege']
             underPrivilege=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "underPrivilege", nsmap=ns_regreq_map_gmw1)
             underPrivilege.text = self.kwargs['underPrivilege']
         except:
             pass
+
+        correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
+        correctionReason.text = self.kwargs['correctionReason']
         
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == 'GMW_Construction':
@@ -698,15 +698,15 @@ class gmw_delete_request():
         qualityRegime=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "qualityRegime", nsmap=ns_regreq_map_gmw1)
         qualityRegime.text = self.kwargs['qualityRegime']
 
-        correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
-        correctionReason.text = self.kwargs['correctionReason']
-        
         try:
             self.kwargs['underPrivilege']
             underPrivilege=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "underPrivilege", nsmap=ns_regreq_map_gmw1)
             underPrivilege.text = self.kwargs['underPrivilege']
         except:
             pass
+
+        correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
+        correctionReason.text = self.kwargs['correctionReason']
         
         # Create sourcedocument and add to registrationrequest:        
         if self.srcdoc == 'GMW_Owner':
@@ -889,15 +889,15 @@ class gmw_insert_request():
         qualityRegime=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "qualityRegime", nsmap=ns_regreq_map_gmw1)
         qualityRegime.text = self.kwargs['qualityRegime']
 
-        correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
-        correctionReason.text = self.kwargs['correctionReason']
-        
         try:
             self.kwargs['underPrivilege']
             underPrivilege=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns1']) + "underPrivilege", nsmap=ns_regreq_map_gmw1)
             underPrivilege.text = self.kwargs['underPrivilege']
         except:
             pass
+
+        correctionReason=etree.SubElement(req, ("{%s}" % ns_regreq_map_gmw1['ns']) + "correctionReason", nsmap=ns_regreq_map_gmw1, codeSpace = codespace_map_gmw1['correctionReason'])
+        correctionReason.text = self.kwargs['correctionReason']
         
         # Create sourcedocument and add to registrationrequest:        
         if self.srcdoc == 'GMW_Owner':
