@@ -130,7 +130,7 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     # Step 3: Deliver upload
     try:
         upload_id = upload_url_id.split('/')[len(upload_url_id.split('/'))-1]    
-        delivery_url = os.path.join(base_url,'leveringen')
+        delivery_url = base_url+'/leveringen'
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
         endresponse = requests.post(delivery_url,
@@ -250,7 +250,7 @@ def upload_sourcedocs_from_dir(input_folder, token, specific_file = None,demo=Fa
     # Step 3: Deliver upload
     try:
         upload_id = upload_url_id.split('/')[len(upload_url_id.split('/'))-1]    
-        delivery_url = os.path.join(base_url,'leveringen')
+        delivery_url = base_url+'/leveringen'
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
         endresponse = requests.post(delivery_url,
