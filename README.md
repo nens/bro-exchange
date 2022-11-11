@@ -1,5 +1,5 @@
 # bro-exchange
-bro-exchange is a package for retrieving data from or sending data to the Dutch National Key Registry of the Subsurface (Basis Registratie Ondergrond). 
+This package contains tools for retrieving data from or sending data to the Dutch National Key Registry of the Subsurface (Basis Registratie Ondergrond). 
  
 # Installation
  
@@ -10,13 +10,15 @@ bro-exchange contains data exchange tools for the following BRO-services:
 
 ## Innameservice
 Tools:
-- Request and sourcedocument generators: these can be used to generate registrationobject oriented requests in xml from json input
+- Request and sourcedocument generators: these can be used to generate registration object oriented requests in xml from json input
 - Requests handlers: these can be used for validating requests and sending them to the innamewebservice.
 
 Examples:
-Notebooks for demonstrating how to generate registrationobject oriented requests and how send them to the innamewebservice are included in examples\innamewebservice
+<br>
+Notebooks for demonstrating how to generate and send registration object oriented requests are included in examples\innamewebservice
 
 Note:
+<br>
 Data exchange related to the following registration objects is supported at this moment:
 
 - Groundwatermonitoringwell (GMW)
