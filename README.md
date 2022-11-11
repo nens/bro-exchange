@@ -5,9 +5,7 @@ This package contains tools for retrieving data from or sending data to the Dutc
  
 # Installation
  
- `pip install git+https://github.com/nens/bro-exchange#egg=bro-exchange'
-
-`
+ `pip install git+https://github.com/nens/bro-exchange#egg=bro-exchange`
 
 # Usage
 bro-exchange contains data exchange tools for the following BRO-services:
