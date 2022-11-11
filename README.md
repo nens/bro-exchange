@@ -14,11 +14,9 @@ bro-exchange contains data exchange tools for the following BRO-services:
 - Requests handlers: these can be used for validating requests and sending them to the innamewebservice.
 
 ### Examples:
-<br>
 Notebooks for demonstrating how to generate and send registration object oriented requests are included in examples\innamewebservice
 
 ### Note:
-<br>
 Data exchange related to the following registration objects is supported at this moment:
 
 - Groundwatermonitoringwell (GMW)
