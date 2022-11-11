@@ -18,11 +18,17 @@ import os
         # install_requires = f.read().splitlines()
     
 setup(
-          name="gwmpy", 
+          name="bro_exhange", 
           version='1.0.0',
-          description='this package contains some tools for data exchange with the BRO, specificly for the groundwatermonitoring domain',
-          author='',
+          description='This python package contains tools to retrieve data from / send data to the Dutch National Key Registry of the Subsurface (Basis Registratie Ondergrond).',
+          author='Karl Schutt',
+          author_email='karlschutt@outlook.com',
+
           packages=find_packages(exclude=['tests','examples']),
-          install_requires=['requests>=2.24.0','lxml>=4.6.1','uuid']
-          
+          install_requires=['requests>=2.24.0','lxml>=4.6.1','uuid'],
+          keywords=['python', 'BRO','Basis Registratie Ondergrond','Bronhouderportaal',],
+          classifiers= [    
+             "Programming Language :: Python :: 3",
+             "Operating System :: Microsoft :: Windows",
+          ]                 
           )
