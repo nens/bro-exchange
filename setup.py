@@ -18,7 +18,7 @@ import os
         # install_requires = f.read().splitlines()
     
 setup(
-          name="bro_exhange", 
+          name="bro-exchange", 
           version='1.0.0',
           description='This python package contains tools to retrieve data from / send data to the Dutch National Key Registry of the Subsurface (Basis Registratie Ondergrond).',
           author='Karl Schutt',

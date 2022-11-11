@@ -1,8 +1,0 @@
-setup.py
-LizardTools/__init__.py
-bro_converter/tools.py
-bro_converter.egg-info/PKG-INFO
-bro_converter.egg-info/SOURCES.txt
-bro_converter.egg-info/dependency_links.txt
-bro_converter.egg-info/requires.txt
-bro_converter.egg-info/top_level.txt
