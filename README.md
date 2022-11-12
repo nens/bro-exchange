@@ -1,5 +1,3 @@
-<img src=bro_exchange/logo/bro_exchange.png width="140">
-
 # bro-exchange
 This package contains tools for retrieving data from or sending data to the Dutch National Key Registry of the Subsurface (Basis Registratie Ondergrond). 
  
