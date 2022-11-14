@@ -3,9 +3,11 @@
 from .sourcedocs import *
 from bro_exchange.broxml.mappings import ns_regreq_map_gmw1, codespace_map_gmw1 # mappings
 from bro_exchange.checks import check_missing_args
+from bro_exchange.bhp.connector import validate_request
 
 from lxml import etree
 import os
+import pandas as pd
 
 
 # =============================================================================
@@ -56,7 +58,9 @@ class gmw_registration_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
-        
+        self.validation_status = None
+        self.validation_report = None 
+
         # Request arguments:
         arglist = {
                    'deliveryAccountableParty':'optional',
@@ -214,15 +218,22 @@ class gmw_registration_request():
         self.request = etree.tostring(self.requesttree, encoding='utf8', method='xml')
         #print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
-    def write_xml(self, filename, output_dir=None):
+    def write_request(self, filename, output_dir=None):
     
         if output_dir == None:
             self.requesttree.write(filename, pretty_print = True)
         else:
             self.requesttree.write(os.path.join(output_dir,filename), pretty_print=True)
 
-
-
+    def validate(self, acces_token_bro_portal, demo=True):
+        if self.request == None:
+            Exception("Request isn't generated yet")  
+        res = validate_request(self.request, acces_token_bro_portal, demo)
+        self.validation_status = res['status']
+        print(res['status'])
+        report = pd.DataFrame(res['errors'])
+        self.validation_report
+    
 class gmw_replace_request():
     
     """
@@ -262,6 +273,8 @@ class gmw_replace_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
+        self.validation_status = None
+        self.validation_report = None
         
         # Request arguments:
         arglist = {
@@ -407,14 +420,21 @@ class gmw_replace_request():
         self.request = etree.tostring(self.requesttree, encoding='utf8', method='xml')
         #print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
-    def write_xml(self, filename, output_dir=None):
+    def write_request(self, filename, output_dir=None):
     
         if output_dir == None:
             self.requesttree.write(filename, pretty_print = True)
         else:
             self.requesttree.write(os.path.join(output_dir,filename), pretty_print=True)
 
-
+    def validate(self, acces_token_bro_portal, demo=True):
+        if self.request == None:
+            Exception("Request isn't generated yet")  
+        res = validate_request(self.request, acces_token_bro_portal, demo)
+        self.validation_status = res['status']
+        print(res['status'])
+        report = pd.DataFrame(res['errors'])
+        self.validation_report
 
 
 class gmw_move_request():
@@ -456,6 +476,8 @@ class gmw_move_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
+        self.validation_status = None
+        self.validation_report = None
         
         # Request arguments:
         arglist = {
@@ -613,12 +635,21 @@ class gmw_move_request():
         self.request = etree.tostring(self.requesttree, encoding='utf8', method='xml')
         #print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
-    def write_xml(self, filename, output_dir=None):
+    def write_request(self, filename, output_dir=None):
     
         if output_dir == None:
             self.requesttree.write(filename, pretty_print = True)
         else:
             self.requesttree.write(os.path.join(output_dir,filename), pretty_print=True)
+
+    def validate(self, acces_token_bro_portal, demo=True):
+        if self.request == None:
+            Exception("Request isn't generated yet")  
+        res = validate_request(self.request, acces_token_bro_portal, demo)
+        self.validation_status = res['status']
+        print(res['status'])
+        report = pd.DataFrame(res['errors'])
+        self.validation_report
 
 
 class gmw_delete_request():
@@ -660,6 +691,8 @@ class gmw_delete_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
+        self.validation_status = None
+        self.validation_report = None
         
         # Request arguments:
         arglist = {
@@ -804,13 +837,21 @@ class gmw_delete_request():
         self.request = etree.tostring(self.requesttree, encoding='utf8', method='xml')
         #print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
-    def write_xml(self, filename, output_dir=None):
+    def write_request(self, filename, output_dir=None):
     
         if output_dir == None:
             self.requesttree.write(filename, pretty_print = True)
         else:
             self.requesttree.write(os.path.join(output_dir,filename), pretty_print=True)
 
+    def validate(self, acces_token_bro_portal, demo=True):
+        if self.request == None:
+            Exception("Request isn't generated yet")  
+        res = validate_request(self.request, acces_token_bro_portal, demo)
+        self.validation_status = res['status']
+        print(res['status'])
+        report = pd.DataFrame(res['errors'])
+        self.validation_report
 
 class gmw_insert_request():
     
@@ -851,6 +892,8 @@ class gmw_insert_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
+        self.validation_status = None
+        self.validation_report = None
         
         # Request arguments:
         arglist = {
@@ -988,9 +1031,18 @@ class gmw_insert_request():
         self.request = etree.tostring(self.requesttree, encoding='utf8', method='xml')
         #print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
-    def write_xml(self, filename, output_dir=None):
+    def write_request(self, filename, output_dir=None):
     
         if output_dir == None:
             self.requesttree.write(filename, pretty_print = True)
         else:
             self.requesttree.write(os.path.join(output_dir,filename), pretty_print=True)
+
+    def validate(self, acces_token_bro_portal, demo=True):
+        if self.request == None:
+            Exception("Request isn't generated yet")  
+        res = validate_request(self.request, acces_token_bro_portal, demo)
+        self.validation_status = res['status']
+        print(res['status'])
+        report = pd.DataFrame(res['errors'])
+        self.validation_report = report

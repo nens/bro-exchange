@@ -13,7 +13,7 @@ import os
 # Validation
 # =============================================================================
 
-def validate_sourcedoc(payload, token, demo=False):
+def validate_request(payload, token, demo=False):
     """
     
 
