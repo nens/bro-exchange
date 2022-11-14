@@ -58,7 +58,7 @@ class gmw_registration_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
-        self.validation_status = None
+        self.validation_info = None
         self.validation_report = None 
 
         # Request arguments:
@@ -228,12 +228,9 @@ class gmw_registration_request():
     def validate(self, acces_token_bro_portal, demo=True):
         if self.request == None:
             Exception("Request isn't generated yet")  
-        res = validate_request(self.request, acces_token_bro_portal, demo)
-        self.validation_status = res['status']
-        print(res['status'])
+        self.validation_info = validate_request(self.request, acces_token_bro_portal, demo)
         try:
-            report = pd.DataFrame(res['errors'])
-            self.validation_report = report
+            self.validation_status = self.validation_info['status']
         except:
             pass
     
@@ -276,7 +273,7 @@ class gmw_replace_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
-        self.validation_status = None
+        self.validation_info = None
         self.validation_report = None
         
         # Request arguments:
@@ -433,12 +430,9 @@ class gmw_replace_request():
     def validate(self, acces_token_bro_portal, demo=True):
         if self.request == None:
             Exception("Request isn't generated yet")  
-        res = validate_request(self.request, acces_token_bro_portal, demo)
-        self.validation_status = res['status']
-        print(res['status'])
+        self.validation_info = validate_request(self.request, acces_token_bro_portal, demo)
         try:
-            report = pd.DataFrame(res['errors'])
-            self.validation_report = report
+            self.validation_status = self.validation_info['status']
         except:
             pass
 
@@ -482,7 +476,7 @@ class gmw_move_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
-        self.validation_status = None
+        self.validation_info = None
         self.validation_report = None
         
         # Request arguments:
@@ -651,12 +645,9 @@ class gmw_move_request():
     def validate(self, acces_token_bro_portal, demo=True):
         if self.request == None:
             Exception("Request isn't generated yet")  
-        res = validate_request(self.request, acces_token_bro_portal, demo)
-        self.validation_status = res['status']
-        print(res['status'])
+        self.validation_info = validate_request(self.request, acces_token_bro_portal, demo)
         try:
-            report = pd.DataFrame(res['errors'])
-            self.validation_report = report
+            self.validation_status = self.validation_info['status']
         except:
             pass
 
@@ -700,7 +691,7 @@ class gmw_delete_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
-        self.validation_status = None
+        self.validation_info = None
         self.validation_report = None
         
         # Request arguments:
@@ -856,12 +847,9 @@ class gmw_delete_request():
     def validate(self, acces_token_bro_portal, demo=True):
         if self.request == None:
             Exception("Request isn't generated yet")  
-        res = validate_request(self.request, acces_token_bro_portal, demo)
-        self.validation_status = res['status']
-        print(res['status'])
+        self.validation_info = validate_request(self.request, acces_token_bro_portal, demo)
         try:
-            report = pd.DataFrame(res['errors'])
-            self.validation_report = report
+            self.validation_status = self.validation_info['status']
         except:
             pass
 
@@ -904,7 +892,7 @@ class gmw_insert_request():
         self.srcdoc = srcdoc
         self.kwargs = kwargs   
         self.request = None
-        self.validation_status = None
+        self.validation_info = None
         self.validation_report = None
         
         # Request arguments:
@@ -1053,11 +1041,8 @@ class gmw_insert_request():
     def validate(self, acces_token_bro_portal, demo=True):
         if self.request == None:
             Exception("Request isn't generated yet")  
-        res = validate_request(self.request, acces_token_bro_portal, demo)
-        self.validation_status = res['status']
-        print(res['status'])
+        self.validation_info = validate_request(self.request, acces_token_bro_portal, demo)
         try:
-            report = pd.DataFrame(res['errors'])
-            self.validation_report = report
+            self.validation_status = self.validation_info['status']
         except:
             pass
