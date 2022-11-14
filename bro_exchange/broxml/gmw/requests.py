@@ -231,8 +231,11 @@ class gmw_registration_request():
         res = validate_request(self.request, acces_token_bro_portal, demo)
         self.validation_status = res['status']
         print(res['status'])
-        report = pd.DataFrame(res['errors'])
-        self.validation_report
+        try:
+            report = pd.DataFrame(res['errors'])
+            self.validation_report = report
+        except:
+            pass
     
 class gmw_replace_request():
     
@@ -433,8 +436,11 @@ class gmw_replace_request():
         res = validate_request(self.request, acces_token_bro_portal, demo)
         self.validation_status = res['status']
         print(res['status'])
-        report = pd.DataFrame(res['errors'])
-        self.validation_report
+        try:
+            report = pd.DataFrame(res['errors'])
+            self.validation_report = report
+        except:
+            pass
 
 
 class gmw_move_request():
@@ -648,8 +654,11 @@ class gmw_move_request():
         res = validate_request(self.request, acces_token_bro_portal, demo)
         self.validation_status = res['status']
         print(res['status'])
-        report = pd.DataFrame(res['errors'])
-        self.validation_report
+        try:
+            report = pd.DataFrame(res['errors'])
+            self.validation_report = report
+        except:
+            pass
 
 
 class gmw_delete_request():
@@ -850,8 +859,11 @@ class gmw_delete_request():
         res = validate_request(self.request, acces_token_bro_portal, demo)
         self.validation_status = res['status']
         print(res['status'])
-        report = pd.DataFrame(res['errors'])
-        self.validation_report
+        try:
+            report = pd.DataFrame(res['errors'])
+            self.validation_report = report
+        except:
+            pass
 
 class gmw_insert_request():
     
@@ -1044,5 +1056,8 @@ class gmw_insert_request():
         res = validate_request(self.request, acces_token_bro_portal, demo)
         self.validation_status = res['status']
         print(res['status'])
-        report = pd.DataFrame(res['errors'])
-        self.validation_report = report
+        try:
+            report = pd.DataFrame(res['errors'])
+            self.validation_report = report
+        except:
+            pass

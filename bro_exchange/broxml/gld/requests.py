@@ -143,8 +143,11 @@ class gld_registration_request():
         res = validate_request(self.request, acces_token_bro_portal, demo)
         self.validation_status = res['status']
         print(res['status'])
-        report = pd.DataFrame(res['errors'])
-        self.validation_report
+        try:
+            report = pd.DataFrame(res['errors'])
+            self.validation_report = report
+        except:
+            pass
 
 #%% gld replace request
 
@@ -282,8 +285,11 @@ class gld_replace_request():
         res = validate_request(self.request, acces_token_bro_portal, demo)
         self.validation_status = res['status']
         print(res['status'])
-        report = pd.DataFrame(res['errors'])
-        self.validation_report
+        try:
+            report = pd.DataFrame(res['errors'])
+            self.validation_report = report
+        except:
+            pass
 
 #%% delete request:
 
@@ -372,9 +378,11 @@ class gld_delete_request():
         res = validate_request(self.request, acces_token_bro_portal, demo)
         self.validation_status = res['status']
         print(res['status'])
-        report = pd.DataFrame(res['errors'])
-        self.validation_report
-
+        try:
+            report = pd.DataFrame(res['errors'])
+            self.validation_report = report
+        except:
+            pass
 
 
 
