@@ -13,18 +13,77 @@ import os
 # Validation
 # =============================================================================
 
-def validate_request(payload, token, demo=False):
+def get_base_url(api,demo):
+    """
+    
+    Parameters
+    ----------
+    api: String
+        API version (default = v1)
+    demo : Bool
+        Defaults to False. If true, the test environment
+        of the bronhouderportaal is selected for data exchange
+    Returns
+    -------
+    base_url: String
+        base url 
+
+    """    
+    if demo == True:
+        base_url = 'https://demo.bronhouderportaal-bro.nl'
+    elif demo == False:
+        base_url = 'https://www.bronhouderportaal-bro.nl'
+    if api == 'v1':
+        base_url += '/api'
+    if api == 'v2':
+        base_url += '/api/v2'
+    
+    return(base_url)
+
+def check_input(token,user,password,project_id,api,demo):
+    if token == None:
+        if user == None or password == None:
+            raise Exception("No user / password supplied for authentication")  
+        token = {
+            'user':user,
+            'pass':password
+            }     
+    else:
+        try:
+            if 'user' not in list(token.keys()) and 'password' not in list(token.keys()):
+                raise Exception("Supplied token not complete: token should contain the following arguments: 'user', 'password'")  
+        except:
+            raise Exception("Token invalid: token must be a dict")  
+
+    if api not in ['v1','v2']:
+        raise Exception("Selected api not valid")  
+
+    if api == 'v2' and project_id == None:
+        raise Exception("A project id must be supplied for using the selected api version")  
+
+    if type(demo) != bool():
+        raise Exception("Demo must be a bool")  
+
+def validate_request(payload, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
     """
     
 
     Parameters
     ----------
-    sourcedoc : string
+    sourcedoc : String
         XML string containing the request.
     token : dictionary
         dictionary with authentication data. keys:
             - user
             - pass
+    user:
+        Token user. Note: should only be supplied when token isn't generated in advance
+    password:
+        Token pass. Note: should only be supplied when token isn't generated in advance
+    api: String
+        API version (default = v1)
+    project_id:
+        id of the project. Note: required when api > v1
     demo : Bool
         Defaults to False. If true, the test environment
         of the bronhouderportaal is selected for data exchange
@@ -34,12 +93,14 @@ def validate_request(payload, token, demo=False):
     None.
 
     """
-    
-    if demo==True:
-        upload_url = 'https://demo.bronhouderportaal-bro.nl/api/validatie'
-    else:
-        upload_url = 'https://www.bronhouderportaal-bro.nl/api/validatie'
-    
+    check_input(token,user,password,project_id,api,demo)
+
+    base_url = get_base_url(api,demo)
+
+    if api == 'v1':
+        upload_url = base_url +'/validatie'  
+    if api == 'v2':
+        upload_url = base_url +'/{project_id}/validatie'  
     
     res = requests.post(upload_url,
         data=payload,

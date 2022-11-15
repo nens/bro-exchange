@@ -6,7 +6,7 @@
   <sourceDocument>
     <GLD_Addition gml:id="id_0001">
       <observation>
-        <om:OM_Observation gml:id="_54d8f995-9123-4924-a4e6-2980988dc175">
+        <om:OM_Observation gml:id="_32dcbe19-0f3f-4b3d-bbb7-57c57bf3215a">
           <om:type xlink:href="http://www.opengis.net/def/observationType/waterml/2.0/MeasurementTimeseriesTVPObservation"/>
           <om:metadata>
             <wml2:ObservationMetadata>
@@ -21,7 +21,7 @@
                 </gmd:CI_ResponsibleParty>
               </gmd:contact>
               <gmd:dateStamp>
-                <gco:Date>2022-11-11</gco:Date>
+                <gco:Date>2022-11-15</gco:Date>
               </gmd:dateStamp>
               <gmd:identificationInfo gco:nilReason="unknown"/>
               <wml2:parameter>
@@ -52,7 +52,7 @@
             </gml:TimeInstant>
           </om:resultTime>
           <om:procedure>
-            <wml2:ObservationProcess gml:id="_485ab1c3-3fa5-413a-b221-11f5cde3b12d">
+            <wml2:ObservationProcess gml:id="_37fe49d3-9d42-4987-b211-68b57082f504">
               <wml2:processType xlink:href="http://www.opengis.net/def/waterml/2.0/processType/Algorithm"/>
               <wml2:processReference xlink:href="urn:bro:gld:ProcessReference:NEN5120v1991"/>
               <wml2:parameter>
@@ -72,7 +72,7 @@
           <om:observedProperty/>
           <om:featureOfInterest/>
           <om:result>
-            <wml2:MeasurementTimeseries gml:id="_b1e35cac-5e77-40fe-8146-24f5ac6e8a29">
+            <wml2:MeasurementTimeseries gml:id="_02ef02e6-f595-40f7-aa59-ec265aa1cd49">
               <wml2:point>
                 <wml2:MeasurementTVP>
                   <wml2:time>2018-04-15T08:05:42+02:00</wml2:time>

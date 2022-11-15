@@ -73,6 +73,7 @@ class gmw_registration_request():
         
         # Check wether all obligated registration request arguments for method 'initialize' are in kwargs
         check_missing_args(self.kwargs, arglist, 'gmw_registration with method initialize')
+        self.generate()
          
     def generate(self):
                
