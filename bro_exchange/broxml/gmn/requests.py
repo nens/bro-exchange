@@ -3,7 +3,7 @@
 from .sourcedocs import *
 from bro_exchange.broxml.mappings import ns_regreq_map_gmn1, ns_regreq_map_gmn2, xsi_regreq_map_gmn1, codespace_map_gmn1  # mappings
 from bro_exchange.checks import check_missing_args
-from bro_exchange.bhp.connector import validate_request
+from bro_exchange.bhp.connector import validate_request, deliver_requests
 
 from lxml import etree
 import os
@@ -47,6 +47,8 @@ class gmn_registration_request():
         self.request = None
         self.validation_info = None
         self.validation_report = None 
+        self.delivery_info = None
+        self.delivery_id = None
 
         # Request arguments:
         arglist = {
@@ -56,10 +58,12 @@ class gmn_registration_request():
                    'requestReference':'obligated',
                    'srcdocdata':'obligated',
                    }
-        
+
         # Check wether all obligated registration request arguments for method 'initialize' are in kwargs
         check_missing_args(self.kwargs, arglist, 'gmw_registration with method initialize')
-         
+
+        self.requestreference = self.kwargs['requestReference']
+
     def generate(self):
                
         # Generate xml document base:
@@ -121,12 +125,30 @@ class gmn_registration_request():
         else:
             self.requesttree.write(os.path.join(output_dir,filename), pretty_print=True)
 
-    def validate(self, acces_token_bro_portal, demo=True):
+    def validate(self, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
         if self.request == None:
-            Exception("Request isn't generated yet")  
-        self.validation_info = validate_request(self.request, acces_token_bro_portal, demo)
+            raise Exception("Request isn't generated yet")  
+        self.validation_info = validate_request(self.request, token, user, password, api, project_id, demo)
         try:
             self.validation_status = self.validation_info['status']
+        except:
+            pass
+    
+    def deliver(self, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
+
+        if self.delivery_id!=None:
+            raise Exception("Request has already been delivered")
+        if self.validation_status != 'VALIDE':
+            raise Exception("Request isn't valid")  
+        if self.validation_status == None:
+            raise Exception("Request isn't validated")  
+        
+        reqs = {self.requestreference:self.request}
+
+        self.delivery_info = deliver_requests(reqs, token, user, password, api, project_id, demo)
+
+        try:
+            self.delivery_id = self.delivery_info.json()['identifier']
         except:
             pass
 
@@ -168,6 +190,8 @@ class gmn_replace_request():
         self.request = None
         self.validation_info = None
         self.validation_report = None 
+        self.delivery_info = None
+        self.delivery_id = None
 
         # Request arguments:
         arglist = {
@@ -181,7 +205,9 @@ class gmn_replace_request():
         
         # Check wether all obligated registration request arguments for method 'initialize' are in kwargs
         check_missing_args(self.kwargs, arglist, 'gmw_replace with method initialize')
-         
+
+        self.requestreference = self.kwargs['requestReference']
+
     def generate(self):
                
         # Generate xml document base:
@@ -246,11 +272,29 @@ class gmn_replace_request():
         else:
             self.requesttree.write(os.path.join(output_dir,filename), pretty_print=True)
 
-    def validate(self, acces_token_bro_portal, demo=True):
+    def validate(self, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
         if self.request == None:
-            Exception("Request isn't generated yet")  
-        self.validation_info = validate_request(self.request, acces_token_bro_portal, demo)
+            raise Exception("Request isn't generated yet")  
+        self.validation_info = validate_request(self.request, token, user, password, api, project_id, demo)
         try:
             self.validation_status = self.validation_info['status']
+        except:
+            pass
+
+    def deliver(self, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
+        
+        if self.delivery_id!=None:
+            raise Exception("Request has already been delivered")
+        if self.validation_status != 'VALIDE':
+            raise Exception("Request isn't valid")  
+        if self.validation_status == None:
+            raise Exception("Request isn't validated")  
+        
+        reqs = {self.requestreference:self.request}
+
+        self.delivery_info = deliver_requests(reqs, token, user, password, api, project_id, demo)
+
+        try:
+            self.delivery_id = self.delivery_info.json()['identifier']
         except:
             pass

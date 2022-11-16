@@ -414,11 +414,15 @@ def gen_point_metadata_qualifiers(data, rec, nsmap, codespacemap, count):
     if 'censoringLimitvalue' in metadata:
         
         qualifierlist['censoringLimitvalue']=etree.Element(("{%s}" % nsmap['wml2']) + 'qualifier', nsmap=nsmap) 
-        censoringLimitvalue_category = etree.SubElement(qualifierlist['censoringLimitvalue'],("{%s}" % nsmap['swe']) + 'Category', nsmap=nsmap) 
-        censoringLimitvalue_codeSpace =  etree.SubElement(censoringLimitvalue_category,("{%s}" % nsmap['swe']) + 'codeSpace', nsmap=nsmap,
-                                                         attrib = {
-                                                                     ("{%s}" % nsmap['xlink'])+'href':codespace_map_gld1["censoringLimitvalue"]                                                               
-                                                             })
+        censoringLimitvalue_category = etree.SubElement(qualifierlist['censoringLimitvalue'],("{%s}" % nsmap['swe']) + 'Quantity', nsmap=nsmap,
+                                                        attrib = {
+                                                                     'definition':codespace_map_gld1["censoringLimitvalue"]                                                               
+                                                             }) 
+        censoringLimitvalue_value = etree.SubElement(censoringLimitvalue_category,("{%s}" % nsmap['swe']) + 'uom', nsmap=nsmap,
+                                                        attrib = {
+                                                                     'code':"m"                                                      
+                                                             }) 
+
         
         censoringLimitvalue_value = etree.SubElement(censoringLimitvalue_category,("{%s}" % nsmap['swe']) + 'value', nsmap=nsmap) 
         censoringLimitvalue_value.text = str(rec['metadata']['censoringLimitvalue'])

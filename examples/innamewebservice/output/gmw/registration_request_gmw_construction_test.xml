@@ -18,7 +18,7 @@
         <ns1:date>2015-02-08</ns1:date>
       </ns:wellConstructionDate>
       <ns:deliveredLocation>
-        <ns2:location ns3:id="id-b374ec48-b3cb-4b42-b12a-1441eeca4915" srsName="urn:ogc:def:crs:EPSG::28992">
+        <ns2:location ns3:id="id-1ad99b5f-1828-47f7-be9c-12de3ab184a9" srsName="urn:ogc:def:crs:EPSG::28992">
           <ns3:pos>134750.0 477800.0</ns3:pos>
         </ns2:location>
         <ns2:horizontalPositioningMethod codeSpace="urn:bro:gmw:HorizontalPositioningMethod">DGPS50tot200cm</ns2:horizontalPositioningMethod>

@@ -107,5 +107,5 @@ codespace_map_gld1 = {
                     "MeasurementInstrumentType":"urn:bro:gld:MeasurementInstrumentType",
                     "ProcessReference":"urn:bro:gld:ProcessReference",
                     "StatusQualityControl":"urn:bro:gld:StatusQualityControl",
-                    "censoringLimitvalue":"urn:bro:gld:censoringLimitvalue" 
+                    "censoringLimitvalue":"urn:bro:gld:PointMetadata:censoringLimitvalue" 
                 }   

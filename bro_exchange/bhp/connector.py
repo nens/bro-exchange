@@ -61,8 +61,10 @@ def check_input(token,user,password,project_id,api,demo):
     if api == 'v2' and project_id == None:
         raise Exception("A project id must be supplied for using the selected api version")  
 
-    if type(demo) != bool():
+    if demo != True or demo != True:
         raise Exception("Demo must be a bool")  
+    
+    return(token)
 
 def validate_request(payload, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
     """
@@ -70,7 +72,7 @@ def validate_request(payload, token=None, user=None, password= None, api='v1', p
 
     Parameters
     ----------
-    sourcedoc : String
+    request : String
         XML string containing the request.
     token : dictionary
         dictionary with authentication data. keys:
@@ -93,14 +95,15 @@ def validate_request(payload, token=None, user=None, password= None, api='v1', p
     None.
 
     """
-    check_input(token,user,password,project_id,api,demo)
+    token = check_input(token,user,password,project_id,api,demo)
 
     base_url = get_base_url(api,demo)
 
     if api == 'v1':
         upload_url = base_url +'/validatie'  
     if api == 'v2':
-        upload_url = base_url +'/{project_id}/validatie'  
+        project_id = str(project_id)
+        upload_url = base_url +'/{}/validatie'.format(project_id)    
     
     res = requests.post(upload_url,
         data=payload,
@@ -116,13 +119,13 @@ def validate_request(payload, token=None, user=None, password= None, api='v1', p
     return(requestinfo)
 
 
-def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
+def deliver_requests(reqs, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
     """
     
 
     Parameters
     ----------
-    sourcedocs : dictionary
+    reqs : dictionary
         dictionary containing:
             keys: filenames
             values: XML strings containing the requests.
@@ -139,14 +142,117 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     Request response.
 
     """    
+    delivery = None
+
+    token = check_input(token,user,password,project_id,api,demo)
+
+    base_url = get_base_url(api,demo)
+
+
+    if api == 'v1':
+        upload_url = base_url +'/uploads'  
+    if api == 'v2':
+        project_id = str(project_id)
+        upload_url = base_url +'/{}/uploads'.format(project_id)  
     
-    if demo==True:
-        base_url = 'https://demo.bronhouderportaal-bro.nl/api'
-    else:
-        base_url = 'https://www.bronhouderportaal-bro.nl/api'
+    try:
+        res = requests.post(upload_url,
+            headers={
+                "Content-Type": "application/xml"
+            },
+            cookies={},
+            auth=(token['user'],token['pass']),
+        )         
+    except:
+        raise Exception('Error: unable to create an upload')
     
-    # Step 1: Create upload
-    upload_url = base_url+'/uploads'
+    try:
+        upload_url_id = res.headers['Location']
+
+        # Step 2: Add source documents to upload
+        try: 
+            
+            for request in reqs.keys():
+                headers = {'Content-type': 'application/xml'}
+                params = {'filename':request}
+                payload = reqs[request]
+                res = requests.post(upload_url_id+'/brondocumenten',
+                    data=payload,
+                    headers=headers,
+                    cookies={},
+                    auth=(token['user'],token['pass']),
+                    params = params
+                )         
+        except:
+            raise Exception('Error: Cannot add source documents to upload')                   
+         
+        # Step 3: Deliver upload
+        try:
+            upload_id = upload_url_id.split('/')[len(upload_url_id.split('/'))-1]    
+            if api == 'v1':
+                delivery_url = base_url +'/leveringen'  
+            if api == 'v2':
+                delivery_url = base_url +'/{}/leveringen'.format(project_id)  
+            payload = {'upload':int(upload_id)}
+            headers = {'Content-type': 'application/json'}
+        except:
+            raise Exception('Error: failed to deliver upload')
+
+        endresponse = requests.post(delivery_url,
+            data=json.dumps(payload),
+            headers=headers,
+            cookies={},
+            auth=(token['user'],token['pass']),
+        )  
+        try:
+            delivery_url_id = endresponse.headers['Location']
+        except:
+            return(endresponse)
+
+        delivery = requests.get(url=delivery_url_id,
+            auth=(token['user'],token['pass']),
+            ) 
+        
+        return(delivery)
+    except:
+        delivery = res
+
+    return(delivery)
+
+def upload_sourcedocs_from_dict(reqs, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
+    """
+    
+
+    Parameters
+    ----------
+    reqs : dictionary
+        dictionary containing:
+            keys: filenames
+            values: XML strings containing the requests.
+    token : dictionary
+        dictionary with authentication data. keys:
+            - user
+            - pass
+    demo : Bool
+        Defaults to False. If true, the test environment
+        of the bronhouderportaal is selected for data exchange
+
+    Returns
+    -------
+    Request response.
+
+    """    
+    delivery = None
+    
+    token = check_input(token,user,password,project_id,api,demo)
+
+    base_url = get_base_url(api,demo)
+
+    if api == 'v1':
+        upload_url = base_url +'/uploads'  
+    if api == 'v2':
+        project_id = str(project_id)
+        upload_url = base_url +'/{}/uploads'.format(project_id)  
     
     try:
         res = requests.post(upload_url,
@@ -169,10 +275,10 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     try:        
         try: 
             
-            for sourcedoc in sourcedocs.keys():
+            for request in reqs.keys():
                 headers = {'Content-type': 'application/xml'}
-                params = {'filename':sourcedoc}
-                payload = sourcedocs[sourcedoc]
+                params = {'filename':request}
+                payload = reqs[request]
                 res = requests.post(upload_url_id+'/brondocumenten',
                     data=payload,
                     headers=headers,
@@ -191,7 +297,10 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     # Step 3: Deliver upload
     try:
         upload_id = upload_url_id.split('/')[len(upload_url_id.split('/'))-1]    
-        delivery_url = base_url+'/leveringen'
+        if api == 'v1':
+            delivery_url = base_url +'/leveringen'  
+        if api == 'v2':
+            delivery_url = base_url +'/{}/leveringen'.format(project_id)    
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
         endresponse = requests.post(delivery_url,
@@ -212,20 +321,20 @@ def upload_sourcedocs_from_dict(sourcedocs, token, demo=False):
     return(delivery)
 
 
-def upload_sourcedocs_from_dir(input_folder, token, specific_file = None,demo=False):
+def upload_sourcedocs_from_dir(input_folder, token=None, user=None, password= None, api='v1', project_id = None, demo=False, specific_file = None):
     """
     
     Parameters
     ----------
     input_folder : string
-        Input folder to load sourcedocuments from
+        Input folder to load requestuments from
         
     token : json
         Acces token for connecting with bronhouderportal project
                
     specific_file : string, optional
-        Filename of an specific sourcedocument in the input folder. If this
-        parameter is left empty, all sourcedocuments in the input folder 
+        Filename of an specific requestument in the input folder. If this
+        parameter is left empty, all requestuments in the input folder 
         will be loaded
 
     Returns
@@ -233,15 +342,18 @@ def upload_sourcedocs_from_dir(input_folder, token, specific_file = None,demo=Fa
     Json string containing information about the delivery (bronhouderportaal api)
 
     """
+    delivery = None
+
+    token = check_input(token,user,password,project_id,api,demo)
 
     # Step 1: Create upload
-    if demo==True:
-        base_url = 'https://demo.bronhouderportaal-bro.nl/api'
-    else:
-        base_url = 'https://www.bronhouderportaal-bro.nl/api'    
-    
-    
-    upload_url = base_url+'/uploads'
+    base_url = get_base_url(api,demo)
+
+    if api == 'v1':
+        upload_url = base_url +'/uploads'  
+    if api == 'v2':
+        project_id = str(project_id)
+        upload_url = base_url +'/{}/uploads'.format(project_id)    
     
     try:
         res = requests.post(upload_url,
@@ -311,7 +423,10 @@ def upload_sourcedocs_from_dir(input_folder, token, specific_file = None,demo=Fa
     # Step 3: Deliver upload
     try:
         upload_id = upload_url_id.split('/')[len(upload_url_id.split('/'))-1]    
-        delivery_url = base_url+'/leveringen'
+        if api == 'v1':
+            delivery_url = base_url +'/leveringen'  
+        if api == 'v2':
+            delivery_url = base_url +'/{}/leveringen'.format(project_id)   
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
         endresponse = requests.post(delivery_url,
@@ -330,7 +445,7 @@ def upload_sourcedocs_from_dir(input_folder, token, specific_file = None,demo=Fa
     return(delivery)
 
 
-def check_delivery_status(identifier, token, demo=False):
+def check_delivery_status(identifier, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
     """
     
 
@@ -350,26 +465,32 @@ def check_delivery_status(identifier, token, demo=False):
     Request response.
 
     """    
+    delivery = None
     
-    if demo==True:
-        base_url = 'https://demo.bronhouderportaal-bro.nl/api'
-    else:
-        base_url = 'https://www.bronhouderportaal-bro.nl/api'
+    token = check_input(token,user,password,project_id,api,demo)
+
+    # Step 1: Create upload
+    base_url = get_base_url(api,demo)
+
+    if api == 'v1':
+        delivery_url_id = base_url +'/leveringen/{}'.format(identifier)
+    if api == 'v2':
+        project_id = str(project_id)
+        delivery_url_id = base_url +'/{}/leveringen/{}'.format(project_id,identifier) 
     
-    delivery_url_id = base_url+'/leveringen/{}'.format(identifier)
     delivery = requests.get(url=delivery_url_id,
         auth=(token['user'],token['pass']),
     )     
     return(delivery)
     
 
-def get_sourcedocument(identifier, token, demo=False):
+def get_sourcedocument(identifier, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
     """
     
 
     Parameters
     ----------
-    identifier : string, sourcedocument id
+    identifier : string, requestument id
     token : dictionary
         dictionary with authentication data. keys:
             - user
@@ -383,13 +504,20 @@ def get_sourcedocument(identifier, token, demo=False):
     Request response.
 
     """    
+    delivery = None
     
-    if demo==True:
-        base_url = 'https://demo.bronhouderportaal-bro.nl/api'
-    else:
-        base_url = 'https://www.bronhouderportaal-bro.nl/api'
     
-    delivery_url_id = base_url+'/brondocumenten/{}'.format(identifier)
+    token = check_input(token,user,password,project_id,api,demo)
+
+    # Step 1: Create upload
+    base_url = get_base_url(api,demo)
+
+    if api == 'v1':
+        delivery_url_id = base_url +'/brondocumenten/{}'.format(identifier)
+    if api == 'v2':
+        project_id = str(project_id)
+        delivery_url_id = base_url +'/{}/brondocumenten/{}'.format(project_id,identifier) 
+    
     delivery = requests.get(url=delivery_url_id,
         auth=(token['user'],token['pass']),
     )     

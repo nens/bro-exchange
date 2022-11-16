@@ -1,12 +1,12 @@
 <registrationRequest xmlns:wml2="http://www.opengis.net/waterml/2.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:om="http://www.opengis.net/om/2.0" xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:brocom="http://www.broservices.nl/xsd/brocommon/3.0" xmlns:gldcom="http://www.broservices.nl/xsd/gldcommon/1.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.broservices.nl/xsd/isgld/1.0" xsi:schemaLocation="http://www.broservices.nl/xsd/isgld/1.0 https://schema.broservices.nl/xsd/isgld/1.0/isgld-messages.xsd">
   <brocom:requestReference>11_GLD_Addition_sensorisch</brocom:requestReference>
   <brocom:deliveryAccountableParty>27376655</brocom:deliveryAccountableParty>
-  <brocom:broId>GLD000000000153</brocom:broId>
+  <brocom:broId>GLD000000054499</brocom:broId>
   <brocom:qualityRegime>IMBRO</brocom:qualityRegime>
   <sourceDocument>
     <GLD_Addition gml:id="id_0001">
       <observation>
-        <om:OM_Observation gml:id="_32dcbe19-0f3f-4b3d-bbb7-57c57bf3215a">
+        <om:OM_Observation gml:id="_92b89efa-d7e7-4e14-885b-d3ed4c6b45d5">
           <om:type xlink:href="http://www.opengis.net/def/observationType/waterml/2.0/MeasurementTimeseriesTVPObservation"/>
           <om:metadata>
             <wml2:ObservationMetadata>
@@ -21,7 +21,7 @@
                 </gmd:CI_ResponsibleParty>
               </gmd:contact>
               <gmd:dateStamp>
-                <gco:Date>2022-11-15</gco:Date>
+                <gco:Date>2018-04-15</gco:Date>
               </gmd:dateStamp>
               <gmd:identificationInfo gco:nilReason="unknown"/>
               <wml2:parameter>
@@ -52,7 +52,7 @@
             </gml:TimeInstant>
           </om:resultTime>
           <om:procedure>
-            <wml2:ObservationProcess gml:id="_37fe49d3-9d42-4987-b211-68b57082f504">
+            <wml2:ObservationProcess gml:id="_51294992-5ba3-4ccc-a713-13c466b5593c">
               <wml2:processType xlink:href="http://www.opengis.net/def/waterml/2.0/processType/Algorithm"/>
               <wml2:processReference xlink:href="urn:bro:gld:ProcessReference:NEN5120v1991"/>
               <wml2:parameter>
@@ -72,7 +72,7 @@
           <om:observedProperty/>
           <om:featureOfInterest/>
           <om:result>
-            <wml2:MeasurementTimeseries gml:id="_02ef02e6-f595-40f7-aa59-ec265aa1cd49">
+            <wml2:MeasurementTimeseries gml:id="_050ece97-9bcd-492b-9470-f352d4c43cbf">
               <wml2:point>
                 <wml2:MeasurementTVP>
                   <wml2:time>2018-04-15T08:05:42+02:00</wml2:time>
