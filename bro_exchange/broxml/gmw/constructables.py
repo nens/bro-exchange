@@ -364,10 +364,14 @@ def gen_monitoringtube(data, tube, nsmap,codespacemap, sourcedoctype):
             numberOfGeoOhmCables = etree.SubElement(monitoringTube, ("{%s}" % nsmap['ns']) + 'numberOfGeoOhmCables', nsmap = nsmap)
             numberOfGeoOhmCables.text = str(data['monitoringTubes'][tube]['numberOfGeoOhmCables'])          
     
-        if 'tubeTopDiameter' in list(data['monitoringTubes'][tube].keys()):    
-            tubeTopDiameter = etree.SubElement(monitoringTube, ("{%s}" % nsmap['ns']) + 'tubeTopDiameter', nsmap = nsmap, uom = 'mm')
-            tubeTopDiameter.text = str(data['monitoringTubes'][tube]['tubeTopDiameter'])              
-    
+        if 'tubeTopDiameter' in list(data['monitoringTubes'][tube].keys()):
+            if data['monitoringTubes'][tube]['tubeTopDiameter'] != None:    
+                tubeTopDiameter = etree.SubElement(monitoringTube, ("{%s}" % nsmap['ns']) + 'tubeTopDiameter', nsmap = nsmap, uom = 'mm')
+                tubeTopDiameter.text = str(data['monitoringTubes'][tube]['tubeTopDiameter'])              
+            else:
+                tubeTopDiameter = etree.SubElement(monitoringTube, ("{%s}" % nsmap['ns']) + 'tubeTopDiameter', nsmap = nsmap, uom = 'mm',
+                    attrib = {("{%s}" % nsmap['xsi'])+'nil': 'true'})
+
         if 'variableDiameter' in list(data['monitoringTubes'][tube].keys()):    
             variableDiameter = etree.SubElement(monitoringTube, ("{%s}" % nsmap['ns']) + 'variableDiameter', nsmap = nsmap)
             variableDiameter.text = str(data['monitoringTubes'][tube]['variableDiameter'])    

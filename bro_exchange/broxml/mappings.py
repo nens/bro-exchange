@@ -9,7 +9,8 @@
 ns_regreq_map_gmw1 = {"ns": "http://www.broservices.nl/xsd/isgmw/1.1",
           "ns1": "http://www.broservices.nl/xsd/brocommon/3.0",
           "ns2": "http://www.broservices.nl/xsd/gmwcommon/1.1" , 
-          "ns3": "http://www.opengis.net/gml/3.2"}
+          "ns3": "http://www.opengis.net/gml/3.2",
+          "xsi": "http://www.w3.org/2001/XMLSchema-instance"}
 
 #%% attribute mappings
 
