@@ -66,6 +66,51 @@ def check_input(token,user,password,project_id,api,demo):
     
     return(token)
 
+
+
+def validate_sourcedoc(payload, token, demo=False):
+    """
+    
+
+    Parameters
+    ----------
+    sourcedoc : string
+        XML string containing the request.
+    token : dictionary
+        dictionary with authentication data. keys:
+            - user
+            - pass
+    demo : Bool
+        Defaults to False. If true, the test environment
+        of the bronhouderportaal is selected for data exchange
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    if demo==True:
+        upload_url = 'https://demo.bronhouderportaal-bro.nl/api/validatie'
+    else:
+        upload_url = 'https://www.bronhouderportaal-bro.nl/api/validatie'
+    
+    
+    res = requests.post(upload_url,
+        data=payload,
+        headers={
+            "Content-Type": "application/xml"
+        },
+        cookies={},
+        auth=(token['user'],token['pass']),
+    ) 
+    
+    requestinfo = res.json()
+    
+    return(requestinfo)
+
+
+
 def validate_request(payload, token=None, user=None, password= None, api='v1', project_id = None, demo=False):
     """
     
