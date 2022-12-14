@@ -61,7 +61,7 @@ def check_input(token,user,password,project_id,api,demo):
     if api == 'v2' and project_id == None:
         raise Exception("A project id must be supplied for using the selected api version")  
 
-    if demo != True or demo != True:
+    if demo != True and demo != False:
         raise Exception("Demo must be a bool")  
     
     return(token)
