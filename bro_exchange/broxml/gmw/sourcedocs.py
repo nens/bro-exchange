@@ -23,7 +23,7 @@ def gen_gmw_construction(data, nsmap, codespacemap, sourcedoctype):
                 'numberOfMonitoringTubes':'obligated',        
                 'groundLevelStable':'obligated',        
                 'wellStability':'optional', # only if groundLevelStabel = nee       
-                'NITGCode':'optional',        
+                'nitgCode':'optional',        
                 #'putcode':'optional', it exists in documentation, not in the official xml schema's
                 'owner':'obligated',        
                 'maintenanceResponsibleParty':'optional',        
