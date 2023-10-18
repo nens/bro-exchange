@@ -120,15 +120,15 @@ def validate_sourcedoc(payload, bro_info, demo=False, api='v1'):
 
         if met_projectnummer(bro_info):
             if demo==True:
-                upload_url = f'https://demo.bronhouderportaal-bro.nl/api/v2/{bro_info['projectnummer']}/validatie'
+                upload_url = f'https://demo.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
             else:
-                upload_url = f'https://www.bronhouderportaal-bro.nl/api/v2/{bro_info['projectnummer']}/validatie'
+                upload_url = f'https://www.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
 
         else:
             if demo==True:
                 upload_url = 'https://demo.bronhouderportaal-bro.nl/api/v2/validatie'
             else:
-                upload_url = 'https://www.bronhouderportaal-bro.nl/api/v2/validatie
+                upload_url = 'https://www.bronhouderportaal-bro.nl/api/v2/validatie'
 
         res = requests.post(upload_url,
         data=payload,
