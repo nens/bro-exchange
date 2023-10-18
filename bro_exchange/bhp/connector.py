@@ -66,9 +66,16 @@ def check_input(token,user,password,project_id,api,demo):
     
     return(token)
 
+def met_projectnummer(bro_info):
+    try:
+        projectnummer = bro_info['projectnummer']
+        available = True
+    except:
+        available = False
 
+    return available
 
-def validate_sourcedoc(payload, token, demo=False):
+def validate_sourcedoc(payload, bro_info, demo=False, api='v1'):
     """
     
 
@@ -89,23 +96,52 @@ def validate_sourcedoc(payload, token, demo=False):
     None.
 
     """
-    
-    if demo==True:
-        upload_url = 'https://demo.bronhouderportaal-bro.nl/api/validatie'
-    else:
-        upload_url = 'https://www.bronhouderportaal-bro.nl/api/validatie'
-    
-    
-    res = requests.post(upload_url,
+    if api == 'v1':
+        token = bro_info['token']
+
+        if demo==True:
+            upload_url = 'https://demo.bronhouderportaal-bro.nl/api/validatie'
+        else:
+            upload_url = 'https://www.bronhouderportaal-bro.nl/api/validatie'
+
+        res = requests.post(upload_url,
         data=payload,
         headers={
             "Content-Type": "application/xml"
         },
         cookies={},
         auth=(token['user'],token['pass']),
-    ) 
+        ) 
+        
+        requestinfo = res.json()
     
-    requestinfo = res.json()
+    elif api == 'v2':
+        token = bro_info['token']
+
+        if met_projectnummer(bro_info):
+            if demo==True:
+                upload_url = f'https://demo.bronhouderportaal-bro.nl/api/v2/{bro_info['projectnummer']}/validatie'
+            else:
+                upload_url = f'https://www.bronhouderportaal-bro.nl/api/v2/{bro_info['projectnummer']}/validatie'
+
+        else:
+            if demo==True:
+                upload_url = 'https://demo.bronhouderportaal-bro.nl/api/v2/validatie'
+            else:
+                upload_url = 'https://www.bronhouderportaal-bro.nl/api/v2/validatie
+
+        res = requests.post(upload_url,
+        data=payload,
+        headers={
+            "Content-Type": "application/xml"
+        },
+        cookies={},
+        auth=(token['user'],token['pass']),
+        ) 
+        
+        requestinfo = res.json()        
+    
+    
     
     return(requestinfo)
 
@@ -295,6 +331,7 @@ def upload_sourcedocs_from_dict(reqs, token=None, user=None, password= None, api
 
     if api == 'v1':
         upload_url = base_url +'/uploads'  
+        
     if api == 'v2':
         project_id = str(project_id)
         upload_url = base_url +'/{}/uploads'.format(project_id)  
