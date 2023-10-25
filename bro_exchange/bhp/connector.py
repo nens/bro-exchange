@@ -8,6 +8,7 @@ import requests
 import requests.auth
 import json
 import os
+from icecream import *
 
 # =============================================================================
 # Validation
@@ -96,13 +97,14 @@ def validate_sourcedoc(payload, bro_info, demo=False, api='v1'):
     None.
 
     """
+
     if api == 'v1':
         token = bro_info['token']
 
         if demo==True:
-            upload_url = 'https://demo.bronhouderportaal-bro.nl/api/validatie'
+            upload_url = f'https://demo.bronhouderportaal-bro.nl/api/validatie'
         else:
-            upload_url = 'https://www.bronhouderportaal-bro.nl/api/validatie'
+            upload_url = f'https://www.bronhouderportaal-bro.nl/api/validatie'
 
         res = requests.post(upload_url,
         data=payload,
@@ -113,7 +115,7 @@ def validate_sourcedoc(payload, bro_info, demo=False, api='v1'):
         auth=(token['user'],token['pass']),
         ) 
         
-        requestinfo = res.json()
+        requestinfo = ic(res.json())
     
     elif api == 'v2':
         token = bro_info['token']
@@ -126,9 +128,9 @@ def validate_sourcedoc(payload, bro_info, demo=False, api='v1'):
 
         else:
             if demo==True:
-                upload_url = 'https://demo.bronhouderportaal-bro.nl/api/v2/validatie'
+                upload_url = f'https://demo.bronhouderportaal-bro.nl/api/v2/validatie'
             else:
-                upload_url = 'https://www.bronhouderportaal-bro.nl/api/v2/validatie'
+                upload_url = f'https://www.bronhouderportaal-bro.nl/api/v2/validatie'
 
         res = requests.post(upload_url,
         data=payload,
@@ -323,7 +325,6 @@ def upload_sourcedocs_from_dict(reqs, token=None, user=None, password= None, api
     Request response.
 
     """    
-    delivery = None
     
     token = check_input(token,user,password,project_id,api,demo)
 
