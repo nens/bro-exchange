@@ -105,7 +105,34 @@ def gen_gmn_measuringpoint(data):
     return(sourceDocument)    
     
     
+def gen_gmn_measuringpoint_enddate(data): 
+    arglist =  {'eventDate':'obligated',                  
+                'measuringPoint':'obligated',              
+                }   
+
+    # Note: mapSheetCode is a valid optional argument that hasn't been included yet
     
+    constructables = ['eventDate','measuringPoint']
+
+    # Check wether all obligated arguments are in data
+    check_missing_args(data, arglist, 'gen_gmn_construction')
+
+    sourceDocument = etree.Element("sourceDocument") 
+    GMN_MeasuringPointEndDate = etree.SubElement(sourceDocument,"GMN_MeasuringPointEndDate", 
+                                        attrib = {            
+                                        ("{%s}" % ns_regreq_map_gmn2['gml'])+'id': 'id_0001'})
+
+    # GMW_Construction subelements:
+    GMN_MeasuringPointEndDate_subelements = {}
+    for arg in data.keys():
+        if arg == 'eventDate':
+            GMN_MeasuringPointEndDate_subelements[arg] = gen_eventdate(data, ns_regreq_map_gmn2)
+            GMN_MeasuringPointEndDate.append(GMN_MeasuringPointEndDate_subelements[arg])
+        elif arg == 'measuringPoint':
+            GMN_MeasuringPointEndDate_subelements[arg] = etree.Element('measuringPointCode')
+            GMN_MeasuringPointEndDate_subelements[arg].text = data[arg]
+            GMN_MeasuringPointEndDate.append(GMN_MeasuringPointEndDate_subelements[arg])
     
+    return(sourceDocument)  
     
     
