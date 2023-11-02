@@ -37,7 +37,7 @@ class gmn_registration_request():
         
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
         
-        self.allowed_srcdocs = ['GMN_StartRegistration','GMN_MeasuringPoint']
+        self.allowed_srcdocs = ['GMN_StartRegistration','GMN_MeasuringPoint', 'GMN_MeasuringPointEndDate']
         
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")   
@@ -110,6 +110,14 @@ class gmn_registration_request():
                 raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
             else:
                 sourceDocument=gen_gmn_measuringpoint(self.kwargs['srcdocdata'])
+                req.append(sourceDocument)
+
+        if self.srcdoc == 'GMN_MeasuringPointEndDate':
+            
+            if 'broId' not in list(self.kwargs.keys()):
+                raise Exception("Registration request argument 'broId' required in combination with given sourcedocument")
+            else:
+                sourceDocument=gen_gmn_measuringpoint_enddate(self.kwargs['srcdocdata'])
                 req.append(sourceDocument)
 
         #print(etree.tostring(req, pretty_print=True,encoding='unicode'))
