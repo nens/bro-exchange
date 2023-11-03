@@ -55,6 +55,28 @@ def gen_eventdate(data, nsmap):
         
     return(eventDate)
 
+def gen_enddate(data, nsmap):
+    endDate = etree.Element('endDateMonitoring') 
+    choice = data['endDateMonitoring'][1]
+    text = data['endDateMonitoring'][0]
+
+    if choice == 'date':
+        date = etree.SubElement(endDate, ("{%s}" % nsmap['brocom']) + 'date', nsmap=nsmap)
+        date.text = text
+
+    elif choice == 'year':
+        date = etree.SubElement(endDate, ("{%s}" % nsmap['brocom']) + 'year', nsmap=nsmap)
+        date.text = text      
+    elif choice == 'yearMonth':
+        date = etree.SubElement(endDate, ("{%s}" % nsmap['brocom']) + 'yearMonth', nsmap=nsmap)
+        date.text = text  
+    elif text == None:
+        date = etree.SubElement(endDate, ("{%s}" % nsmap['brocom']) + 'voidReason', nsmap=nsmap)
+        date.text = choice 
+        
+    return(endDate)
+
+
 #%%
 
 
