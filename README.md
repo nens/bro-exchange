@@ -35,3 +35,11 @@ supported at this moment:
 
 - Handlers for downloading data from the uitgifteservice. These tools are
   still in development at the moment.
+
+
+## Development
+
+Local dev installation:
+
+	$ python3 -m venv .
+	$ bin/pip install -e .
