@@ -1,10 +1,13 @@
-# -*- coding: utf-8 -*-
-
-from bro_exchange.broxml.mappings import ns_regreq_map_gmn1, ns_regreq_map_gmn2, xsi_regreq_map_gmn1, codespace_map_gmn1  # mappings
-from .constructables import *
-from bro_exchange import check_missing_args
 
 from lxml import etree
+
+from bro_exchange import check_missing_args
+from bro_exchange.broxml.mappings import (  # mappings
+    codespace_map_gmn1,
+    ns_regreq_map_gmn2,
+)
+
+from .constructables import *
 
 #%%
 
@@ -55,8 +58,8 @@ def gen_gmn_startregistartion(data):
                     raise Exception("No measuringPoints provided in input, at least 1 measuringPoint should be provided")
                 else:
                     for mp in range(len(data[arg])):
-                        GMN_StartRegistration_subelements['measuringPoint{}'.format(str(mp))] = gen_measuringpoint(data, ns_regreq_map_gmn2, mp)
-                        GMN_StartRegistration.append(GMN_StartRegistration_subelements['measuringPoint{}'.format(str(mp))])
+                        GMN_StartRegistration_subelements[f'measuringPoint{str(mp)}'] = gen_measuringpoint(data, ns_regreq_map_gmn2, mp)
+                        GMN_StartRegistration.append(GMN_StartRegistration_subelements[f'measuringPoint{str(mp)}'])
                 
     return(sourceDocument)
     
@@ -99,8 +102,8 @@ def gen_gmn_measuringpoint(data):
                 
             elif arg == 'measuringPoint':
                 
-                GMN_MeasuringPoint_subelements['measuringPoint{}'.format(str(0))] = gen_measuringpoint(data, ns_regreq_map_gmn2)
-                GMN_MeasuringPoint.append(GMN_MeasuringPoint_subelements['measuringPoint{}'.format(str(0))])
+                GMN_MeasuringPoint_subelements[f'measuringPoint{str(0)}'] = gen_measuringpoint(data, ns_regreq_map_gmn2)
+                GMN_MeasuringPoint.append(GMN_MeasuringPoint_subelements[f'measuringPoint{str(0)}'])
                 
     return(sourceDocument)    
     

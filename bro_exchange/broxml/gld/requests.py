@@ -1,13 +1,18 @@
-# -*- coding: utf-8 -*-
 
-from bro_exchange.broxml.gld.sourcedocs import *
-from bro_exchange.broxml.mappings import ns_regreq_map_gld1,ns_regreq_map_gld2,ns_regreq_map_gld3, xsi_regreq_map_gld1, codespace_map_gld1 # mappings
-from bro_exchange.checks import check_missing_args
-from bro_exchange.bhp.connector import validate_request, deliver_requests
-
-from lxml import etree
 import os
 
+from lxml import etree
+
+from bro_exchange.bhp.connector import deliver_requests, validate_request
+from bro_exchange.broxml.gld.sourcedocs import *
+from bro_exchange.broxml.mappings import (  # mappings
+    codespace_map_gld1,
+    ns_regreq_map_gld1,
+    ns_regreq_map_gld2,
+    ns_regreq_map_gld3,
+    xsi_regreq_map_gld1,
+)
+from bro_exchange.checks import check_missing_args
 
 # =============================================================================
 # General info
@@ -18,7 +23,7 @@ import os
 
 #%%
 
-class gld_registration_request():
+class gld_registration_request:
     
     """
     Class for generating gld registration requests. Check 
@@ -169,7 +174,7 @@ class gld_registration_request():
 #%% gld replace request
 
 
-class gld_replace_request():
+class gld_replace_request:
     
     
     # VRAAG: WAT IS VOOR GLD ADDITION DE EENHEID VAN CORRECTIE? WORDEN DE 
@@ -327,7 +332,7 @@ class gld_replace_request():
 
 #%% delete request:
 
-class gld_delete_request():
+class gld_delete_request:
        
     
     """

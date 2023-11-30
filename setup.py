@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Nov  3 14:09:18 2021
 
 """
 
-from setuptools import find_packages
-from setuptools import setup
 
-import os
+from setuptools import find_packages, setup
 
 # loc = os.path.dirname(os.path.realpath(__file__))
 # requirementPath = loc + '/requirements.txt'

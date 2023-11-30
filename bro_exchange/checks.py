@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 def get_all_obligated(constraints):
     all_obligated = [k for k,v in constraints.items() if v == 'obligated']

@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 
-from bro_exchange import check_missing_args
+import uuid
 
 from lxml import etree
-import uuid
+
+from bro_exchange import check_missing_args
 
 # =============================================================================
 # General info
@@ -133,7 +133,7 @@ def gen_materialused(data, tube, nsmap, codespacemap, sourcedoctype):
                     'glue':'optional'}            
         
     
-    check_missing_args(data['monitoringTubes'][tube]['materialUsed'], arglist, 'gen_monitoringtube, tube with index {}, gen_materialused'.format(str(tube)))
+    check_missing_args(data['monitoringTubes'][tube]['materialUsed'], arglist, f'gen_monitoringtube, tube with index {str(tube)}, gen_materialused')
     
     materialUsed = etree.Element(("{%s}" % nsmap['ns']) + 'materialUsed', nsmap=nsmap)
     
@@ -157,7 +157,7 @@ def gen_screen(data, tube, nsmap,codespacemap):
     arglist = {'screenLength':'obligated',
                 'sockMaterial':'obligated'}    
     
-    check_missing_args(data['monitoringTubes'][tube]['screen'], arglist, 'gen_monitoringtube, tube with index {}, gen_screen'.format(str(tube)))
+    check_missing_args(data['monitoringTubes'][tube]['screen'], arglist, f'gen_monitoringtube, tube with index {str(tube)}, gen_screen')
     
     screen = etree.Element(("{%s}" % nsmap['ns']) + 'screen', nsmap=nsmap)
 
@@ -174,7 +174,7 @@ def gen_screen(data, tube, nsmap,codespacemap):
 def gen_plaintubepart(data, tube, nsmap, sourcedoctype):
     arglist = {'plainTubePartLength':'obligated'}    
     
-    check_missing_args(data['monitoringTubes'][tube]['plainTubePart'], arglist, 'gen_monitoringtube, tube with index {}, gen_plaintubepart'.format(str(tube)))
+    check_missing_args(data['monitoringTubes'][tube]['plainTubePart'], arglist, f'gen_monitoringtube, tube with index {str(tube)}, gen_plaintubepart')
     
     plainTubePart = etree.Element(("{%s}" % nsmap['ns']) + 'plainTubePart', nsmap=nsmap)
 
@@ -188,7 +188,7 @@ def gen_plaintubepart(data, tube, nsmap, sourcedoctype):
 def gen_sedimentsump(data, tube, nsmap):
     arglist = {'sedimentSumpLength':'obligated'}    
     
-    check_missing_args(data['monitoringTubes'][tube]['sedimentSump'], arglist, 'gen_monitoringtube, tube with index {}, gen_sedimentsump'.format(str(tube)))
+    check_missing_args(data['monitoringTubes'][tube]['sedimentSump'], arglist, f'gen_monitoringtube, tube with index {str(tube)}, gen_sedimentsump')
     
     sedimentSump = etree.Element(("{%s}" % nsmap['ns']) + 'sedimentSump', nsmap=nsmap)
 
@@ -207,7 +207,7 @@ def gen_electrode(data, tube, geoOhmCableId, electrode, nsmap, codespacemap):
     
     targetdata = data['monitoringTubes'][tube]['geoOhmCables'][geoOhmCableId]['electrodes'][electrode]
     
-    check_missing_args(targetdata, arglist, 'gen_monitoringtube, tube with index {}, geoOhmCable with index {}, electrode with index {}'.format(str(tube),str(geoOhmCableId),str(electrode)))
+    check_missing_args(targetdata, arglist, f'gen_monitoringtube, tube with index {str(tube)}, geoOhmCable with index {str(geoOhmCableId)}, electrode with index {str(electrode)}')
     
     electrode = etree.Element(("{%s}" % nsmap['ns']) + 'electrode', nsmap=nsmap)
 
@@ -261,7 +261,7 @@ def gen_geoohmcable(data, tube, geoOhmCableId, nsmap,codespacemap):
     arglist = {'cableNumber':'obligated',
                'electrodes':'obligated'}    
     
-    check_missing_args(data['monitoringTubes'][tube]['geoOhmCables'][geoOhmCableId], arglist, 'gen_monitoringtube, tube with index {}, gen_geoohmcable, geoOhmCableId {}'.format(str(tube),str(geoOhmCableId)))
+    check_missing_args(data['monitoringTubes'][tube]['geoOhmCables'][geoOhmCableId], arglist, f'gen_monitoringtube, tube with index {str(tube)}, gen_geoohmcable, geoOhmCableId {str(geoOhmCableId)}')
 
     
     if len(data['monitoringTubes'][tube]['geoOhmCables'][geoOhmCableId]['electrodes']) < 2:
@@ -275,8 +275,8 @@ def gen_geoohmcable(data, tube, geoOhmCableId, nsmap,codespacemap):
     
         electrodes = {}
         for electrode in range(len(data['monitoringTubes'][tube]['geoOhmCables'][geoOhmCableId]['electrodes'])):
-            electrodes['electrode{}'.format(str(electrode))] = gen_electrode(data, tube, geoOhmCableId, electrode, nsmap,codespacemap)
-            geoOhmCable.append(electrodes['electrode{}'.format(str(electrode))])    
+            electrodes[f'electrode{str(electrode)}'] = gen_electrode(data, tube, geoOhmCableId, electrode, nsmap,codespacemap)
+            geoOhmCable.append(electrodes[f'electrode{str(electrode)}'])    
     
         return(geoOhmCable)
 
@@ -339,7 +339,7 @@ def gen_monitoringtube(data, tube, nsmap,codespacemap, sourcedoctype):
         arglist = {'tubeNumber':'obligated',
                     'tubeStatus':'obligated'} 
         
-    check_missing_args(data['monitoringTubes'][tube], arglist, 'gen_monitoringtube, tube with index {}'.format(str(tube)))
+    check_missing_args(data['monitoringTubes'][tube], arglist, f'gen_monitoringtube, tube with index {str(tube)}')
     
     monitoringTube = etree.Element(("{%s}" % nsmap['ns']) + 'monitoringTube', nsmap=nsmap)
     
@@ -411,8 +411,8 @@ def gen_monitoringtube(data, tube, nsmap,codespacemap, sourcedoctype):
             geoOhmCables = {}
             
             for geoOhmCableId in range(len(data['monitoringTubes'][tube]['geoOhmCables'])):
-                geoOhmCables['geoOhmCable{}'.format(str(geoOhmCableId))] = gen_geoohmcable(data, tube, geoOhmCableId, nsmap,codespacemap)
-                monitoringTube.append(geoOhmCables['geoOhmCable{}'.format(str(geoOhmCableId))])
+                geoOhmCables[f'geoOhmCable{str(geoOhmCableId)}'] = gen_geoohmcable(data, tube, geoOhmCableId, nsmap,codespacemap)
+                monitoringTube.append(geoOhmCables[f'geoOhmCable{str(geoOhmCableId)}'])
     
     elif sourcedoctype in ['GMW_Lengthening','GMW_Shortening',
                            'lengthening','shortening']:

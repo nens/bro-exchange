@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 
 #from gwmpy.broxml.mappings import ns_regreq_map # mappings
-from bro_exchange import check_missing_args
 
 from lxml import etree
-import uuid
 
+from bro_exchange import check_missing_args
 
 #%%
 
@@ -111,12 +109,12 @@ def gen_measuringpoint(data, nsmap , mp = None):
                 'monitoringTube':'obligated'}
     
     if mp!=None:
-        check_missing_args(data['measuringPoints'][mp], arglist, 'gen_monitoringtube, tube with index {}'.format(str(mp)))
+        check_missing_args(data['measuringPoints'][mp], arglist, f'gen_monitoringtube, tube with index {str(mp)}')
     
         measuringpoint = etree.Element('measuringPoint')
         
         measuringpoint_ = etree.SubElement(measuringpoint,'MeasuringPoint',  attrib = {            
-                                            ("{%s}" % nsmap['gml'])+'id': 'id_mp{}'.format(str(mp))})
+                                            ("{%s}" % nsmap['gml'])+'id': f'id_mp{str(mp)}'})
         
         measuringpointcode =  etree.SubElement(measuringpoint_,'measuringPointCode')
         measuringpointcode.text = data['measuringPoints'][mp]['measuringPointCode']
@@ -124,7 +122,7 @@ def gen_measuringpoint(data, nsmap , mp = None):
         monitoringTube = etree.SubElement(measuringpoint_,'monitoringTube')
         
         GroundwaterMonitoringTube = etree.SubElement(monitoringTube,'GroundwaterMonitoringTube',  attrib = {            
-                                            ("{%s}" % nsmap['gml'])+'id': 'id_mpgwmt{}'.format(str(mp))})
+                                            ("{%s}" % nsmap['gml'])+'id': f'id_mpgwmt{str(mp)}'})
         
         broId = etree.SubElement(GroundwaterMonitoringTube,'broId')  
         broId.text = str(data['measuringPoints'][mp]['monitoringTube']['broId'])
@@ -136,12 +134,12 @@ def gen_measuringpoint(data, nsmap , mp = None):
 
     else:
     
-        check_missing_args(data['measuringPoint'], arglist, 'gen_monitoringtube, tube with index {}'.format(str(0)))
+        check_missing_args(data['measuringPoint'], arglist, f'gen_monitoringtube, tube with index {str(0)}')
     
         measuringpoint = etree.Element('measuringPoint')
         
         measuringpoint_ = etree.SubElement(measuringpoint,'MeasuringPoint',  attrib = {            
-                                            ("{%s}" % nsmap['gml'])+'id': 'id_mp{}'.format(str(0))})
+                                            ("{%s}" % nsmap['gml'])+'id': f'id_mp{str(0)}'})
         
         measuringpointcode =  etree.SubElement(measuringpoint_,'measuringPointCode')
         measuringpointcode.text = data['measuringPoint']['measuringPointCode']
@@ -149,7 +147,7 @@ def gen_measuringpoint(data, nsmap , mp = None):
         monitoringTube = etree.SubElement(measuringpoint_,'monitoringTube')
         
         GroundwaterMonitoringTube = etree.SubElement(monitoringTube,'GroundwaterMonitoringTube',  attrib = {            
-                                            ("{%s}" % nsmap['gml'])+'id': 'id_mpgwmt{}'.format(str(0))})
+                                            ("{%s}" % nsmap['gml'])+'id': f'id_mpgwmt{str(0)}'})
         
         broId = etree.SubElement(GroundwaterMonitoringTube,'broId')  
         broId.text = str(data['measuringPoint']['monitoringTube']['broId'])

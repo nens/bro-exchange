@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Nov  3 11:41:54 2021
 
 """
 
-import requests
-import requests.auth
 import json
 import os
+
+import requests
+import requests.auth
 
 # =============================================================================
 # Validation
@@ -184,7 +184,7 @@ def validate_request(payload, token=None, user=None, password= None, api='v1', p
         upload_url = base_url +'/validatie'  
     if api == 'v2':
         project_id = str(project_id)
-        upload_url = base_url +'/{}/validatie'.format(project_id)    
+        upload_url = base_url +f'/{project_id}/validatie'    
     
     res = requests.post(upload_url,
         data=payload,
@@ -234,7 +234,7 @@ def deliver_requests(reqs, token=None, user=None, password= None, api='v1', proj
         upload_url = base_url +'/uploads'  
     if api == 'v2':
         project_id = str(project_id)
-        upload_url = base_url +'/{}/uploads'.format(project_id)  
+        upload_url = base_url +f'/{project_id}/uploads'  
     
     try:
         res = requests.post(upload_url,
@@ -273,7 +273,7 @@ def deliver_requests(reqs, token=None, user=None, password= None, api='v1', proj
             if api == 'v1':
                 delivery_url = base_url +'/leveringen'  
             if api == 'v2':
-                delivery_url = base_url +'/{}/leveringen'.format(project_id)  
+                delivery_url = base_url +f'/{project_id}/leveringen'  
             payload = {'upload':int(upload_id)}
             headers = {'Content-type': 'application/json'}
         except:
@@ -334,7 +334,7 @@ def upload_sourcedocs_from_dict(reqs, token=None, user=None, password= None, api
         
     if api == 'v2':
         project_id = str(project_id)
-        upload_url = base_url +'/{}/uploads'.format(project_id)  
+        upload_url = base_url +f'/{project_id}/uploads'  
     
     try:
         res = requests.post(upload_url,
@@ -351,7 +351,7 @@ def upload_sourcedocs_from_dict(reqs, token=None, user=None, password= None, api
     try:
         upload_url_id = res.headers['Location']
     except:
-        print('Error: {}'.format(res.text))
+        print(f'Error: {res.text}')
 
     # Step 2: Add source documents to upload
     try:        
@@ -382,7 +382,7 @@ def upload_sourcedocs_from_dict(reqs, token=None, user=None, password= None, api
         if api == 'v1':
             delivery_url = base_url +'/leveringen'  
         if api == 'v2':
-            delivery_url = base_url +'/{}/leveringen'.format(project_id)    
+            delivery_url = base_url +f'/{project_id}/leveringen'    
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
         endresponse = requests.post(delivery_url,
@@ -435,7 +435,7 @@ def upload_sourcedocs_from_dir(input_folder, token=None, user=None, password= No
         upload_url = base_url +'/uploads'  
     if api == 'v2':
         project_id = str(project_id)
-        upload_url = base_url +'/{}/uploads'.format(project_id)    
+        upload_url = base_url +f'/{project_id}/uploads'    
     
     try:
         res = requests.post(upload_url,
@@ -460,7 +460,7 @@ def upload_sourcedocs_from_dir(input_folder, token=None, user=None, password= No
                 for source_document in source_documents:
                     print(source_document)
                     xmlfile = os.path.join(input_folder,source_document)
-                    with open(xmlfile, 'r') as file:
+                    with open(xmlfile) as file:
                         payload = file.read()
                     headers = {'Content-type': 'application/xml'}
                     params = {'filename':source_document}
@@ -485,7 +485,7 @@ def upload_sourcedocs_from_dir(input_folder, token=None, user=None, password= No
             print(xmlfile)            
             
             try:
-                with open(xmlfile, 'r') as file:
+                with open(xmlfile) as file:
                     payload = file.read()
                     headers = {'Content-type': 'application/xml'}
                     params = {'filename':specific_file}
@@ -508,7 +508,7 @@ def upload_sourcedocs_from_dir(input_folder, token=None, user=None, password= No
         if api == 'v1':
             delivery_url = base_url +'/leveringen'  
         if api == 'v2':
-            delivery_url = base_url +'/{}/leveringen'.format(project_id)   
+            delivery_url = base_url +f'/{project_id}/leveringen'   
         payload = {'upload':int(upload_id)}
         headers = {'Content-type': 'application/json'}
         endresponse = requests.post(delivery_url,
@@ -555,10 +555,10 @@ def check_delivery_status(identifier, token=None, user=None, password= None, api
     base_url = get_base_url(api,demo)
 
     if api == 'v1':
-        delivery_url_id = base_url +'/leveringen/{}'.format(identifier)
+        delivery_url_id = base_url +f'/leveringen/{identifier}'
     if api == 'v2':
         project_id = str(project_id)
-        delivery_url_id = base_url +'/{}/leveringen/{}'.format(project_id,identifier) 
+        delivery_url_id = base_url +f'/{project_id}/leveringen/{identifier}' 
     
     delivery = requests.get(url=delivery_url_id,
         auth=(token['user'],token['pass']),
@@ -595,10 +595,10 @@ def get_sourcedocument(identifier, token=None, user=None, password= None, api='v
     base_url = get_base_url(api,demo)
 
     if api == 'v1':
-        delivery_url_id = base_url +'/brondocumenten/{}'.format(identifier)
+        delivery_url_id = base_url +f'/brondocumenten/{identifier}'
     if api == 'v2':
         project_id = str(project_id)
-        delivery_url_id = base_url +'/{}/brondocumenten/{}'.format(project_id,identifier) 
+        delivery_url_id = base_url +f'/{project_id}/brondocumenten/{identifier}' 
     
     delivery = requests.get(url=delivery_url_id,
         auth=(token['user'],token['pass']),

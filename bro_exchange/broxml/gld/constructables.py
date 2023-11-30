@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
+
+import datetime
+import uuid as uuid_gen
+
+import pandas as pd
+from lxml import etree
 
 from bro_exchange import check_missing_args
-from bro_exchange.broxml.mappings import ns_regreq_map_gld1,ns_regreq_map_gld2,ns_regreq_map_gld3, xsi_regreq_map_gld1, codespace_map_gld1 # mappings
-
-from lxml import etree
-import uuid
-import datetime
-import pandas as pd
-import uuid as uuid_gen
+from bro_exchange.broxml.mappings import (  # mappings
+    codespace_map_gld1,
+)
 
 # =============================================================================
 # General info
@@ -27,13 +28,13 @@ def gen_groundwatermonitoringnet(data, net, nsmap,count):
     
     arglist = {'broId':'obligated'}
     
-    check_missing_args(data['groundwaterMonitoringNets'][net], arglist, 'gen_groundwatermonitoringnet, net with index {}'.format(str(net)))
+    check_missing_args(data['groundwaterMonitoringNets'][net], arglist, f'gen_groundwatermonitoringnet, net with index {str(net)}')
     
     groundwaterMonitoringNet = etree.Element('groundwaterMonitoringNet')
     
     GroundwaterMonitoringNet = etree.SubElement(groundwaterMonitoringNet, ("{%s}" % nsmap['gldcom']) + 'GroundwaterMonitoringNet', nsmap=nsmap,
                                              attrib = {            
-                                             ("{%s}" % nsmap['gml'])+'id': 'id_000{}'.format(str(count))})
+                                             ("{%s}" % nsmap['gml'])+'id': f'id_000{str(count)}'})
     
     count+=1
     
@@ -51,14 +52,14 @@ def gen_monitoringpoint(data, point, nsmap, count):
     arglist = {'broId':'obligated',
                'tubeNumber':'obligated'}
 
-    check_missing_args(data['monitoringPoints'][point], arglist, 'gen_monitoringpoint, point with index {}'.format(str(point)))
+    check_missing_args(data['monitoringPoints'][point], arglist, f'gen_monitoringpoint, point with index {str(point)}')
 
     monitoringPoint = etree.Element('monitoringPoint')
     
     
     GroundwaterMonitoringTube = etree.SubElement(monitoringPoint, ("{%s}" % nsmap['gldcom']) + 'GroundwaterMonitoringTube', nsmap=nsmap,
                                                                     attrib = {            
-                                                                    ("{%s}" % nsmap['gml'])+'id': 'id_000{}'.format(str(count))})
+                                                                    ("{%s}" % nsmap['gml'])+'id': f'id_000{str(count)}'})
     
     count+=1  
 
@@ -230,7 +231,7 @@ def gen_phenomenontime(data, nsmap, codespacemap, count):
     
     TimePeriod = etree.SubElement(phenomenonTime, ("{%s}" % nsmap['gml']) + 'TimePeriod', nsmap=nsmap,
                                            attrib={
-                                               ("{%s}" % nsmap['gml'])+'id':'id_000{}'.format(str(count))
+                                               ("{%s}" % nsmap['gml'])+'id':f'id_000{str(count)}'
                                                }
                                            )  
     
@@ -272,7 +273,7 @@ def gen_resulttime(data, nsmap, codespacemap, count):
     resultTime = etree.Element(("{%s}" % nsmap['om']) + 'resultTime', nsmap=nsmap)    
     TimeInstant = etree.SubElement(resultTime, ("{%s}" % nsmap['gml']) + 'TimeInstant', nsmap=nsmap,
                                            attrib={
-                                               ("{%s}" % nsmap['gml'])+'id':'id_000{}'.format(str(count))
+                                               ("{%s}" % nsmap['gml'])+'id':f'id_000{str(count)}'
                                                }
                                            )  
     
@@ -356,7 +357,7 @@ def gen_procedure(data, nsmap, codespacemap):
     procedure = etree.Element(("{%s}" % nsmap['om']) + 'procedure', nsmap=nsmap)  
     ObservationProcess  = etree.SubElement(procedure, ("{%s}" % nsmap['wml2']) + 'ObservationProcess', nsmap=nsmap,
                                            attrib={
-                                               ("{%s}" % nsmap['gml'])+'id':'_{}'.format(uuid_gen.uuid4())
+                                               ("{%s}" % nsmap['gml'])+'id':f'_{uuid_gen.uuid4()}'
                                                }
                                            )  
     if 'processType' not in data['procedure'].keys():
@@ -497,7 +498,7 @@ def gen_result(data, nsmap, codespacemap, count):
     result = etree.Element(("{%s}" % nsmap['om']) + 'result', nsmap=nsmap) 
     MeasurementTimeseries  = etree.SubElement(result, ("{%s}" % nsmap['wml2']) + 'MeasurementTimeseries', nsmap=nsmap,
                                            attrib={
-                                               ("{%s}" % nsmap['gml'])+'id':'_{}'.format(uuid_gen.uuid4())
+                                               ("{%s}" % nsmap['gml'])+'id':f'_{uuid_gen.uuid4()}'
                                                }
                                            )      
     
@@ -508,8 +509,8 @@ def gen_result(data, nsmap, codespacemap, count):
     points = {}
     
     for point in range(len(timeseriesdata)):
-        points['points_{}'.format(str(point))], count = gen_point(data, timeseriesdata.iloc[point], nsmap, codespacemap, count)
-        MeasurementTimeseries.append(points['points_{}'.format(str(point))])        
+        points[f'points_{str(point)}'], count = gen_point(data, timeseriesdata.iloc[point], nsmap, codespacemap, count)
+        MeasurementTimeseries.append(points[f'points_{str(point)}'])        
     
     return(result,count)
   

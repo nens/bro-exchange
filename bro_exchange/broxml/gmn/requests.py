@@ -1,17 +1,22 @@
-# -*- coding: utf-8 -*-
 
-from .sourcedocs import *
-from bro_exchange.broxml.mappings import ns_regreq_map_gmn1, ns_regreq_map_gmn2, xsi_regreq_map_gmn1, codespace_map_gmn1  # mappings
-from bro_exchange.checks import check_missing_args
-from bro_exchange.bhp.connector import validate_request, deliver_requests
-
-from lxml import etree
 import os
 
+from lxml import etree
+
+from bro_exchange.bhp.connector import deliver_requests, validate_request
+from bro_exchange.broxml.mappings import (  # mappings
+    codespace_map_gmn1,
+    ns_regreq_map_gmn1,
+    ns_regreq_map_gmn2,
+    xsi_regreq_map_gmn1,
+)
+from bro_exchange.checks import check_missing_args
+
+from .sourcedocs import *
 
 #%%
 
-class gmn_registration_request():
+class gmn_registration_request:
     
     """
     Class for generating gmw registration requests. Check 
@@ -170,7 +175,7 @@ class gmn_registration_request():
 
 #%%
 
-class gmn_replace_request():
+class gmn_replace_request:
     
     """
     Class for generating gmw registration requests. Check 

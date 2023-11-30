@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
-
-from .constructables import *
-from bro_exchange import check_missing_args
 
 from lxml import etree
+
+from bro_exchange import check_missing_args
+
+from .constructables import *
 
 # =============================================================================
 # General info
@@ -84,8 +84,8 @@ def gen_gmw_construction(data, nsmap, codespacemap, sourcedoctype):
                             raise Exception("No monitoring tubes provided in input, at least 1 monitoringtube should be provided")
                         else:
                             for tube in range(len(data[arg])):
-                                GMW_Construction_subelements['monitoringTube{}'.format(str(tube))] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
-                                GMW_Construction.append(GMW_Construction_subelements['monitoringTube{}'.format(str(tube))])
+                                GMW_Construction_subelements[f'monitoringTube{str(tube)}'] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
+                                GMW_Construction.append(GMW_Construction_subelements[f'monitoringTube{str(tube)}'])
             
     if sourcedoctype == "GMW_Construction": 
                 
@@ -211,8 +211,8 @@ def gen_gmw_lengthening_shortening(data, nsmap, codespacemap, sourcedoctype):
                             raise Exception("Ammount of monitoringtubes should be equal to numberOfTubesLengthened")
                         else:
                             for tube in range(len(data[arg])):
-                                GMW_Lengthening_Shortening_subelements['monitoringTube{}'.format(str(tube))] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
-                                GMW_Lengthening_Shortening.append(GMW_Lengthening_Shortening_subelements['monitoringTube{}'.format(str(tube))])
+                                GMW_Lengthening_Shortening_subelements[f'monitoringTube{str(tube)}'] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
+                                GMW_Lengthening_Shortening.append(GMW_Lengthening_Shortening_subelements[f'monitoringTube{str(tube)}'])
                         
     if sourcedoctype in ['GMW_Lengthening','GMW_Shortening']:
         return(sourceDocument)    
@@ -385,8 +385,8 @@ def gen_gmw_positions(data, nsmap, codespacemap, sourcedoctype):
                             raise Exception("Ammount of monitoringtubes should be equal to numberOfTubesLengthened")
                         else:
                             for tube in range(len(data[arg])):
-                                GMW_Positions_subelements['monitoringTube{}'.format(str(tube))] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
-                                GMW_Positions.append(GMW_Positions_subelements['monitoringTube{}'.format(str(tube))])
+                                GMW_Positions_subelements[f'monitoringTube{str(tube)}'] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
+                                GMW_Positions.append(GMW_Positions_subelements[f'monitoringTube{str(tube)}'])
             
     if sourcedoctype == "GMW_Positions":
                         
@@ -448,8 +448,8 @@ def gen_gmw_electrodestatus(data, nsmap, codespacemap, sourcedoctype):
                             raise Exception("Ammount of electrodes should be equal to numberOfElectrodesChanged")
                         else:
                             for electrode in range(len(data[arg])):
-                                GMW_ElectrodeStatus_subelements['electrode{}'.format(str(electrode))] = adjust_electrode(data, electrode, nsmap, codespacemap)
-                                GMW_ElectrodeStatus.append(GMW_ElectrodeStatus_subelements['electrode{}'.format(str(electrode))])
+                                GMW_ElectrodeStatus_subelements[f'electrode{str(electrode)}'] = adjust_electrode(data, electrode, nsmap, codespacemap)
+                                GMW_ElectrodeStatus.append(GMW_ElectrodeStatus_subelements[f'electrode{str(electrode)}'])
             
     if sourcedoctype == "GMW_ElectrodeStatus":
                         
@@ -554,8 +554,8 @@ def gen_gmw_tubestatus(data, nsmap, codespacemap, sourcedoctype):
                             raise Exception("Ammount of monitoringtubes should be equal to numberOfTubesLengthened")
                         else:
                             for tube in range(len(data[arg])):
-                                GMW_TubeStatus_subelements['monitoringTube{}'.format(str(tube))] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
-                                GMW_TubeStatus.append(GMW_TubeStatus_subelements['monitoringTube{}'.format(str(tube))])       
+                                GMW_TubeStatus_subelements[f'monitoringTube{str(tube)}'] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
+                                GMW_TubeStatus.append(GMW_TubeStatus_subelements[f'monitoringTube{str(tube)}'])       
     if sourcedoctype== "GMW_TubeStatus":
                         
         return(sourceDocument)   
@@ -865,8 +865,8 @@ def gen_gmw_positionsmeasuring(data, nsmap, codespacemap, sourcedoctype):
                             raise Exception("Ammount of monitoringtubes should be equal to numberOfTubesLengthened")
                         else:
                             for tube in range(len(data[arg])):
-                                GMW_PositionsMeasuring_subelements['monitoringTube{}'.format(str(tube))] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
-                                GMW_PositionsMeasuring.append(GMW_PositionsMeasuring_subelements['monitoringTube{}'.format(str(tube))])
+                                GMW_PositionsMeasuring_subelements[f'monitoringTube{str(tube)}'] = gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype)
+                                GMW_PositionsMeasuring.append(GMW_PositionsMeasuring_subelements[f'monitoringTube{str(tube)}'])
             
     if sourcedoctype == "GMW_PositionsMeasuring":
                         

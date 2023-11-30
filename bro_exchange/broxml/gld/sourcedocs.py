@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
 
-from .constructables import *
+import uuid as uuid_gen
+
+import pandas as pd
+from lxml import etree
+
 from bro_exchange import check_missing_args
 
-from lxml import etree
-import uuid as uuid_gen
-import pandas as pd
+from .constructables import *
 
 # =============================================================================
 # General info
@@ -54,8 +55,8 @@ def gen_gld_startregistration(data, nsmap, codespacemap):
                     pass
                 else:
                     for net in range(len(data[arg])):
-                        GLD_StartRegistration_subelements['groundwaterMonitoringNet{}'.format(str(net))],count = gen_groundwatermonitoringnet(data, net, nsmap, count)
-                        GLD_StartRegistration.append(GLD_StartRegistration_subelements['groundwaterMonitoringNet{}'.format(str(net))])
+                        GLD_StartRegistration_subelements[f'groundwaterMonitoringNet{str(net)}'],count = gen_groundwatermonitoringnet(data, net, nsmap, count)
+                        GLD_StartRegistration.append(GLD_StartRegistration_subelements[f'groundwaterMonitoringNet{str(net)}'])
         
             elif arg == 'monitoringPoints':
                 
@@ -63,8 +64,8 @@ def gen_gld_startregistration(data, nsmap, codespacemap):
                     raise Exception("One monitoringpoint should be provided, no more or no less")
                 else:
                     for point in range(len(data[arg])):
-                        GLD_StartRegistration_subelements['monitoringPoint{}'.format(str(point))],count = gen_monitoringpoint(data, point, nsmap, count)
-                        GLD_StartRegistration.append(GLD_StartRegistration_subelements['monitoringPoint{}'.format(str(point))])
+                        GLD_StartRegistration_subelements[f'monitoringPoint{str(point)}'],count = gen_monitoringpoint(data, point, nsmap, count)
+                        GLD_StartRegistration.append(GLD_StartRegistration_subelements[f'monitoringPoint{str(point)}'])
                 
     return(sourceDocument)
     
@@ -100,7 +101,7 @@ def gen_gld_addition(data, nsmap, codespacemap):
     # Unique for every observation!
     OM_Observation  = etree.SubElement(observation, ("{%s}" % nsmap['om']) + 'OM_Observation', nsmap=nsmap,
                                        attrib = {            
-                                       ("{%s}" % nsmap['gml'])+'id': '_{}'.format(uuid_gen.uuid4())})
+                                       ("{%s}" % nsmap['gml'])+'id': f'_{uuid_gen.uuid4()}'})
     
     type_ = etree.SubElement(OM_Observation, ("{%s}" % nsmap['om']) + 'type', nsmap=nsmap,
                                        attrib = {            

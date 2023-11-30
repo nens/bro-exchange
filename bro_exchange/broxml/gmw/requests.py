@@ -1,14 +1,16 @@
-# -*- coding: utf-8 -*-
 
-from .sourcedocs import *
-from bro_exchange.broxml.mappings import ns_regreq_map_gmw1, codespace_map_gmw1 # mappings
-from bro_exchange.checks import check_missing_args
-from bro_exchange.bhp.connector import validate_request, deliver_requests
+import os
 
 from lxml import etree
-import os
-import pandas as pd
 
+from bro_exchange.bhp.connector import deliver_requests, validate_request
+from bro_exchange.broxml.mappings import (  # mappings
+    codespace_map_gmw1,
+    ns_regreq_map_gmw1,
+)
+from bro_exchange.checks import check_missing_args
+
+from .sourcedocs import *
 
 # =============================================================================
 # General info
@@ -19,7 +21,7 @@ import pandas as pd
 
 #%%
 
-class gmw_registration_request():
+class gmw_registration_request:
     
     """
     Class for generating gmw registration requests. Check 
@@ -256,7 +258,7 @@ class gmw_registration_request():
         except:
             pass
 
-class gmw_replace_request():
+class gmw_replace_request:
     
     """
     Class for generating gmw registration requests. Check 
@@ -481,7 +483,7 @@ class gmw_replace_request():
 
 
 
-class gmw_move_request():
+class gmw_move_request:
     
     """
     Class for generating gmw registration requests. Check 
@@ -717,7 +719,7 @@ class gmw_move_request():
             pass
 
 
-class gmw_delete_request():
+class gmw_delete_request:
     
     """
     Class for generating gmw registration requests. Check 
@@ -942,7 +944,7 @@ class gmw_delete_request():
 
 
 
-class gmw_insert_request():
+class gmw_insert_request:
     
     """
     Class for generating gmw registration requests. Check 
