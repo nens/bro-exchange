@@ -167,7 +167,7 @@ class gmn_registration_request:
         # print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
     def write_request(self, filename, output_dir=None):
-        if output_dir == None:
+        if output_dir is None:
             self.requesttree.write(filename, pretty_print=True)
         else:
             self.requesttree.write(
@@ -183,7 +183,7 @@ class gmn_registration_request:
         project_id=None,
         demo=False,
     ):
-        if self.request == None:
+        if self.request is None:
             raise Exception("Request isn't generated yet")
         self.validation_info = validate_request(
             self.request, token, user, password, api, project_id, demo
@@ -202,11 +202,11 @@ class gmn_registration_request:
         project_id=None,
         demo=False,
     ):
-        if self.delivery_id != None:
+        if self.delivery_id is not None:
             raise Exception("Request has already been delivered")
         if self.validation_status != "VALIDE":
             raise Exception("Request isn't valid")
-        if self.validation_status == None:
+        if self.validation_status is None:
             raise Exception("Request isn't validated")
 
         reqs = {self.requestreference: self.request}
@@ -351,7 +351,7 @@ class gmn_replace_request:
         # print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
     def write_request(self, filename, output_dir=None):
-        if output_dir == None:
+        if output_dir is None:
             self.requesttree.write(filename, pretty_print=True)
         else:
             self.requesttree.write(
@@ -367,7 +367,7 @@ class gmn_replace_request:
         project_id=None,
         demo=False,
     ):
-        if self.request == None:
+        if self.request is None:
             raise Exception("Request isn't generated yet")
         self.validation_info = validate_request(
             self.request, token, user, password, api, project_id, demo
@@ -386,11 +386,11 @@ class gmn_replace_request:
         project_id=None,
         demo=False,
     ):
-        if self.delivery_id != None:
+        if self.delivery_id is not None:
             raise Exception("Request has already been delivered")
         if self.validation_status != "VALIDE":
             raise Exception("Request isn't valid")
-        if self.validation_status == None:
+        if self.validation_status is None:
             raise Exception("Request isn't validated")
 
         reqs = {self.requestreference: self.request}

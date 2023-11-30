@@ -30,9 +30,9 @@ def get_base_url(api, demo):
         base url
 
     """
-    if demo == True:
+    if demo is True:
         base_url = "https://demo.bronhouderportaal-bro.nl"
-    elif demo == False:
+    elif demo is False:
         base_url = "https://www.bronhouderportaal-bro.nl"
     if api == "v1":
         base_url += "/api"
@@ -43,8 +43,8 @@ def get_base_url(api, demo):
 
 
 def check_input(token, user, password, project_id, api, demo):
-    if token == None:
-        if user == None or password == None:
+    if token is None:
+        if user is None or password is None:
             raise Exception("No user / password supplied for authentication")
         token = {"user": user, "pass": password}
     else:
@@ -61,12 +61,12 @@ def check_input(token, user, password, project_id, api, demo):
     if api not in ["v1", "v2"]:
         raise Exception("Selected api not valid")
 
-    if api == "v2" and project_id == None:
+    if api == "v2" and project_id is None:
         raise Exception(
             "A project id must be supplied for using the selected api version"
         )
 
-    if demo != True and demo != False:
+    if demo is not True and demo is not False:
         raise Exception("Demo must be a bool")
 
     return token
@@ -74,7 +74,7 @@ def check_input(token, user, password, project_id, api, demo):
 
 def met_projectnummer(bro_info):
     try:
-        projectnummer = bro_info["projectnummer"]
+        bro_info["projectnummer"]
         available = True
     except:
         available = False
@@ -106,7 +106,7 @@ def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
     if api == "v1":
         token = bro_info["token"]
 
-        if demo == True:
+        if demo is True:
             upload_url = "https://demo.bronhouderportaal-bro.nl/api/validatie"
         else:
             upload_url = "https://www.bronhouderportaal-bro.nl/api/validatie"
@@ -125,13 +125,13 @@ def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
         token = bro_info["token"]
 
         if met_projectnummer(bro_info):
-            if demo == True:
+            if demo is True:
                 upload_url = f'https://demo.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
             else:
                 upload_url = f'https://www.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
 
         else:
-            if demo == True:
+            if demo is True:
                 upload_url = "https://demo.bronhouderportaal-bro.nl/api/v2/validatie"
             else:
                 upload_url = "https://www.bronhouderportaal-bro.nl/api/v2/validatie"
@@ -466,7 +466,7 @@ def upload_sourcedocs_from_dir(
     upload_url_id = res.headers["Location"]
 
     # Step 2: Add source documents to upload
-    if specific_file == None:
+    if specific_file is None:
         try:
             source_documents = os.listdir(input_folder)
 

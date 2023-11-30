@@ -28,7 +28,7 @@ def gen_startdatemonitoring(data, nsmap):
             startDateMonitoring, ("{%s}" % nsmap["brocom"]) + "yearMonth", nsmap=nsmap
         )
         date.text = text
-    elif text == None:
+    elif text is None:
         date = etree.SubElement(
             startDateMonitoring, ("{%s}" % nsmap["brocom"]) + "voidReason", nsmap=nsmap
         )
@@ -61,7 +61,7 @@ def gen_eventdate(data, nsmap):
             eventDate, ("{%s}" % nsmap["brocom"]) + "yearMonth", nsmap=nsmap
         )
         date.text = text
-    elif text == None:
+    elif text is None:
         date = etree.SubElement(
             eventDate, ("{%s}" % nsmap["brocom"]) + "voidReason", nsmap=nsmap
         )
@@ -91,7 +91,7 @@ def gen_enddate(data, nsmap):
             endDate, ("{%s}" % nsmap["brocom"]) + "yearMonth", nsmap=nsmap
         )
         date.text = text
-    elif text == None:
+    elif text is None:
         date = etree.SubElement(
             endDate, ("{%s}" % nsmap["brocom"]) + "voidReason", nsmap=nsmap
         )
@@ -131,7 +131,7 @@ def gen_measuringpoint(data, nsmap, mp=None):
 
     arglist = {"measuringPointCode": "obligated", "monitoringTube": "obligated"}
 
-    if mp != None:
+    if mp is not None:
         check_missing_args(
             data["measuringPoints"][mp],
             arglist,

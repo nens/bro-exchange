@@ -166,7 +166,7 @@ class gld_registration_request:
         # print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
     def write_request(self, filename, output_dir=None):
-        if output_dir == None:
+        if output_dir is None:
             self.requesttree.write(filename, pretty_print=True)
         else:
             self.requesttree.write(
@@ -182,7 +182,7 @@ class gld_registration_request:
         project_id=None,
         demo=False,
     ):
-        if self.request == None:
+        if self.request is None:
             raise Exception("Request isn't generated yet")
         self.validation_info = validate_request(
             self.request, token, user, password, api, project_id, demo
@@ -201,11 +201,11 @@ class gld_registration_request:
         project_id=None,
         demo=False,
     ):
-        if self.delivery_id != None:
+        if self.delivery_id is not None:
             raise Exception("Request has already been delivered")
         if self.validation_status != "VALIDE":
             raise Exception("Request isn't valid")
-        if self.validation_status == None:
+        if self.validation_status is None:
             raise Exception("Request isn't validated")
 
         reqs = {self.requestreference: self.request}
@@ -373,7 +373,7 @@ class gld_replace_request:
         # print(etree.tostring(req, pretty_print=True,encoding='unicode'))
 
     def write_request(self, filename, output_dir=None):
-        if output_dir == None:
+        if output_dir is None:
             self.requesttree.write(filename, pretty_print=True)
         else:
             self.requesttree.write(
@@ -389,7 +389,7 @@ class gld_replace_request:
         project_id=None,
         demo=False,
     ):
-        if self.request == None:
+        if self.request is None:
             raise Exception("Request isn't generated yet")
         self.validation_info = validate_request(
             self.request, token, user, password, api, project_id, demo
@@ -408,11 +408,11 @@ class gld_replace_request:
         project_id=None,
         demo=False,
     ):
-        if self.delivery_id != None:
+        if self.delivery_id is not None:
             raise Exception("Request has already been delivered")
         if self.validation_status != "VALIDE":
             raise Exception("Request isn't valid")
-        if self.validation_status == None:
+        if self.validation_status is None:
             raise Exception("Request isn't validated")
 
         reqs = {self.requestreference: self.request}
@@ -483,7 +483,7 @@ class gld_delete_request:
             if "Request" in element.tag:
                 element.tag = "deleteRequest"
 
-        if correctionreason_there == False:
+        if correctionreason_there is False:
             correctionReason = etree.Element(
                 "correctionReason", attrib={"codeSpace": "urn:bro:gld:CorrectionReason"}
             )
@@ -500,7 +500,7 @@ class gld_delete_request:
         self.requesttree = etree.ElementTree(self.srcdoc)
 
     def write_request(self, filename, output_dir=None):
-        if output_dir == None:
+        if output_dir is None:
             self.requesttree.write(filename, pretty_print=True)
         else:
             self.requesttree.write(
@@ -516,7 +516,7 @@ class gld_delete_request:
         project_id=None,
         demo=False,
     ):
-        if self.request == None:
+        if self.request is None:
             raise Exception("Request isn't generated yet")
         self.validation_info = validate_request(
             self.request, token, user, password, api, project_id, demo
@@ -535,11 +535,11 @@ class gld_delete_request:
         project_id=None,
         demo=False,
     ):
-        if self.delivery_id != None:
+        if self.delivery_id is not None:
             raise Exception("Request has already been delivered")
         if self.validation_status != "VALIDE":
             raise Exception("Request isn't valid")
-        if self.validation_status == None:
+        if self.validation_status is None:
             raise Exception("Request isn't validated")
 
         reqs = {self.requestreference: self.request}

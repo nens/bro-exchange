@@ -597,7 +597,7 @@ def gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype):
             )
 
         if "tubeTopDiameter" in list(data["monitoringTubes"][tube].keys()):
-            if data["monitoringTubes"][tube]["tubeTopDiameter"] != None:
+            if data["monitoringTubes"][tube]["tubeTopDiameter"] is not None:
                 tubeTopDiameter = etree.SubElement(
                     monitoringTube,
                     ("{%s}" % nsmap["ns"]) + "tubeTopDiameter",
