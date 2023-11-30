@@ -1,5 +1,2 @@
-from bro_exchange.broxml.gmw.requests import *
-from bro_exchange.broxml.gmw.constructables import *
-from bro_exchange.broxml.gmw.sourcedocs import *
-
-
+# There were star imports here, but that's not best practice. Use the full
+# import paths *or* do it more explicitly.

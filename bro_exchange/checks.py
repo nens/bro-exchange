@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
-
 def get_all_obligated(constraints):
-    all_obligated = [k for k,v in constraints.items() if v == 'obligated']
-    return(all_obligated)
+    all_obligated = [k for k, v in constraints.items() if v == "obligated"]
+    return all_obligated
+
 
 def check_missing_args(inputs, constraints, method):
     """
-    
+
 
     Parameters
     ----------
@@ -17,7 +16,7 @@ def check_missing_args(inputs, constraints, method):
         values: optional, obligated
     method:
         description of method (string)
-        
+
 
     Raises
     ------
@@ -30,13 +29,19 @@ def check_missing_args(inputs, constraints, method):
     None.
 
     """
-    
-    available = [elem in list(inputs.keys()) for elem in get_all_obligated(constraints)] 
+
+    available = [elem in list(inputs.keys()) for elem in get_all_obligated(constraints)]
     obligated = all(available)
-    
+
     if obligated:
         pass
     else:
-        nonavailable =  list(set(list(get_all_obligated(constraints)))-set(list(inputs.keys())))
+        nonavailable = list(
+            set(list(get_all_obligated(constraints))) - set(list(inputs.keys()))
+        )
         print(nonavailable)
-        raise Exception("Obligated input arguments missing for '{}': {}".format(method,''.join(str(e)+' ' for e in nonavailable)))
+        raise Exception(
+            "Obligated input arguments missing for '{}': {}".format(
+                method, "".join(str(e) + " " for e in nonavailable)
+            )
+        )
