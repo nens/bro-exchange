@@ -41,5 +41,15 @@ supported at this moment:
 
 Local dev installation:
 
+    $ pip3 install ruff
 	$ python3 -m venv .
 	$ bin/pip install -e .
+
+Syntax checks:
+
+	$ ruff check .
+	$ ruff check . --fix
+
+Formatting ("black"):
+
+	$ ruff format .
