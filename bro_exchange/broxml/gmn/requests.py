@@ -11,9 +11,12 @@ from bro_exchange.broxml.mappings import (  # mappings
 )
 from bro_exchange.checks import check_missing_args
 
-from .sourcedocs import *
-
-# %%
+from .sourcedocs import (
+    gen_gmn_closure,
+    gen_gmn_measuringpoint,
+    gen_gmn_measuringpoint_enddate,
+    gen_gmn_startregistartion,
+)
 
 
 class gmn_registration_request:

@@ -3,7 +3,6 @@ import os
 from lxml import etree
 
 from bro_exchange.bhp.connector import deliver_requests, validate_request
-from bro_exchange.broxml.gld.sourcedocs import *
 from bro_exchange.broxml.mappings import (  # mappings
     codespace_map_gld1,
     ns_regreq_map_gld1,

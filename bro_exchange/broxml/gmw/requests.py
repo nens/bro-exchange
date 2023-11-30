@@ -9,7 +9,23 @@ from bro_exchange.broxml.mappings import (  # mappings
 )
 from bro_exchange.checks import check_missing_args
 
-from .sourcedocs import *
+from .sourcedocs import (
+    gen_gmw_construction,
+    gen_gmw_constructionwithhistory,
+    gen_gmw_electrodestatus,
+    gen_gmw_groundlevel,
+    gen_gmw_groundlevelmeasuring,
+    gen_gmw_insertion,
+    gen_gmw_lengthening_shortening,
+    gen_gmw_maintainer,
+    gen_gmw_owner,
+    gen_gmw_positions,
+    gen_gmw_positionsmeasuring,
+    gen_gmw_removal,
+    gen_gmw_shift,
+    gen_gmw_tubestatus,
+    gen_gmw_wellheadprotector,
+)
 
 # =============================================================================
 # General info

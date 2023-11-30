@@ -5,7 +5,15 @@ from lxml import etree
 
 from bro_exchange import check_missing_args
 
-from .constructables import *
+from .constructables import (
+    gen_groundwatermonitoringnet,
+    gen_metadata,
+    gen_monitoringpoint,
+    gen_phenomenontime,
+    gen_procedure,
+    gen_result,
+    gen_resulttime,
+)
 
 # =============================================================================
 # General info
@@ -111,8 +119,6 @@ def gen_gld_addition(data, nsmap, codespacemap):
 
     # Note: mapSheetCode is a valid optional argument that hasn't been included yet
 
-    constructables = ["metadata", "procedure", "result"]
-
     # Check wether all obligated arguments are in data
     check_missing_args(data, arglist, "gen_gld_addition")
 
@@ -131,16 +137,6 @@ def gen_gld_addition(data, nsmap, codespacemap):
         ("{%s}" % nsmap["om"]) + "OM_Observation",
         nsmap=nsmap,
         attrib={("{%s}" % nsmap["gml"]) + "id": f"_{uuid_gen.uuid4()}"},
-    )
-
-    type_ = etree.SubElement(
-        OM_Observation,
-        ("{%s}" % nsmap["om"]) + "type",
-        nsmap=nsmap,
-        attrib={
-            ("{%s}" % nsmap["xlink"])
-            + "href": "http://www.opengis.net/def/observationType/waterml/2.0/MeasurementTimeseriesTVPObservation"
-        },
     )
 
     # =============================================================================
@@ -247,6 +243,7 @@ def gen_gld_addition(data, nsmap, codespacemap):
                     ("{%s}" % nsmap["om"]) + "featureOfInterest",
                     nsmap=nsmap,
                 )
+            # TODO: obeservedProperty is never used!
 
     return sourceDocument
 
