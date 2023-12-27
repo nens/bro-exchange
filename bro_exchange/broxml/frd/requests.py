@@ -2,6 +2,7 @@ from lxml import etree
 
 from bro_exchange.broxml.mappings import (
     frd_namespaces,
+    frd_nsmap
 )
 
 class FrdStartregistrationTool:
@@ -12,6 +13,8 @@ class FrdStartregistrationTool:
 
     def __init__(self, srcdocdata):
         self.srcdocdata = srcdocdata
+        self.xml_tree = None
+        self.source_document = None
     
     def generate_xml_file(self):
         """
@@ -19,6 +22,8 @@ class FrdStartregistrationTool:
         """
         self.setup_xml_tree()
         self.fill_sourcedocs()
+
+        self.xml_tree.append(self.source_document)
         
         print(etree.tostring(self.xml_tree, pretty_print=True, encoding="unicode"))
 
@@ -63,4 +68,15 @@ class FrdStartregistrationTool:
 
 
     def fill_sourcedocs(self):
-        pass
+        self.source_document = etree.Element("sourceDocument", nsmap=frd_nsmap)
+
+        # Create the FRD_StartRegistration element with the correct namespace
+        FRD_StartRegistration = etree.Element(
+            "{http://www.broservices.nl/xsd/isfrd/1.0}FRD_StartRegistration"
+        )
+
+        # Set the gml:id attribute using the proper namespace
+        FRD_StartRegistration.set("{http://www.opengis.net/gml/3.2}id", "id_0001")
+
+        # Append FRD_StartRegistration to source_document
+        self.source_document.append(FRD_StartRegistration)

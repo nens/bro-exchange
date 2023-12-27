@@ -129,3 +129,10 @@ frd_namespaces = {
             "xsi": "http://www.w3.org/2001/XMLSchema-instance",
         }
 
+ns_isfrd = "http://www.broservices.nl/xsd/isfrd/1.0"
+ns_gml = "http://www.opengis.net/gml/3.2"
+
+frd_nsmap = {
+    None: ns_isfrd,
+    'gml': ns_gml
+}
