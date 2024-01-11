@@ -115,3 +115,24 @@ codespace_map_gld1 = {
     "StatusQualityControl": "urn:bro:gld:StatusQualityControl",
     "censoringLimitvalue": "urn:bro:gld:PointMetadata:censoringLimitvalue",
 }
+
+
+# =============================================================================
+# FRD
+# =============================================================================
+
+frd_namespaces = {
+            None: "http://www.broservices.nl/xsd/isfrd/1.0",
+            "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
+            "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
+            "gml": "http://www.opengis.net/gml/3.2",
+            "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+        }
+
+ns_isfrd = "http://www.broservices.nl/xsd/isfrd/1.0"
+ns_gml = "http://www.opengis.net/gml/3.2"
+
+frd_nsmap = {
+    None: ns_isfrd,
+    'gml': ns_gml
+}

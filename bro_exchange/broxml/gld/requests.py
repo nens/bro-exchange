@@ -12,6 +12,8 @@ from bro_exchange.broxml.mappings import (  # mappings
 )
 from bro_exchange.checks import check_missing_args
 
+from sourcedocs import gen_gld_startregistration
+
 # =============================================================================
 # General info
 # =============================================================================
