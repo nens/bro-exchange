@@ -105,7 +105,7 @@ def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
     """
     if api == "v1":
         token = bro_info["token"]
-
+        
         if demo is True:
             upload_url = "https://demo.bronhouderportaal-bro.nl/api/validatie"
         else:
