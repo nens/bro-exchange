@@ -1,6 +1,6 @@
 from lxml import etree
 
-from bro_exchange import check_missing_args
+from bro_exchange.checks import check_missing_args
 
 from .constructables import (
     adjust_electrode,

@@ -4,7 +4,7 @@ import uuid as uuid_gen
 import pandas as pd
 from lxml import etree
 
-from bro_exchange import check_missing_args
+from bro_exchange.checks import check_missing_args
 from bro_exchange.broxml.mappings import (  # mappings
     codespace_map_gld1,
 )
