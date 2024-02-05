@@ -139,6 +139,16 @@ def gen_gld_addition(data, nsmap, codespacemap):
         attrib={("{%s}" % nsmap["gml"]) + "id": f"_{uuid_gen.uuid4()}"},
     )
 
+    type_ = etree.SubElement(
+        OM_Observation,
+        ("{%s}" % nsmap["om"]) + "type",
+        nsmap=nsmap,
+        attrib={
+            ("{%s}" % nsmap["xlink"])
+            + "href": "http://www.opengis.net/def/observationType/waterml/2.0/MeasurementTimeseriesTVPObservation"
+        },
+    )
+
     # =============================================================================
     # NOTE: Related observation references not yet supported
     # =============================================================================
