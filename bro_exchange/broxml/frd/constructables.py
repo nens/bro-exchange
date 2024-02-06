@@ -42,15 +42,14 @@ def current_pair(current_pair: dict) -> etree.Element:
 
 def measurement_configuration(measurement_configuration_dict: dict) -> etree.Element:
     measurement_configuration_element = etree.Element(
-        "MeasurementConfiguration",
+        "measurementConfiguration",
         nsmap=frd_nsmap,
     )
 
     measurement_configuration = etree.SubElement(
         measurement_configuration_element,
-        "{http://www.broservices.nl/xsd/frdcommon/1.0}measurementConfiguration"
+        "{http://www.broservices.nl/xsd/frdcommon/1.0}MeasurementConfiguration"
     )
-    print(measurement_configuration_dict)
     measurement_configuration.set("{http://www.opengis.net/gml/3.2}id", f"mc_{measurement_configuration_dict['name']}")
     measurement_configuration_id = etree.SubElement(
         measurement_configuration,
