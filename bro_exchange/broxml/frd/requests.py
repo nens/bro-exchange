@@ -270,13 +270,16 @@ class ConfigurationRegistrationTool(FRDRegistrationTool):
             "FRD_GEM_MeasurementConfiguration"
         )
         gem_measurement_configuration.set("{http://www.opengis.net/gml/3.2}id", f"id_000{id_count}")
+        
         id_count += 1
 
         for configuration in self.srcdocdata["measurement_configurations"]:
-            self.source_document.append(
+            gem_measurement_configuration.append(
                 constructables.measurement_configuration(configuration)
             )
-            print(self.source_document)
+        
+        self.source_document.append(gem_measurement_configuration)
+        print(self.source_document)
   
 class GeoOhmMeasuementRegistrationTool(FRDRegistrationTool):
     """

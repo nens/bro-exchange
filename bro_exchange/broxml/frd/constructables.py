@@ -42,7 +42,7 @@ def current_pair(current_pair: dict) -> etree.Element:
 
 def measurement_configuration(measurement_configuration_dict: dict) -> etree.Element:
     measurement_configuration_element = etree.Element(
-        "measurementConfiguration",
+        "MeasurementConfiguration",
         nsmap=frd_nsmap,
     )
 
