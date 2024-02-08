@@ -158,10 +158,14 @@ class FRDStartRegistrationTool(FRDRequest):
 class FRDGEMConfigurationRegistrationTool(FRDRequest):
     """Handles the registration of a FRD GEM measurement configuration"""
 
-    def __init__(self, metadata: dict = None, srcdocdata: dict = None, request_type:str = None):
+    def __init__(
+        self, metadata: dict = None, srcdocdata: dict = None, request_type: str = None
+    ):
         super().__init__(metadata, srcdocdata)
         self.request_type = request_type
-        self.namespace = namespaces.namespace[f"FRD_GEM_Configuration_{self.request_type}"]
+        self.namespace = namespaces.namespace[
+            f"FRD_GEM_Configuration_{self.request_type}"
+        ]
         self.xsi_schema_location = namespaces.xsi_schemalocation
 
     def create_sourcedocument(self):
@@ -187,7 +191,9 @@ class FRDGEMConfigurationRegistrationTool(FRDRequest):
 class FRDClosureTool(FRDRequest):
     """Handles the Closure of a FRD."""
 
-    def __init__(self, metadata: dict = None, srcdocdata: dict = None, request_type:str = None) -> None:
+    def __init__(
+        self, metadata: dict = None, srcdocdata: dict = None, request_type: str = None
+    ) -> None:
         super().__init__(metadata, srcdocdata)
         self.request_type = request_type
         self.namespace = namespaces.namespace[f"FRD_Closure_{self.request_type}"]
