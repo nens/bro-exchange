@@ -232,6 +232,14 @@ class GEMMeasurementTool(FRDRequest):
         - Move
         - Delete
     """
+    def __init__(
+        self, metadata: dict = None, srcdocdata: dict = None, request_type: str = None
+    ) -> None:
+        super().__init__(metadata, srcdocdata)
+        self.request_type = request_type
+        self.namespace = namespaces.namespace[f"FRD_GEM_Measurement_{self.request_type}"]
+        self.xsi_schema_location = namespaces.xsi_schemalocation
+
     def create_sourcedocument(self):
         pass
     
