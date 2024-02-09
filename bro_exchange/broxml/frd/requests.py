@@ -18,8 +18,7 @@ class FRDRequest(ABC):
         self.id_count = 1
 
     def generate_xml_file(self):
-        """
-        Generates the XML file, based on the provide sourcedocsdata
+        """ Generates the XML file, based on the provide sourcedocsdata
         """
         self.setup_xml_tree()
         self.add_metadata()
@@ -33,7 +32,7 @@ class FRDRequest(ABC):
         return self.xml_tree
 
     def setup_xml_tree(self):
-        """Sets up the basis of a startregistration xml file, consisting of the namespace urls."""
+        """ Sets up the basis of a startregistration xml file, consisting of the namespace urls."""
         self.xml_tree = etree.Element(
             self.request_type,
             nsmap=self.namespace,
@@ -46,7 +45,7 @@ class FRDRequest(ABC):
             )
 
     def add_metadata(self):
-        """Fills in the metadata: all information between the namespace links and the sourcedocs."""
+        """ Fills in the metadata: all information between the namespace links and the sourcedocs."""
 
         if "request_reference" in self.metadata:
             request_reference = etree.SubElement(
@@ -85,7 +84,12 @@ class FRDRequest(ABC):
 
 
 class FRDStartRegistrationTool(FRDRequest):
-    """Handles the registration of a FRD."""
+    """ Handles the requests for startregistration of a FRD.
+    
+    Options are:
+        - Registration
+        - Replace
+    """
 
     def __init__(self, metadata: dict, srcdocdata: dict, request_type: str) -> None:
         super().__init__(metadata, srcdocdata)
@@ -155,8 +159,14 @@ class FRDStartRegistrationTool(FRDRequest):
         self.source_document.append(frd_startregistration)
 
 
-class FRDGEMConfigurationRegistrationTool(FRDRequest):
-    """Handles the registration of a FRD GEM measurement configuration"""
+class GEMConfigurationTool(FRDRequest):
+    """ Handles the requests for GEM Configurations.
+    
+    Options are:
+        - Registration
+        - Replace
+        - Delete
+    """
 
     def __init__(
         self, metadata: dict = None, srcdocdata: dict = None, request_type: str = None
@@ -189,7 +199,12 @@ class FRDGEMConfigurationRegistrationTool(FRDRequest):
 
 
 class FRDClosureTool(FRDRequest):
-    """Handles the Closure of a FRD."""
+    """ Handles the requests for Closures of a FRD.
+    
+    Options are:
+        - Registration
+        - Delete
+    """
 
     def __init__(
         self, metadata: dict = None, srcdocdata: dict = None, request_type: str = None
@@ -207,146 +222,16 @@ class FRDClosureTool(FRDRequest):
         self.source_document.append(frd_closure)
 
 
-# class FRDReplaceTool(ABC):
-#     def __init__(self, srcdocdata: dict) -> None:
-#         self.srcdocdata = srcdocdata
-#         self.xml_tree = None
-#         self.source_document = None
-
-#     def generate_xml_file(self):
-#         """
-#         Generates the XML file, based on the provide sourcedocsdata
-#         """
-#         self.setup_xml_tree()
-#         self.create_sourcedocument()
-
-#         self.xml_tree.append(self.source_document)
-
-#         self.xml_tree = etree.ElementTree(self.xml_tree)
-
-#         return self.xml_tree
-
-#     def setup_xml_tree(self):
-#         """
-#         Sets up the basis of a replace request xml file
-#         """
-
-#         # Setup file
-#         self.xml_tree = etree.Element(
-#                 "replaceRequest",
-#                 nsmap=frd_namespaces,
-#             )
-
-#         self.xml_tree.set(
-#             "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation",
-#             "http://www.broservices.nl/xsd/isfrd/1.0 ../../XSD/isfrd-messages.xsd",
-#         )
-
-#         # add request
-#         request_reference = etree.SubElement(
-#             self.xml_tree,
-#             ("{%s}" % frd_namespaces["brocom"]) + "requestReference",
-#             nsmap=frd_namespaces,
-#         )
-#         request_reference.text = self.srcdocdata["request_reference"]
-
-#         # add delivery accountable party
-#         delivery_accountable_party = etree.SubElement(
-#             self.xml_tree,
-#             ("{%s}" % frd_namespaces["brocom"]) + "deliveryAccountableParty",
-#             nsmap=frd_namespaces,
-#         )
-#         delivery_accountable_party.text = self.srcdocdata["delivery_accountable_party"]
-
-#         # add bro id of the formation resistance dossier
-#         bro_id = etree.SubElement(
-#             self.xml_tree,
-#             ("{%s}" % frd_namespaces["brocom"]) + "broId",
-#             nsmap=frd_namespaces,
-#         )
-#         bro_id.text = self.srcdocdata["bro_id"]
-
-#         # add quality regime
-#         quality_regime = etree.SubElement(
-#             self.xml_tree,
-#             ("{%s}" % frd_namespaces["brocom"]) + "qualityRegime",
-#             nsmap=frd_namespaces,
-#         )
-#         quality_regime.text = self.srcdocdata["quality_regime"]
-
-#         correction_reason = etree.SubElement(
-#             self.xml_tree,
-#             ("{%s}" % frd_namespaces["brocom"]) + "correctionReason",
-#             nsmap=frd_namespaces,
-#         )
-#         correction_reason.text = self.srcdocdata["correction_reason"]
-
-#     @abstractmethod
-#     def create_sourcedocument(self):
-#         pass
-# class GeoOhmMeasuementRegistrationTool(FRDRegistrationTool):
-#     """
-#     Sets up the xml file for the geo-ohm measurement configuration registrations of the FRD domain
-#     """
-#     def create_sourcedocument(self):
-#         id_count = 1
-#         self.source_document = etree.Element("sourceDocument", nsmap=frd_nsmap)
-
-#         # Create Main element
-#         gem_measurement  = etree.Element(
-#             "FRD_GEM_Measurement"
-#         )
-#         gem_measurement.set("{http://www.opengis.net/gml/3.2}id", f"id_000{id_count}")
-#         id_count += 1
-
-
-#         # Initialize related Geo Electric Measurement
-#         related_geo_electric_measurement = etree.SubElement(
-#             gem_measurement,
-#             "relatedGeoElectricMeasurement"
-#         )
-
-#         # Generate actual measurement element
-#         geo_electric_measurement = etree.SubElement(
-#             related_geo_electric_measurement,
-#             "{http://www.broservices.nl/xsd/frdcommon/1.0}GeoElectricMeasurement"
-#         )
-#         geo_electric_measurement.set("{http://www.opengis.net/gml/3.2}id", f"id_000{id_count}")
-#         id_count += 1
-
-#         # Define measurement date
-#         measurement_date = etree.SubElement(
-#             geo_electric_measurement,
-#             "{http://www.broservices.nl/xsd/frdcommon/1.0}measurementDate",
-#         )
-#         measurement_date.text = self.srcdocdata["measurement_date"]
-
-
-#         # Define measurement operator element
-#         measurement_operator = etree.SubElement(
-#             geo_electric_measurement,
-#             "{http://www.broservices.nl/xsd/frdcommon/1.0}measurementOperator",
-#         )
-
-#         # Define measurement operator kvk
-#         measurement_operator_kvk = etree.SubElement(
-#             measurement_operator,
-#             "{http://www.broservices.nl/xsd/brocommon/3.0}chamberOfCommerceNumber"
-#         )
-#         measurement_operator_kvk.text = self.srcdocdata["chamberOfCommerceNumber"]
-
-#         # Define determination procedure
-#         determination_procedure = etree.SubElement(
-#             geo_electric_measurement,
-#             "{http://www.broservices.nl/xsd/frdcommon/1.0}determinationProcedure",
-#         )
-
-#         # Define evaluation procedure
-#         evaluation_procedure = etree.SubElement(
-#             geo_electric_measurement,
-#             "{http://www.broservices.nl/xsd/frdcommon/1.0}evaluationProcedure",
-#         )
-
-#         for measure in self.srcdocdata["geoOhmMeasure"]:
-#             measure_element = constructables.measure(measure)
-#             geo_electric_measurement.append(measure_element)
+class GEMMeasurementTool(FRDRequest):
+    """ Handles the requests for GEM Measurements of a FRD.
+    
+    Options are:
+        - Registration
+        - Replace
+        - Insert
+        - Move
+        - Delete
+    """
+    def create_sourcedocument(self):
+        pass
+    
