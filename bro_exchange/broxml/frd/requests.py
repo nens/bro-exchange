@@ -77,6 +77,14 @@ class FRDRequest(ABC):
             )
             quality_regime.text = self.metadata["quality_regime"]
 
+        if "correction_reason" in self.metadata:
+            bro_id = etree.SubElement(
+                self.xml_tree,
+                "correctionReason",
+                attrib={"codeSpace": "urn:bro:frd:CorrectionReason"},
+            )
+            bro_id.text = self.metadata["correction_reason"]
+
     @abstractmethod
     def create_sourcedocument(self):
         """Creates the sourcedocs XML structure."""
