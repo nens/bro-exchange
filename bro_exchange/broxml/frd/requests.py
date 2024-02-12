@@ -241,5 +241,184 @@ class GEMMeasurementTool(FRDRequest):
         self.xsi_schema_location = namespaces.xsi_schemalocation
 
     def create_sourcedocument(self):
-        pass
+        # Create Main element
+        gem_measurement = etree.Element(
+            "FRD_GEM_Measurement"
+        )
+        gem_measurement.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # Add relatedGeoElectricMeasurement obj
+        related_geo_measurement = etree.SubElement(
+            gem_measurement,
+            "relatedGeoElectricMeasurement",
+        )
+
+        # Add GeoElectricMeasurement  obj
+        geo_electric_measurement = etree.SubElement(
+            related_geo_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}GeoElectricMeasurement",
+        )
+
+        geo_electric_measurement.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # Add measurement date element
+        measurement_date = etree.SubElement(
+            geo_electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}measurementDate",
+        )
+
+        measurement_date.text = self.srcdocdata["measurement_date"]
+
+        # Add measurement operator element
+        measurement_operator = etree.SubElement(
+            geo_electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}measurementOperator",
+        )
+
+        measurement_operator_kvk = etree.SubElement(
+            measurement_operator,
+            "{http://www.broservices.nl/xsd/brocommon/3.0}chamberOfCommerceNumber",
+        )
+
+        measurement_operator_kvk.text = self.srcdocdata["measuring_responsible_party"]
+
+        # Add determination procedure element
+        determination_procedure  = etree.SubElement(
+            geo_electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}determinationProcedure",
+            attrib={"codeSpace": "urn:bro:frd:DeterminationProcedure"},
+        )
+
+        determination_procedure.text = self.srcdocdata["measuring_procedure"]
+
+        # Add evaluation procedure element
+        evaluation_procedure  = etree.SubElement(
+            geo_electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}evaluationProcedure",
+            attrib={"codeSpace": "urn:bro:frd:EvaluationProcedure"},
+        )
+
+        evaluation_procedure.text = self.srcdocdata["evaluation_procedure"]
+
+        # Add measure elements
+        for measure in self.srcdocdata["measurements"]:
+            constructables.add_measure_element(measure=measure, parent=geo_electric_measurement)
+           
+        # Add evaluation procedure element
+        related_calculated_apparent_element  = etree.SubElement(
+            geo_electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}relatedCalculatedApparentFormationResistance",
+        )
+
+        related_calculated_apparent_subelement  = etree.SubElement(
+            related_calculated_apparent_element,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}CalculatedApparentFormationResistance",
+        )
+
+        related_calculated_apparent_subelement.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # add calculation operator element
+        calculation_operator_element  = etree.SubElement(
+            related_calculated_apparent_subelement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}calculationOperator",
+        )
+
+        calculation_operator_kvk_element  = etree.SubElement(
+            calculation_operator_element,
+            "{http://www.broservices.nl/xsd/brocommon/3.0}chamberOfCommerceNumber",
+        )
+
+        calculation_operator_kvk_element.text = self.srcdocdata["calculated_method_responsible_party"]
+
+        # Add evaluation procedure element
+        evaluation_procedure_element  = etree.SubElement(
+            related_calculated_apparent_subelement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}evaluationProcedure",
+            attrib={"codeSpace": "urn:bro:frd:EvaluationProcedure"},
+        )
+
+        evaluation_procedure_element.text = self.srcdocdata["calculated_method_procedure"]
+
+        # add series element
+        series_element  = etree.SubElement(
+            related_calculated_apparent_subelement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}apparentFormationResistanceSeries",
+        )
+
+        # Add dataArray element
+        data_array_element = etree.SubElement(
+            series_element,
+            "{http://www.opengis.net/swe/2.0}DataArray",
+        )
+
+        data_array_element.set(
+            "id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # add element count
+        element_count_element = etree.SubElement(
+            data_array_element,
+            "{http://www.opengis.net/swe/2.0}elementCount",
+        )
+
+        count_element = etree.SubElement(
+            element_count_element,
+            "{http://www.opengis.net/swe/2.0}Count",
+        )
+
+        value_element = etree.SubElement(
+            count_element,
+            "{http://www.opengis.net/swe/2.0}value",
+        )
+
+        value_element.text = str(self.srcdocdata["measurement_count"])
+
+        # add element type element
+        etree.SubElement(
+            data_array_element,
+            "{http://www.opengis.net/swe/2.0}elementType",
+            attrib={
+                "name": "SchijnbareFormatieweerstandRecord",
+                "{http://www.w3.org/1999/xlink}href":"https://schema.broservices.nl/xsd/frdcommon/1.0/ApparentFormationResistanceRecord.xml",
+                },
+        )
+
+        # add encoding
+        encoding_element = etree.SubElement(
+            data_array_element,
+            "{http://www.opengis.net/swe/2.0}encoding",
+        )
+
+        etree.SubElement(
+            encoding_element,
+            "{http://www.opengis.net/swe/2.0}TextEncoding",
+            attrib={
+                "collapseWhiteSpaces": "true",
+                "decimalSeparator":".",
+                "tokenSeparator":",",
+                "blockSeparator":" ",
+                },
+        )
+
+        # add values
+        values_element = etree.SubElement(
+            data_array_element,
+            "{http://www.opengis.net/swe/2.0}values",
+        )
+
+        values_element.text = self.srcdocdata["calculated_values"]
+
+        # add to sourcedocs
+        self.source_document.append(gem_measurement)
     
+ 

@@ -68,3 +68,27 @@ def measurement_configuration(measurement_configuration_dict: dict) -> etree.Ele
     )
 
     return measurement_configuration_element
+
+def add_measure_element(measure, parent):
+    """Creates a measure element for the FRD GEM Measurement"""
+    config_name, value = measure
+
+
+    element = etree.SubElement(
+        parent,
+        "{http://www.broservices.nl/xsd/frdcommon/1.0}measure",
+    )
+
+    resistance_sub_element = etree.SubElement(
+        element,
+        "{http://www.broservices.nl/xsd/frdcommon/1.0}resistance",
+        attrib={"uom": "Ohm"},
+    )
+
+    resistance_sub_element.text = str(value)
+
+    etree.SubElement(
+        element,
+        "{http://www.broservices.nl/xsd/frdcommon/1.0}relatedMeasurementConfiguration",
+        attrib={"{http://www.w3.org/1999/xlink}href": config_name},
+    )
