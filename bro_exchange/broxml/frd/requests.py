@@ -2,7 +2,7 @@ from lxml import etree
 from abc import ABC, abstractmethod
 
 import bro_exchange.broxml.frd.constructables as constructables
-from bro_exchange.broxml.mappings import frd_namespaces, frd_nsmap
+from bro_exchange.broxml.mappings import frd_namespaces
 from . import namespaces
 
 
@@ -304,6 +304,7 @@ class GEMMeasurementTool(FRDRequest):
         )
 
         determination_procedure.text = self.srcdocdata["measuring_procedure"]
+
 
         # Add evaluation procedure element
         evaluation_procedure  = etree.SubElement(
