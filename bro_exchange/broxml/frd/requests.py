@@ -431,3 +431,392 @@ class GEMMeasurementTool(FRDRequest):
         self.source_document.append(gem_measurement)
     
  
+class EMMConfigurationTool(FRDRequest):
+    """ Handles the requests for GEM Configurations.
+    
+    Options are:
+        - Registration
+        - Replace
+        - Delete
+    """
+
+    def __init__(
+        self, metadata: dict = None, srcdocdata: dict = None, request_type: str = None
+    ):
+        super().__init__(metadata, srcdocdata)
+        self.request_type = request_type
+        self.namespace = namespaces.namespace[
+            f"FRD_EMM_InstrumentConfiguration_{self.request_type}"
+        ]
+        self.xsi_schema_location = namespaces.xsi_schemalocation
+
+    def create_sourcedocument(self):
+
+        # Create Main element
+        gem_measurement_configuration = etree.Element(
+            "FRD_EMM_InstrumentConfiguration"
+        )
+        gem_measurement_configuration.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # create maininstrument configuration element
+        instrument_configuration_main_element = etree.SubElement(
+            gem_measurement_configuration,
+            "instrumentConfiguration",
+        )
+
+        # Create sub instrument configuration element
+        instrument_congonfiguration_sub_element = etree.SubElement(
+            instrument_configuration_main_element,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}InstrumentConfiguration",
+        )
+        instrument_congonfiguration_sub_element.set(
+            "{http://www.opengis.net/gml/3.2}id", self.srcdocdata['instrument_configuration_id']
+        )
+
+
+        # create instrumentConfigurationID element
+        config_id_element = etree.SubElement(
+            instrument_congonfiguration_sub_element,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}instrumentConfigurationID",
+        )
+        config_id_element.text = str(self.srcdocdata['instrument_configuration_id'])
+
+
+        # create relativePositionTransmitterCoil element
+        transmitter_element = etree.SubElement(
+            instrument_congonfiguration_sub_element,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}relativePositionTransmitterCoil",
+            attrib={"uom": "cm"},
+        )
+        transmitter_element.text = str(self.srcdocdata['relative_position_transmitter_coil'])
+
+        # create relativePositionPrimaryReceiverCoil element
+        primary_coil_element = etree.SubElement(
+            instrument_congonfiguration_sub_element,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}relativePositionPrimaryReceiverCoil",
+            attrib={"uom": "cm"},
+        )
+        primary_coil_element.text = str(self.srcdocdata['relative_position_primary_receiver_coil'])
+
+
+        # create secondaryReceiverCoilAvailable element
+        secondary_coil_element = etree.SubElement(
+            instrument_congonfiguration_sub_element,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}secondaryReceiverCoilAvailable",
+        )
+        secondary_coil_element.text = str(self.srcdocdata['secondary_receiver_coil_available'])
+
+        if "relative_position_secondary_receiver_coil" in self.srcdocdata:
+            # create relativePositionPrimaryReceiverCoil element
+            secondary_coil_position_element = etree.SubElement(
+                instrument_congonfiguration_sub_element,
+                "{http://www.broservices.nl/xsd/frdcommon/1.0}relativePositionSecondaryReceiverCoil",
+                attrib={"uom": "cm"},
+            )
+            secondary_coil_position_element.text = str(self.srcdocdata['relative_position_secondary_receiver_coil'])
+
+        # create coilFrequencyKnown element
+        coil_frequency_present_element = etree.SubElement(
+            instrument_congonfiguration_sub_element,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}coilFrequencyKnown",
+        )
+        coil_frequency_present_element.text = str(self.srcdocdata['coil_frequency_known'])
+
+        if "coilfrequency" in self.srcdocdata:
+            # create relativePositionPrimaryReceiverCoil element
+            coil_frequency_element = etree.SubElement(
+                instrument_congonfiguration_sub_element,
+                "{http://www.broservices.nl/xsd/frdcommon/1.0}coilFrequency",
+                attrib={"uom": "kHz"},
+            )
+            coil_frequency_element.text = str(self.srcdocdata['coilfrequency'])
+
+        # create instrumentLength element
+        instrument_length_element = etree.SubElement(
+            instrument_congonfiguration_sub_element,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}instrumentLength",
+            attrib={"uom": "cm"},
+        )
+        instrument_length_element.text = str(self.srcdocdata['instrument_length'])
+
+        self.source_document.append(gem_measurement_configuration)
+
+class EMMMeasurementTool(FRDRequest):
+    """ Handles the requests for EMM Measurements.
+    
+    Options are:
+        - Registration
+        - Replace
+        - Insert
+        - Move
+        - Delete
+    """
+
+    def __init__(
+        self, metadata: dict = None, srcdocdata: dict = None, request_type: str = None
+    ):
+        super().__init__(metadata, srcdocdata)
+        self.request_type = request_type
+        self.namespace = namespaces.namespace[
+            f"FRD_EMM_Measurement_{self.request_type}"
+        ]
+        self.xsi_schema_location = namespaces.xsi_schemalocation
+
+    def create_sourcedocument(self):
+        # Create Main element
+        emm_measurement = etree.Element(
+            "FRD_EMM_Measurement"
+        )
+        emm_measurement.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # Add relatedElectromagneticMeasurement obj
+        related_electro_measurement = etree.SubElement(
+            emm_measurement,
+            "relatedElectromagneticMeasurement",
+        )
+
+        # Add GeoElectricMeasurement  obj
+        electric_measurement = etree.SubElement(
+            related_electro_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}ElectromagneticMeasurement",
+        )
+
+        electric_measurement.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # Add measurement date element
+        measurement_date = etree.SubElement(
+            electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}measurementDate",
+        )
+
+        measurement_date.text = str(self.srcdocdata["measurement_date"])
+
+        # Add measurement operator element
+        measurement_operator = etree.SubElement(
+            electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}measurementOperator",
+        )
+
+        measurement_operator_kvk = etree.SubElement(
+            measurement_operator,
+            "{http://www.broservices.nl/xsd/brocommon/3.0}chamberOfCommerceNumber",
+        )
+
+        measurement_operator_kvk.text = str(self.srcdocdata["measuring_responsible_party"])
+
+        # Add determination procedure element
+        determination_procedure  = etree.SubElement(
+            electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}determinationProcedure",
+            attrib={"codeSpace": "urn:bro:frd:DeterminationProcedure"},
+        )
+
+        determination_procedure.text = self.srcdocdata["measuring_procedure"]
+
+        # Add evaluation procedure element
+        evaluation_procedure  = etree.SubElement(
+            electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}evaluationProcedure",
+            attrib={"codeSpace": "urn:bro:frd:EvaluationProcedure"},
+        )
+
+        evaluation_procedure.text = str(self.srcdocdata["evaluation_procedure"])
+
+        # add measuremetn series element
+        measurement_series  = etree.SubElement(
+            electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}measurementSeries",
+        )
+
+        data_array = etree.SubElement(
+            measurement_series,
+            "{http://www.opengis.net/swe/2.0}DataArray",
+        )
+
+        data_array.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # Add element count
+        element_count  = etree.SubElement(
+            data_array,
+            "{http://www.opengis.net/swe/2.0}elementCount",
+        )
+
+        count = etree.SubElement(
+            element_count,
+            "{http://www.opengis.net/swe/2.0}Count",
+        )
+
+        value = etree.SubElement(
+            count,
+            "{http://www.opengis.net/swe/2.0}value",
+        )
+
+        value.text = str(self.srcdocdata["element_count"])
+
+        # add element type element
+        etree.SubElement(
+            data_array,
+            "{http://www.opengis.net/swe/2.0}elementType",
+            attrib={
+                "name": "ElektromagnetischeMetingRecord",
+                "{http://www.w3.org/1999/xlink}href":"https://schema.broservices.nl/xsd/frdcommon/1.0/ElectromagneticMeasurementRecord.xml",
+                },
+        )
+
+        # add encoding
+        encoding_element = etree.SubElement(
+            data_array,
+            "{http://www.opengis.net/swe/2.0}encoding",
+        )
+
+        etree.SubElement(
+            encoding_element,
+            "{http://www.opengis.net/swe/2.0}TextEncoding",
+            attrib={
+                "collapseWhiteSpaces": "true",
+                "decimalSeparator":".",
+                "tokenSeparator":",",
+                "blockSeparator":" ",
+                },
+        )
+
+        # add values
+        values_element = etree.SubElement(
+            data_array,
+            "{http://www.opengis.net/swe/2.0}values",
+        )
+
+        values_element.text = str(self.srcdocdata["measurement_data"])
+
+        # add relatedInstrumentConfiguration element
+        etree.SubElement(
+            electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}relatedInstrumentConfiguration",
+            attrib={
+                "{http://www.w3.org/1999/xlink}href":str(self.srcdocdata["related_instrument_config"],)
+                },
+        )
+
+        # add relatedCalculatedApparentFormationResistance element
+        related_calc_form_res  = etree.SubElement(
+            electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}relatedCalculatedApparentFormationResistance",
+        )
+
+        calc_form_res = etree.SubElement(
+            related_calc_form_res,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}CalculatedApparentFormationResistance",
+        )
+
+        data_array.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # Add measurement operator element
+        calculation_operator = etree.SubElement(
+            calc_form_res,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}calculationOperator",
+        )
+
+        measurement_operator_kvk = etree.SubElement(
+            calculation_operator,
+            "{http://www.broservices.nl/xsd/brocommon/3.0}chamberOfCommerceNumber",
+        )
+
+        measurement_operator_kvk.text = str(self.srcdocdata["calculated_measurement_operator"])
+
+        # Add evaluation procedure element
+        evaluation_procedure  = etree.SubElement(
+            electric_measurement,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}evaluationProcedure",
+            attrib={"codeSpace": "urn:bro:frd:DeterminationProcedure"},
+        )
+
+        determination_procedure.text = str(self.srcdocdata["calculated_determination_procedure"])
+
+        ############
+
+
+        # add apparentFormationResistanceSeries
+        apparent_series  = etree.SubElement(
+            calc_form_res,
+            "{http://www.broservices.nl/xsd/frdcommon/1.0}apparentFormationResistanceSeries",
+        )
+
+        data_array = etree.SubElement(
+            apparent_series,
+            "{http://www.opengis.net/swe/2.0}DataArray",
+        )
+
+        data_array.set(
+            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        )
+        self.id_count += 1
+
+        # Add element count
+        element_count  = etree.SubElement(
+            data_array,
+            "{http://www.opengis.net/swe/2.0}elementCount",
+        )
+
+        count = etree.SubElement(
+            element_count,
+            "{http://www.opengis.net/swe/2.0}Count",
+        )
+
+        value = etree.SubElement(
+            count,
+            "{http://www.opengis.net/swe/2.0}value",
+        )
+
+        value.text = str(self.srcdocdata["formation_measurement_data_count"])
+
+        # add element type element
+        etree.SubElement(
+            data_array,
+            "{http://www.opengis.net/swe/2.0}elementType",
+            attrib={
+                "name": "SchijnbareFormatieweerstandRecord",
+                "{http://www.w3.org/1999/xlink}href":"https://schema.broservices.nl/xsd/frdcommon/1.0/ApparentFormationResistanceRecord.xml",
+                },
+        )
+
+        # add encoding
+        encoding_element = etree.SubElement(
+            data_array,
+            "{http://www.opengis.net/swe/2.0}encoding",
+        )
+
+        etree.SubElement(
+            encoding_element,
+            "{http://www.opengis.net/swe/2.0}TextEncoding",
+            attrib={
+                "collapseWhiteSpaces": "true",
+                "decimalSeparator":".",
+                "tokenSeparator":",",
+                "blockSeparator":" ",
+                },
+        )
+
+        # add values
+        values_element = etree.SubElement(
+            data_array,
+            "{http://www.opengis.net/swe/2.0}values",
+        )
+
+        values_element.text = str(self.srcdocdata["formation_measurement_data"])
+
+        self.source_document.append(emm_measurement)
