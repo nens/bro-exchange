@@ -77,6 +77,13 @@ class FRDRequest(ABC):
             )
             quality_regime.text = self.metadata["quality_regime"]
 
+        if "date_to_be_corrected" in self.metadata:
+            date_tobe_corrected_element = etree.SubElement(
+                self.xml_tree,
+                "dateToBeCorrected",
+            )
+            date_tobe_corrected_element.text = self.metadata["date_to_be_corrected"]
+
         if "correction_reason" in self.metadata:
             bro_id = etree.SubElement(
                 self.xml_tree,
