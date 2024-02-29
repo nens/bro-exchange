@@ -643,7 +643,7 @@ class EMMMeasurementTool(FRDRequest):
         )
 
         data_array.set(
-            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+            "id", f"id_000{self.id_count}"
         )
         self.id_count += 1
 
@@ -720,10 +720,11 @@ class EMMMeasurementTool(FRDRequest):
             "{http://www.broservices.nl/xsd/frdcommon/1.0}CalculatedApparentFormationResistance",
         )
 
-        data_array.set(
+        calc_form_res.set(
             "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
         )
         self.id_count += 1
+
 
         # Add measurement operator element
         calculation_operator = etree.SubElement(
@@ -731,21 +732,21 @@ class EMMMeasurementTool(FRDRequest):
             "{http://www.broservices.nl/xsd/frdcommon/1.0}calculationOperator",
         )
 
-        measurement_operator_kvk = etree.SubElement(
+        calculation_operator_kvk = etree.SubElement(
             calculation_operator,
             "{http://www.broservices.nl/xsd/brocommon/3.0}chamberOfCommerceNumber",
         )
 
-        measurement_operator_kvk.text = str(self.srcdocdata["calculated_measurement_operator"])
+        calculation_operator_kvk.text = str(self.srcdocdata["calculated_measurement_operator"])
 
         # Add evaluation procedure element
         evaluation_procedure  = etree.SubElement(
-            electric_measurement,
+            calc_form_res,
             "{http://www.broservices.nl/xsd/frdcommon/1.0}evaluationProcedure",
-            attrib={"codeSpace": "urn:bro:frd:DeterminationProcedure"},
+            attrib={"codeSpace": "urn:bro:frd:EvaluationProcedure"},
         )
 
-        determination_procedure.text = str(self.srcdocdata["calculated_determination_procedure"])
+        evaluation_procedure.text = str(self.srcdocdata["calculated_determination_procedure"])
 
         ############
 
@@ -756,19 +757,19 @@ class EMMMeasurementTool(FRDRequest):
             "{http://www.broservices.nl/xsd/frdcommon/1.0}apparentFormationResistanceSeries",
         )
 
-        data_array = etree.SubElement(
+        data_array2 = etree.SubElement(
             apparent_series,
             "{http://www.opengis.net/swe/2.0}DataArray",
         )
 
-        data_array.set(
-            "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+        data_array2.set(
+            "id", f"id_000{self.id_count}"
         )
         self.id_count += 1
 
         # Add element count
         element_count  = etree.SubElement(
-            data_array,
+            data_array2,
             "{http://www.opengis.net/swe/2.0}elementCount",
         )
 
@@ -786,7 +787,7 @@ class EMMMeasurementTool(FRDRequest):
 
         # add element type element
         etree.SubElement(
-            data_array,
+            data_array2,
             "{http://www.opengis.net/swe/2.0}elementType",
             attrib={
                 "name": "SchijnbareFormatieweerstandRecord",
@@ -796,7 +797,7 @@ class EMMMeasurementTool(FRDRequest):
 
         # add encoding
         encoding_element = etree.SubElement(
-            data_array,
+            data_array2,
             "{http://www.opengis.net/swe/2.0}encoding",
         )
 
@@ -813,7 +814,7 @@ class EMMMeasurementTool(FRDRequest):
 
         # add values
         values_element = etree.SubElement(
-            data_array,
+            data_array2,
             "{http://www.opengis.net/swe/2.0}values",
         )
 

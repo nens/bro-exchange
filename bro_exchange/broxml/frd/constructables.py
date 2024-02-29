@@ -90,5 +90,5 @@ def add_measure_element(measure, parent):
     etree.SubElement(
         element,
         "{http://www.broservices.nl/xsd/frdcommon/1.0}relatedMeasurementConfiguration",
-        attrib={"{http://www.w3.org/1999/xlink}href": config_name},
+        attrib={"{http://www.w3.org/1999/xlink}href": f"mc_{config_name}"},
     )
