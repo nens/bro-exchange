@@ -134,20 +134,21 @@ class FRDStartRegistrationTool(FRDRequest):
 
         # Check if gmn is present in srcdocdata. If so, create element
         if self.srcdocdata["gmn_bro_id"] is not None:
-            grounwater_monitoring_net = etree.Element("groundwaterMonitoringNet")
-            gmn_element = etree.SubElement(
-                grounwater_monitoring_net,
-                "{http://www.broservices.nl/xsd/isfrd/1.0}GroundwaterMonitoringNet",
-            )
-            gmn_element.set(
-                "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
-            )
-            self.id_count += 1
-            gmn_bro_id = etree.SubElement(
-                gmn_element, "{http://www.broservices.nl/xsd/isfrd/1.0}broId"
-            )
-            gmn_bro_id.text = self.srcdocdata["gmn_bro_id"]
-            frd_startregistration.append(grounwater_monitoring_net)
+            for gmn_bro_id in self.srcdocdata["gmn_bro_id"]
+                grounwater_monitoring_net = etree.Element("groundwaterMonitoringNet")
+                gmn_element = etree.SubElement(
+                    grounwater_monitoring_net,
+                    "{http://www.broservices.nl/xsd/isfrd/1.0}GroundwaterMonitoringNet",
+                )
+                gmn_element.set(
+                    "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
+                )
+                self.id_count += 1
+                gmn_bro_id = etree.SubElement(
+                    gmn_element, "{http://www.broservices.nl/xsd/isfrd/1.0}broId"
+                )
+                gmn_bro_id.text = gmn_bro_id
+                frd_startregistration.append(grounwater_monitoring_net)
 
         # add grounwaterMonitoringTube
         grounwater_monitoring_tube = etree.Element("groundwaterMonitoringTube")
