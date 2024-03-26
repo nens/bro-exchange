@@ -147,7 +147,7 @@ class FRDStartRegistrationTool(FRDRequest):
                 gmn_bro_id = etree.SubElement(
                     gmn_element, "{http://www.broservices.nl/xsd/isfrd/1.0}broId"
                 )
-                gmn_bro_id.text = gmn_bro_id
+                gmn_bro_id.text = str(gmn_bro_id)
                 frd_startregistration.append(grounwater_monitoring_net)
 
         # add grounwaterMonitoringTube
