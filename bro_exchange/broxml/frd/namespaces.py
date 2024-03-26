@@ -1,40 +1,40 @@
 namespace = {
-    "FRD_registrationRequest": {
+    "FRD_registration": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
         "gml": "http://www.opengis.net/gml/3.2",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_replaceRequest": {
+    "FRD_replace": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
         "gml": "http://www.opengis.net/gml/3.2",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
         },
-    "FRD_GEM_Configuration_registrationRequest": {
+    "FRD_GEM_Configuration_registration": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
         "gml": "http://www.opengis.net/gml/3.2",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_GEM_Configuration_replaceRequest": {
+    "FRD_GEM_Configuration_replace": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
         "gml": "http://www.opengis.net/gml/3.2",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_GEM_Configuration_deleteRequest": {
+    "FRD_GEM_Configuration_delete": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
         "gml": "http://www.opengis.net/gml/3.2",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_Closure_registrationRequest": {
+    "FRD_Closure_registration": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -43,7 +43,7 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_Closure_deleteRequest": {
+    "FRD_Closure_delete": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -52,7 +52,7 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
         },
-    "FRD_GEM_Measurement_registrationRequest": {
+    "FRD_GEM_Measurement_registration": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -61,7 +61,7 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_GEM_Measurement_deleteRequest": {
+    "FRD_GEM_Measurement_delete": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -70,7 +70,7 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_GEM_Measurement_replaceRequest": {
+    "FRD_GEM_Measurement_replace": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -79,7 +79,7 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_GEM_Measurement_insertRequest": {
+    "FRD_GEM_Measurement_insert": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -88,7 +88,7 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_GEM_Measurement_moveRequest": {
+    "FRD_GEM_Measurement_move": {
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -97,37 +97,28 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_EMM_InstrumentConfiguration_registrationRequest":{
+    "FRD_EMM_InstrumentConfiguration_registration":{
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
         "gml": "http://www.opengis.net/gml/3.2",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_EMM_InstrumentConfiguration_replaceRequest":{
+    "FRD_EMM_InstrumentConfiguration_replace":{
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
         "gml": "http://www.opengis.net/gml/3.2",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_EMM_InstrumentConfiguration_deleteRequest":{
+    "FRD_EMM_InstrumentConfiguration_delete":{
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
         "gml": "http://www.opengis.net/gml/3.2",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_EMM_Measurement_registrationRequest":{
-        None: "http://www.broservices.nl/xsd/isfrd/1.0",
-        "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
-        "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
-        "swe": "http://www.opengis.net/swe/2.0",
-        "gml": "http://www.opengis.net/gml/3.2",
-        "xlink": "http://www.w3.org/1999/xlink",
-        "xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    },
-    "FRD_EMM_Measurement_replaceRequest":{
+    "FRD_EMM_Measurement_registration":{
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -136,7 +127,7 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_EMM_Measurement_insertRequest":{
+    "FRD_EMM_Measurement_replace":{
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -145,7 +136,7 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_EMM_Measurement_moveRequest":{
+    "FRD_EMM_Measurement_insert":{
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
@@ -154,7 +145,16 @@ namespace = {
         "xlink": "http://www.w3.org/1999/xlink",
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     },
-    "FRD_EMM_Measurement_deleteRequest":{
+    "FRD_EMM_Measurement_move":{
+        None: "http://www.broservices.nl/xsd/isfrd/1.0",
+        "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
+        "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
+        "swe": "http://www.opengis.net/swe/2.0",
+        "gml": "http://www.opengis.net/gml/3.2",
+        "xlink": "http://www.w3.org/1999/xlink",
+        "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+    },
+    "FRD_EMM_Measurement_delete":{
         None: "http://www.broservices.nl/xsd/isfrd/1.0",
         "frdcom": "http://www.broservices.nl/xsd/frdcommon/1.0",
         "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
