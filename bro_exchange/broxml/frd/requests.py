@@ -134,7 +134,7 @@ class FRDStartRegistrationTool(FRDRequest):
 
         # Check if gmn is present in srcdocdata. If so, create element
         if self.srcdocdata["gmn_bro_id"] is not None:
-            for gmn_bro_id in self.srcdocdata["gmn_bro_id"]
+            for gmn_bro_id in self.srcdocdata["gmn_bro_id"]:
                 grounwater_monitoring_net = etree.Element("groundwaterMonitoringNet")
                 gmn_element = etree.SubElement(
                     grounwater_monitoring_net,
