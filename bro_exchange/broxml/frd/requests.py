@@ -34,7 +34,7 @@ class FRDRequest(ABC):
     def setup_xml_tree(self):
         """ Sets up the basis of a startregistration xml file, consisting of the namespace urls."""
         self.xml_tree = etree.Element(
-            self.request_type,
+            f"{self.request_type}Request",
             nsmap=self.namespace,
         )
 
