@@ -134,7 +134,7 @@ class FRDStartRegistrationTool(FRDRequest):
 
         # Check if gmn is present in srcdocdata. If so, create element
         if self.srcdocdata["gmn_bro_id"] is not None:
-            for gmn_bro_id in self.srcdocdata["gmn_bro_id"]:
+            for gmn_bro_id_value in self.srcdocdata["gmn_bro_id"]:
                 grounwater_monitoring_net = etree.Element("groundwaterMonitoringNet")
                 gmn_element = etree.SubElement(
                     grounwater_monitoring_net,
@@ -147,7 +147,7 @@ class FRDStartRegistrationTool(FRDRequest):
                 gmn_bro_id = etree.SubElement(
                     gmn_element, "{http://www.broservices.nl/xsd/isfrd/1.0}broId"
                 )
-                gmn_bro_id.text = str(gmn_bro_id)
+                gmn_bro_id.text = str(gmn_bro_id_value)
                 frd_startregistration.append(grounwater_monitoring_net)
 
         # add grounwaterMonitoringTube
