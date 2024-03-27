@@ -138,7 +138,7 @@ class FRDStartRegistrationTool(FRDRequest):
                 grounwater_monitoring_net = etree.Element("groundwaterMonitoringNet")
                 gmn_element = etree.SubElement(
                     grounwater_monitoring_net,
-                    "{http://www.broservices.nl/xsd/isfrd/1.0}GroundwaterMonitoringNet",
+                    "{http://www.broservices.nl/xsd/frdcommon/1.0}GroundwaterMonitoringNet",
                 )
                 gmn_element.set(
                     "{http://www.opengis.net/gml/3.2}id", f"id_000{self.id_count}"
