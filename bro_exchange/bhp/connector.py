@@ -190,6 +190,8 @@ def validate_request(
         project_id = str(project_id)
         upload_url = base_url + f"/{project_id}/validatie"
 
+    print(upload_url)
+    
     res = requests.post(
         upload_url,
         data=payload,
