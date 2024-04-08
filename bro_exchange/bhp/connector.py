@@ -190,8 +190,6 @@ def validate_request(
         project_id = str(project_id)
         upload_url = base_url + f"/{project_id}/validatie"
 
-    print(upload_url)
-    
     res = requests.post(
         upload_url,
         data=payload,
@@ -346,6 +344,8 @@ def upload_sourcedocs_from_dict(
         project_id = str(project_id)
         upload_url = base_url + f"/{project_id}/uploads"
 
+    print(upload_url)
+
     try:
         res = requests.post(
             upload_url,
@@ -354,6 +354,7 @@ def upload_sourcedocs_from_dict(
             auth=(token["user"], token["pass"]),
         )
     except:
+        print(res.json())
         print("Error: unable to create an upload")
         return "Error"
 
