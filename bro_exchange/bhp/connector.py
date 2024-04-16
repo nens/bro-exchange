@@ -407,6 +407,7 @@ def upload_sourcedocs_from_dict(
             auth=(token["user"], token["pass"]),
         )
     except:
+        print(endresponse.json())
         print("Error: failed to deliver upload")
         return "Error"
 
