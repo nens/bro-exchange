@@ -352,17 +352,14 @@ def upload_sourcedocs_from_dict(
 
     print(upload_url)
 
-    try:
-        res = requests.post(
-            upload_url,
-            headers={"Content-Type": "application/xml"},
-            cookies={},
-            auth=(token["user"], token["pass"]),
-        )
-    except Exception as e:
-        print(res.json())
-        print("Error: unable to create an upload")
-        return f"Error: {e}"
+    res = requests.post(
+        upload_url,
+        headers={"Content-Type": "application/xml"},
+        cookies={},
+        auth=(token["user"], token["pass"]),
+    )
+
+    print(res)
 
     try:
         upload_url_id = res.headers["Location"]
@@ -392,21 +389,21 @@ def upload_sourcedocs_from_dict(
         return f"Error: {e}"
 
     # Step 3: Deliver upload
+    upload_id = upload_url_id.split("/")[len(upload_url_id.split("/")) - 1]
+    if api == "v1":
+        delivery_url = base_url + "/leveringen"
+    if api == "v2":
+        delivery_url = base_url + f"/{project_id}/leveringen"
+    payload = {"upload": int(upload_id)}
+    headers = {"Content-type": "application/json"}
+    endresponse = requests.post(
+        delivery_url,
+        data=json.dumps(payload),
+        headers=headers,
+        cookies={},
+        auth=(token["user"], token["pass"]),
+    )
     try:
-        upload_id = upload_url_id.split("/")[len(upload_url_id.split("/")) - 1]
-        if api == "v1":
-            delivery_url = base_url + "/leveringen"
-        if api == "v2":
-            delivery_url = base_url + f"/{project_id}/leveringen"
-        payload = {"upload": int(upload_id)}
-        headers = {"Content-type": "application/json"}
-        endresponse = requests.post(
-            delivery_url,
-            data=json.dumps(payload),
-            headers=headers,
-            cookies={},
-            auth=(token["user"], token["pass"]),
-        )
         delivery_url_id = endresponse.headers["Location"]
         delivery = requests.get(
             url=delivery_url_id,
