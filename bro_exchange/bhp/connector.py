@@ -366,6 +366,8 @@ def upload_sourcedocs_from_dict(
     except:
         print(f"Error: {res.text}")
 
+    raise Exception(f"response: {res}; headers: {res.headers}")
+
     # Step 2: Add source documents to upload
     try:
         try:
