@@ -385,6 +385,7 @@ def upload_sourcedocs_from_dict(
         return f"Error: {e}"
 
     # Step 3: Deliver upload
+    raise Exception({res.headers})
     upload_id = upload_url_id.split("/")[len(upload_url_id.split("/")) - 1]
     if api == "v1":
         delivery_url = base_url + "/leveringen"
