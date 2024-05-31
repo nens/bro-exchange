@@ -118,8 +118,10 @@ def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
             cookies={},
             auth=(token["user"], token["pass"]),
         )
-
-        requestinfo = res.json()
+        try:
+            requestinfo = res.json()
+        except:
+            requestinfo = res
 
     elif api == "v2":
         token = bro_info["token"]
@@ -144,7 +146,11 @@ def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
             cookies={},
             auth=(token["user"], token["pass"]),
         )
-        requestinfo = res.json()
+        try:
+            requestinfo = res.json()
+        except:
+            requestinfo = res
+            
 
     return requestinfo
 
