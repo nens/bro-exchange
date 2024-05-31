@@ -360,13 +360,7 @@ def upload_sourcedocs_from_dict(
     )
 
     print(res)
-    upload_url_id = ""
-    try:
-        upload_url_id = res.headers["Location"]
-    except:
-        print(f"Error: {res.text}")
-
-    raise Exception(f"response: {res}; headers: {res.headers}")
+    upload_url_id = res.headers["Location"]
 
     # Step 2: Add source documents to upload
     try:
