@@ -359,10 +359,10 @@ def upload_sourcedocs_from_dict(
             cookies={},
             auth=(token["user"], token["pass"]),
         )
-    except:
+    except Exception as e:
         print(res.json())
         print("Error: unable to create an upload")
-        return "Error"
+        return f"Error: {e}"
 
     try:
         upload_url_id = res.headers["Location"]
@@ -387,9 +387,9 @@ def upload_sourcedocs_from_dict(
         except:
             print("Error: Cannot add source documents to upload")
 
-    except:
+    except Exception as e:
         print("Error: No source documents found")
-        return "Error"
+        return f"Error: {e}"
 
     # Step 3: Deliver upload
     try:
@@ -412,10 +412,10 @@ def upload_sourcedocs_from_dict(
             url=delivery_url_id,
             auth=(token["user"], token["pass"]),
         )
-    except:
+    except Exception as e:
         print(endresponse.json())
         print("Error: failed to deliver upload")
-        return "Error"
+        return f"Error: {e}"
 
     return delivery
 
