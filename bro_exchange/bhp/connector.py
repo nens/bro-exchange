@@ -360,7 +360,7 @@ def upload_sourcedocs_from_dict(
     )
 
     print(res)
-
+    upload_url_id = ""
     try:
         upload_url_id = res.headers["Location"]
     except:
@@ -470,6 +470,7 @@ def upload_sourcedocs_from_dir(
     except:
         print("Error: unable to create an upload")
 
+    upload_url_id = ""
     upload_url_id = res.headers["Location"]
 
     # Step 2: Add source documents to upload
