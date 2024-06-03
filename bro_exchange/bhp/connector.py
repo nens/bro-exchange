@@ -360,7 +360,7 @@ def upload_sourcedocs_from_dict(
     )
 
     print(res)
-    upload_url_id = res.headers["Location"]
+    upload_url_id = res.headers["location"]
 
     # Step 2: Add source documents to upload
     try:
@@ -385,7 +385,6 @@ def upload_sourcedocs_from_dict(
         return f"Error: {e}"
 
     # Step 3: Deliver upload
-    raise Exception({res.headers})
     upload_id = upload_url_id.split("/")[len(upload_url_id.split("/")) - 1]
     if api == "v1":
         delivery_url = base_url + "/leveringen"
@@ -407,7 +406,6 @@ def upload_sourcedocs_from_dict(
             auth=(token["user"], token["pass"]),
         )
     except Exception as e:
-        # print(endresponse.json())
         print("Error: failed to deliver upload")
         return f"Error: {e}"
 
