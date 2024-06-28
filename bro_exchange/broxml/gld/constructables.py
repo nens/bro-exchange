@@ -1,4 +1,5 @@
 import datetime
+import pytz
 import uuid as uuid_gen
 
 import pandas as pd
@@ -341,7 +342,10 @@ def gen_phenomenontime(data, nsmap, codespacemap, count):
         beginPosition = str(pd.DataFrame(data["result"])["time"][0])[:10]
         endPosition = str(
             pd.DataFrame(data["result"])["time"][len(pd.DataFrame(data["result"])) - 1]
-        )[:10]
+        )
+        tz_info = pytz.timezone("Europe/Amsterdam")
+        endPosition = datetime.datetime.strptime(endPosition, "%Y-%m-%dT%H:%M:%SZ").astimezone(tz=tz_info)
+        endPosition = endPosition.strftime("%Y-%m-%d")
     except:
         raise Exception("Error: phenomenonTime cannot be derived from timeseries")
 
