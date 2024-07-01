@@ -31,7 +31,7 @@ def get_base_url(api, demo):
 
     """
     if demo is True:
-        base_url = "https://acc.bronhouderportaal-bro.nl"
+        base_url = "https://demo.bronhouderportaal-bro.nl"
     elif demo is False:
         base_url = "https://www.bronhouderportaal-bro.nl"
     if api == "v1":
@@ -107,7 +107,7 @@ def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
         token = bro_info["token"]
         
         if demo is True:
-            upload_url = "https://acc.bronhouderportaal-bro.nl/api/validatie"
+            upload_url = "https://demo.bronhouderportaal-bro.nl/api/validatie"
         else:
             upload_url = "https://www.bronhouderportaal-bro.nl/api/validatie"
 
@@ -127,13 +127,13 @@ def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
         token = bro_info["token"]
         if met_projectnummer(bro_info):
             if demo is True:
-                upload_url = f'https://acc.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
+                upload_url = f'https://demo.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
             else:
                 upload_url = f'https://www.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
 
         else:
             if demo is True:
-                upload_url = "https://acc.bronhouderportaal-bro.nl/api/v2/validatie"
+                upload_url = "https://demo.bronhouderportaal-bro.nl/api/v2/validatie"
             else:
                 upload_url = "https://www.bronhouderportaal-bro.nl/api/v2/validatie"
 
