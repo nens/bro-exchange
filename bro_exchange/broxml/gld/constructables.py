@@ -344,7 +344,7 @@ def gen_phenomenontime(data, nsmap, codespacemap, count):
             pd.DataFrame(data["result"])["time"][len(pd.DataFrame(data["result"])) - 1]
         )
         tz_info = pytz.timezone("Europe/Amsterdam")
-        endPosition = datetime.datetime.strptime(endPosition, "%Y-%m-%dT%H:%M:%SZ").astimezone(tz=tz_info)
+        endPosition = datetime.datetime.strptime(endPosition, "%Y-%m-%dT%H:%M:%S%z").astimezone(tz=tz_info)
         endPosition = endPosition.strftime("%Y-%m-%d")
     except:
         raise Exception("Error: phenomenonTime cannot be derived from timeseries")
