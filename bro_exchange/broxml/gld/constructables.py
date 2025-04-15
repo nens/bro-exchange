@@ -621,6 +621,9 @@ def gen_point_metadata_qualifiers(data, rec, nsmap, codespacemap, count):
         )
         StatusQualityControl_value.text = str(rec["metadata"]["StatusQualityControl"])
 
+    print("printing metadata")
+    print(metadata)
+    print(rec["metadata"]["censoringLimitvalue"])
     if "censoringLimitvalue" in metadata:
         qualifierlist["censoringLimitvalue"] = etree.Element(
             ("{%s}" % nsmap["wml2"]) + "qualifier", nsmap=nsmap
@@ -679,7 +682,10 @@ def gen_point_metadata(data, rec, nsmap, codespacemap, count):
                     )
                 },
             )
-        if "censoredReason" in rec["metadata"].keys():
+        print("printing censoredReason")
+        print(rec["metadata"].keys())
+        print(rec["metadata"]["censoredReason"])
+        if "censoredReason" in rec["metadata"].keys() and rec["metadata"]["censoredReason"]:
             censoredReason = etree.SubElement(
                 TVPMeasurementMetadata,
                 ("{%s}" % nsmap["wml2"]) + "censoredReason",
