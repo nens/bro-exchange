@@ -621,9 +621,6 @@ def gen_point_metadata_qualifiers(data, rec, nsmap, codespacemap, count):
         )
         StatusQualityControl_value.text = str(rec["metadata"]["StatusQualityControl"])
 
-    print("printing metadata")
-    print(metadata)
-    print(rec["metadata"]["censoringLimitvalue"])
     if "censoringLimitvalue" in metadata:
         qualifierlist["censoringLimitvalue"] = etree.Element(
             ("{%s}" % nsmap["wml2"]) + "qualifier", nsmap=nsmap
@@ -682,21 +679,20 @@ def gen_point_metadata(data, rec, nsmap, codespacemap, count):
                     )
                 },
             )
-        print("printing censoredReason")
-        print(rec["metadata"].keys())
-        print(rec["metadata"]["censoredReason"])
-        if "censoredReason" in rec["metadata"].keys() and rec["metadata"]["censoredReason"]:
-            censoredReason = etree.SubElement(
-                TVPMeasurementMetadata,
-                ("{%s}" % nsmap["wml2"]) + "censoredReason",
-                nsmap=nsmap,
-                attrib={
-                    ("{%s}" % nsmap["xlink"])
-                    + "href": "http://www.opengis.net/def/nil/OGC/0/{}".format(
-                        rec["metadata"]["censoredReason"]
-                    )
-                },
-            )
+
+        if "censoredReason" in rec["metadata"].keys():
+            if rec["metadata"]["censoredReason"] != "nan":
+                censoredReason = etree.SubElement(
+                    TVPMeasurementMetadata,
+                    ("{%s}" % nsmap["wml2"]) + "censoredReason",
+                    nsmap=nsmap,
+                    attrib={
+                        ("{%s}" % nsmap["xlink"])
+                        + "href": "http://www.opengis.net/def/nil/OGC/0/{}".format(
+                            rec["metadata"]["censoredReason"]
+                        )
+                    },
+                )
     # except:
     # raise Exception('Error: failed to compile point metadata parameters')
 
