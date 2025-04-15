@@ -681,7 +681,7 @@ def gen_point_metadata(data, rec, nsmap, codespacemap, count):
             )
 
         if "censoredReason" in rec["metadata"].keys():
-            if rec["metadata"]["censoredReason"] != "nan":
+            if not rec["metadata"]["censoredReason"] in ["nan", None, ""]:
                 censoredReason = etree.SubElement(
                     TVPMeasurementMetadata,
                     ("{%s}" % nsmap["wml2"]) + "censoredReason",
