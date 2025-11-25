@@ -93,6 +93,9 @@ class gmw_registration_request:
         self.delivery_info = None
         self.delivery_id = None
 
+        if self.kwargs.get("qualityRegime") is not None:
+            self.kwargs["underPrivilege"] = "ja"
+
         # Request arguments:
         arglist = {
             "deliveryAccountableParty": "optional",
