@@ -110,35 +110,30 @@ class gld_registration_request:
             nsmap=ns_regreq_map_gld2,
         )
         requestReference.text = self.kwargs["requestReference"]
+        
+        deliveryAccountableParty = etree.SubElement(
+            req,
+            ("{%s}" % ns_regreq_map_gld2["brocom"]) + "deliveryAccountableParty",
+            nsmap=ns_regreq_map_gld2,
+        )
+        deliveryAccountableParty.text = str(self.kwargs.get("deliveryAccountableParty", "Unknown"))
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
-            deliveryAccountableParty = etree.SubElement(
-                req,
-                ("{%s}" % ns_regreq_map_gld2["brocom"]) + "deliveryAccountableParty",
-                nsmap=ns_regreq_map_gld2,
-            )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
-
-        try:
-            self.kwargs["broId"]
+        bro_id = self.kwargs.get("broId", None)
+        if bro_id:
             broId = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gld2["brocom"]) + "broId",
                 nsmap=ns_regreq_map_gld2,
             )
-            broId.text = self.kwargs["broId"]
-        except:
-            pass
-
+            broId.text = bro_id
+        
+        quality_regime = self.kwargs.get("qualityRegime", "IMBRO/A") ## If qualityRegime is not in kwargs data, use IMBRO/A to ensure delivery is possible
         qualityRegime = etree.SubElement(
             req,
             ("{%s}" % ns_regreq_map_gld2["brocom"]) + "qualityRegime",
             nsmap=ns_regreq_map_gld2,
         )
-        qualityRegime.text = self.kwargs["qualityRegime"]
+        qualityRegime.text = quality_regime if quality_regime else "IMBRO/A" ## If qualityRegime is None, use IMBRO/A to ensure delivery is possible
 
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == "GLD_StartRegistration":
@@ -451,6 +446,8 @@ class gld_delete_request:
         None, saves generated replace request xml to output directory
 
         """
+        print("BRO Exchange: GLD Delete Request needs to be updated.")
+
         self.allowed_srcdocs = ["GLD_Addition"]
         self.srcdoc = etree.fromstring(srcdoc)
         self.correctionReason = correctionReason
