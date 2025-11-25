@@ -14,7 +14,7 @@ import requests.auth
 # =============================================================================
 
 
-def get_base_url(api, demo):
+def get_base_url(demo):
     """
 
     Parameters
@@ -34,10 +34,8 @@ def get_base_url(api, demo):
         base_url = "https://demo.bronhouderportaal-bro.nl"
     elif demo is False:
         base_url = "https://www.bronhouderportaal-bro.nl"
-    if api == "v1":
-        base_url += "/api"
-    if api == "v2":
-        base_url += "/api/v2"
+
+    base_url += "/api/v2"
 
     return base_url
 
@@ -82,7 +80,7 @@ def met_projectnummer(bro_info):
     return available
 
 
-def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
+def validate_sourcedoc(payload, bro_info, demo=False):
     """
 
 
@@ -103,60 +101,33 @@ def validate_sourcedoc(payload, bro_info, demo=False, api="v1"):
     None.
 
     """
-    if api == "v1":
-        token = bro_info["token"]
-        
-        if demo is True:
-            upload_url = "https://demo.bronhouderportaal-bro.nl/api/validatie"
-        else:
-            upload_url = "https://www.bronhouderportaal-bro.nl/api/validatie"
+    token = bro_info["token"]
+    proj_str = (
+        "" if not met_projectnummer(bro_info) else f"{bro_info['projectnummer']}/"
+    )
+    url_prefix = "demo" if demo else "www"
+    upload_url = (
+        f"https://{url_prefix}.bronhouderportaal-bro.nl/api/v2/{proj_str}validatie"
+    )
 
-        res = requests.post(
-            upload_url,
-            data=payload,
-            headers={"Content-Type": "application/xml"},
-            cookies={},
-            auth=(token["user"], token["pass"]),
-        )
-        try:
-            requestinfo = res.json()
-        except:
-            requestinfo = res
-
-    elif api == "v2":
-        token = bro_info["token"]
-        if met_projectnummer(bro_info):
-            if demo is True:
-                upload_url = f'https://demo.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
-            else:
-                upload_url = f'https://www.bronhouderportaal-bro.nl/api/v2/{bro_info["projectnummer"]}/validatie'
-
-        else:
-            if demo is True:
-                upload_url = "https://demo.bronhouderportaal-bro.nl/api/v2/validatie"
-            else:
-                upload_url = "https://www.bronhouderportaal-bro.nl/api/v2/validatie"
-
-
-    
-        res = requests.post(
-            upload_url,
-            data=payload,
-            headers={"Content-Type": "application/xml"},
-            cookies={},
-            auth=(token["user"], token["pass"]),
-        )
-        try:
-            requestinfo = res.json()
-        except:
-            requestinfo = res
-            
+    res = requests.post(
+        upload_url,
+        data=payload,
+        headers={"Content-Type": "application/xml"},
+        cookies={},
+        auth=(token["user"], token["pass"]),
+    )
+    try:
+        requestinfo = res.json()
+    except Exception as e:
+        print(f"Error while parsing response from bronhouderportaal: {e}")
+        requestinfo = res
 
     return requestinfo
 
 
 def validate_request(
-    payload, token=None, user=None, password=None, api="v1", project_id=None, demo=False
+    payload, token=None, user=None, password=None, project_id=None, demo=False
 ):
     """
 
@@ -186,15 +157,10 @@ def validate_request(
     None.
 
     """
-    token = check_input(token, user, password, project_id, api, demo)
-
-    base_url = get_base_url(api, demo)
-
-    if api == "v1":
-        upload_url = base_url + "/validatie"
-    if api == "v2":
-        project_id = str(project_id)
-        upload_url = base_url + f"/{project_id}/validatie"
+    token = check_input(token, user, password, project_id, demo)
+    base_url = get_base_url(demo)
+    project_id = str(project_id)
+    upload_url = base_url + f"/{project_id}/validatie"
 
     res = requests.post(
         upload_url,
@@ -210,7 +176,7 @@ def validate_request(
 
 
 def deliver_requests(
-    reqs, token=None, user=None, password=None, api="v1", project_id=None, demo=False
+    reqs, token=None, user=None, password=None, project_id=None, demo=False
 ):
     """
 
@@ -236,15 +202,12 @@ def deliver_requests(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, api, demo)
+    token = check_input(token, user, password, project_id, demo)
 
-    base_url = get_base_url(api, demo)
+    base_url = get_base_url(demo)
 
-    if api == "v1":
-        upload_url = base_url + "/uploads"
-    if api == "v2":
-        project_id = str(project_id)
-        upload_url = base_url + f"/{project_id}/uploads"
+    project_id = str(project_id)
+    upload_url = base_url + f"/{project_id}/uploads"
 
     try:
         res = requests.post(
@@ -279,10 +242,7 @@ def deliver_requests(
         # Step 3: Deliver upload
         try:
             upload_id = upload_url_id.split("/")[len(upload_url_id.split("/")) - 1]
-            if api == "v1":
-                delivery_url = base_url + "/leveringen"
-            if api == "v2":
-                delivery_url = base_url + f"/{project_id}/leveringen"
+            delivery_url = base_url + f"/{project_id}/leveringen"
             payload = {"upload": int(upload_id)}
             headers = {"Content-type": "application/json"}
         except:
@@ -313,7 +273,7 @@ def deliver_requests(
 
 
 def upload_sourcedocs_from_dict(
-    reqs, token=None, user=None, password=None, api="v1", project_id=None, demo=False
+    reqs, token=None, user=None, password=None, project_id=None, demo=False
 ):
     """
 
@@ -339,16 +299,10 @@ def upload_sourcedocs_from_dict(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, api, demo)
-
-    base_url = get_base_url(api, demo)
-
-    if api == "v1":
-        upload_url = base_url + "/uploads"
-
-    if api == "v2":
-        project_id = str(project_id)
-        upload_url = base_url + f"/{project_id}/uploads"
+    token = check_input(token, user, password, project_id, demo)
+    base_url = get_base_url(demo)
+    project_id = str(project_id)
+    upload_url = base_url + f"/{project_id}/uploads"
 
     print(upload_url)
 
@@ -386,10 +340,7 @@ def upload_sourcedocs_from_dict(
 
     # Step 3: Deliver upload
     upload_id = upload_url_id.split("/")[len(upload_url_id.split("/")) - 1]
-    if api == "v1":
-        delivery_url = base_url + "/leveringen"
-    if api == "v2":
-        delivery_url = base_url + f"/{project_id}/leveringen"
+    delivery_url = base_url + f"/{project_id}/leveringen"
     payload = {"upload": int(upload_id)}
     headers = {"Content-type": "application/json"}
     endresponse = requests.post(
@@ -417,7 +368,6 @@ def upload_sourcedocs_from_dir(
     token=None,
     user=None,
     password=None,
-    api="v1",
     project_id=None,
     demo=False,
     specific_file=None,
@@ -444,16 +394,10 @@ def upload_sourcedocs_from_dir(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, api, demo)
-
-    # Step 1: Create upload
-    base_url = get_base_url(api, demo)
-
-    if api == "v1":
-        upload_url = base_url + "/uploads"
-    if api == "v2":
-        project_id = str(project_id)
-        upload_url = base_url + f"/{project_id}/uploads"
+    token = check_input(token, user, password, project_id, demo)
+    base_url = get_base_url(demo)
+    project_id = str(project_id)
+    upload_url = base_url + f"/{project_id}/uploads"
 
     try:
         res = requests.post(
@@ -519,10 +463,7 @@ def upload_sourcedocs_from_dir(
     # Step 3: Deliver upload
     try:
         upload_id = upload_url_id.split("/")[len(upload_url_id.split("/")) - 1]
-        if api == "v1":
-            delivery_url = base_url + "/leveringen"
-        if api == "v2":
-            delivery_url = base_url + f"/{project_id}/leveringen"
+        delivery_url = base_url + f"/{project_id}/leveringen"
         payload = {"upload": int(upload_id)}
         headers = {"Content-type": "application/json"}
         endresponse = requests.post(
@@ -548,7 +489,6 @@ def check_delivery_status(
     token=None,
     user=None,
     password=None,
-    api="v1",
     project_id=None,
     demo=False,
 ):
@@ -573,16 +513,12 @@ def check_delivery_status(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, api, demo)
+    token = check_input(token, user, password, project_id, demo)
 
     # Step 1: Create upload
-    base_url = get_base_url(api, demo)
-
-    if api == "v1":
-        delivery_url_id = base_url + f"/leveringen/{identifier}"
-    if api == "v2":
-        project_id = str(project_id)
-        delivery_url_id = base_url + f"/{project_id}/leveringen/{identifier}"
+    base_url = get_base_url(demo)
+    project_id = str(project_id)
+    delivery_url_id = base_url + f"/{project_id}/leveringen/{identifier}"
 
     delivery = requests.get(
         url=delivery_url_id,
@@ -596,7 +532,6 @@ def get_sourcedocument(
     token=None,
     user=None,
     password=None,
-    api="v1",
     project_id=None,
     demo=False,
 ):
@@ -621,16 +556,12 @@ def get_sourcedocument(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, api, demo)
+    token = check_input(token, user, password, project_id, demo)
 
     # Step 1: Create upload
-    base_url = get_base_url(api, demo)
-
-    if api == "v1":
-        delivery_url_id = base_url + f"/brondocumenten/{identifier}"
-    if api == "v2":
-        project_id = str(project_id)
-        delivery_url_id = base_url + f"/{project_id}/brondocumenten/{identifier}"
+    base_url = get_base_url(demo)
+    project_id = str(project_id)
+    delivery_url_id = base_url + f"/{project_id}/brondocumenten/{identifier}"
 
     delivery = requests.get(
         url=delivery_url_id,
