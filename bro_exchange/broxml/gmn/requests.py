@@ -179,14 +179,13 @@ class gmn_registration_request:
         token=None,
         user=None,
         password=None,
-        api="v1",
         project_id=None,
         demo=False,
     ):
         if self.request is None:
             raise Exception("Request isn't generated yet")
         self.validation_info = validate_request(
-            self.request, token, user, password, api, project_id, demo
+            self.request, token, user, password, project_id, demo
         )
         try:
             self.validation_status = self.validation_info["status"]
@@ -198,7 +197,6 @@ class gmn_registration_request:
         token=None,
         user=None,
         password=None,
-        api="v1",
         project_id=None,
         demo=False,
     ):
@@ -212,7 +210,7 @@ class gmn_registration_request:
         reqs = {self.requestreference: self.request}
 
         self.delivery_info = deliver_requests(
-            reqs, token, user, password, api, project_id, demo
+            reqs, token, user, password, project_id, demo
         )
 
         try:
@@ -363,14 +361,13 @@ class gmn_replace_request:
         token=None,
         user=None,
         password=None,
-        api="v1",
         project_id=None,
         demo=False,
     ):
         if self.request is None:
             raise Exception("Request isn't generated yet")
         self.validation_info = validate_request(
-            self.request, token, user, password, api, project_id, demo
+            self.request, token, user, password, project_id, demo
         )
         try:
             self.validation_status = self.validation_info["status"]
@@ -382,7 +379,6 @@ class gmn_replace_request:
         token=None,
         user=None,
         password=None,
-        api="v1",
         project_id=None,
         demo=False,
     ):
@@ -396,7 +392,7 @@ class gmn_replace_request:
         reqs = {self.requestreference: self.request}
 
         self.delivery_info = deliver_requests(
-            reqs, token, user, password, api, project_id, demo
+            reqs, token, user, password, project_id, demo
         )
 
         try:

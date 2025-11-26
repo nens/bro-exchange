@@ -40,7 +40,7 @@ def get_base_url(demo):
     return base_url
 
 
-def check_input(token, user, password, project_id, api, demo):
+def check_input(token, user, password, project_id, demo):
     if token is None:
         if user is None or password is None:
             raise Exception("No user / password supplied for authentication")
@@ -55,11 +55,8 @@ def check_input(token, user, password, project_id, api, demo):
                 )
         except:
             raise Exception("Token invalid: token must be a dict")
-
-    if api not in ["v1", "v2"]:
-        raise Exception("Selected api not valid")
-
-    if api == "v2" and project_id is None:
+        
+    if project_id is None:
         raise Exception(
             "A project id must be supplied for using the selected api version"
         )
