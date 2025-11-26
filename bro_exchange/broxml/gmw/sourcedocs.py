@@ -71,6 +71,9 @@ def gen_gmw_construction(data, nsmap, codespacemap, sourcedoctype):
     GMW_Construction_subelements = {}
     for ordered_arg in arglist.keys():
         for arg in data.keys():
+            if data[arg] is None:
+                continue
+            
             if arg == ordered_arg:
                 if arg not in constructables:
                     if arg in codespacemap.keys():
