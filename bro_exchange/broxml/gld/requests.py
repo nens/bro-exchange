@@ -251,7 +251,7 @@ class gld_replace_request:
 
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
 
-        self.allowed_srcdocs = ["GLD_Addition"]
+        self.allowed_srcdocs = ["GLD_StartRegistration", "GLD_Addition"]
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -283,7 +283,7 @@ class gld_replace_request:
 
     def generate(self):
         # Generate xml document base:
-        if self.srcdoc == "GLD_Addition":
+        if self.srcdoc in ["GLD_StartRegistration", "GLD_Addition"]:
             req = etree.Element(
                 "replaceRequest",
                 nsmap=ns_regreq_map_gld3,
@@ -342,9 +342,9 @@ class gld_replace_request:
 
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == "GLD_StartRegistration":
-            if "broId" in list(self.kwargs.keys()):
+            if "broId" not in list(self.kwargs.keys()):
                 raise Exception(
-                    "Registration request argument 'broId' not allowed in combination with given sourcedocument"
+                    "Registration request argument 'broId' required in combination with given sourcedocument"
                 )
             else:
                 sourceDocument = gen_gld_startregistration(

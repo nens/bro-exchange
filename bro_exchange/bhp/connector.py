@@ -154,7 +154,13 @@ def validate_request(
     None.
 
     """
-    token = check_input(token, user, password, project_id, demo)
+    token = check_input(
+        token=token, 
+        user=user, 
+        password=password, 
+        project_id=project_id, 
+        demo=demo
+    )
     base_url = get_base_url(demo)
     project_id = str(project_id)
     upload_url = base_url + f"/{project_id}/validatie"
@@ -199,7 +205,13 @@ def deliver_requests(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, demo)
+    token = check_input(
+        token=token, 
+        user=user, 
+        password=password, 
+        project_id=project_id, 
+        demo=demo
+    )
 
     base_url = get_base_url(demo)
 
@@ -296,7 +308,13 @@ def upload_sourcedocs_from_dict(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, demo)
+    token = check_input(
+        token=token, 
+        user=user, 
+        password=password, 
+        project_id=project_id, 
+        demo=demo
+    )
     base_url = get_base_url(demo)
     project_id = str(project_id)
     upload_url = base_url + f"/{project_id}/uploads"
@@ -391,7 +409,13 @@ def upload_sourcedocs_from_dir(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, demo)
+    token = check_input(
+        token=token, 
+        user=user, 
+        password=password, 
+        project_id=project_id, 
+        demo=demo
+    )
     base_url = get_base_url(demo)
     project_id = str(project_id)
     upload_url = base_url + f"/{project_id}/uploads"
@@ -510,7 +534,13 @@ def check_delivery_status(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, demo)
+    token = check_input(
+        token=token, 
+        user=user, 
+        password=password, 
+        project_id=project_id, 
+        demo=demo
+    )
 
     # Step 1: Create upload
     base_url = get_base_url(demo)
@@ -553,7 +583,13 @@ def get_sourcedocument(
     """
     delivery = None
 
-    token = check_input(token, user, password, project_id, demo)
+    token = check_input(
+        token=token, 
+        user=user, 
+        password=password, 
+        project_id=project_id, 
+        demo=demo
+    )
 
     # Step 1: Create upload
     base_url = get_base_url(demo)
