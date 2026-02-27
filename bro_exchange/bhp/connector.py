@@ -373,6 +373,7 @@ def upload_sourcedocs_from_dict(
         )
     except Exception as e:
         print("Error: failed to deliver upload")
+        print(f'leveringen post resulted in: {endresponse.content}')
         return f"Error: {e}"
 
     return delivery
