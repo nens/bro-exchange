@@ -331,8 +331,8 @@ def upload_sourcedocs_from_dict(
     try:
         try:
             for request in reqs.keys():
+                print(f"Uploading {request} to bronhouderportaal")
                 headers = {"Content-type": "application/xml"}
-                params = {"filename": request}
                 payload = reqs[request]
                 res = requests.post(
                     upload_url_id + "/brondocumenten",
@@ -340,8 +340,8 @@ def upload_sourcedocs_from_dict(
                     headers=headers,
                     cookies={},
                     auth=(token["user"], token["pass"]),
-                    params=params,
                 )
+                print(f"Posting to {res.url} - {res.status_code} - {res.content}")
         except:
             print("Error: Cannot add source documents to upload")
 
