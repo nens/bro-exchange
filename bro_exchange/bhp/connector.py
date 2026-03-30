@@ -329,7 +329,7 @@ def upload_sourcedocs_from_dict(
     )
 
     print(res)
-    upload_url_id = res.headers["location"]
+    upload_url_id = res.headers["Location"]
 
     # Step 2: Add source documents to upload
     try:
@@ -354,7 +354,7 @@ def upload_sourcedocs_from_dict(
         return f"Error: {e}"
 
     # Step 3: Deliver upload
-    upload_id = upload_url_id.split("/")[len(upload_url_id.split("/")) - 1]
+    upload_id = upload_url_id.split("/")[-1]
     delivery_url = base_url + f"/{project_id}/leveringen"
     payload = {"upload": int(upload_id)}
     headers = {"Content-type": "application/json"}
@@ -362,17 +362,18 @@ def upload_sourcedocs_from_dict(
         delivery_url,
         data=json.dumps(payload),
         headers=headers,
-        cookies={},
         auth=(token["user"], token["pass"]),
+        timeout=60,
     )
     try:
+        endresponse.raise_for_status()
         delivery_url_id = endresponse.headers["Location"]
         delivery = requests.get(
             url=delivery_url_id,
             auth=(token["user"], token["pass"]),
         )
     except Exception as e:
-        print("Error: failed to deliver upload")
+        print(f"Error: failed to deliver upload - {e}")
         print(f'leveringen post resulted in: {endresponse.content}')
         return f"Error: {e}"
 
