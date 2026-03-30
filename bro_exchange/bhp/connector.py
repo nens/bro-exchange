@@ -19,8 +19,6 @@ def get_base_url(demo):
 
     Parameters
     ----------
-    api: String
-        API version (default = v1)
     demo : Bool
         Defaults to False. If true, the test environment
         of the bronhouderportaal is selected for data exchange
@@ -32,7 +30,7 @@ def get_base_url(demo):
     """
     if demo is True:
         base_url = "https://demo.bronhouderportaal-bro.nl"
-    elif demo is False:
+    else:
         base_url = "https://www.bronhouderportaal-bro.nl"
 
     base_url += "/api/v2"
@@ -61,7 +59,7 @@ def check_input(token, user, password, project_id, demo):
             "A project id must be supplied for using the selected api version"
         )
 
-    if demo is not True and demo is not False:
+    if isinstance(demo, bool) == False:
         raise Exception("Demo must be a bool")
 
     return token
@@ -141,8 +139,6 @@ def validate_request(
         Token user. Note: should only be supplied when token isn't generated in advance
     password:
         Token pass. Note: should only be supplied when token isn't generated in advance
-    api: String
-        API version (default = v1)
     project_id:
         id of the project. Note: required when api > v1
     demo : Bool
