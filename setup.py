@@ -16,7 +16,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="bro-exchange",
-    version="1.0.2",
+    version="1.0.3",
     description="This python package contains tools to retrieve data from / send data to the Dutch National Key Registry of the Subsurface (Basis Registratie Ondergrond).",
     author="Karl Schutt",
     author_email="karlschutt@outlook.com",
