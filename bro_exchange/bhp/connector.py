@@ -315,7 +315,6 @@ def upload_sourcedocs_from_dict(
     project_id = str(project_id)
     upload_url = base_url + f"/{project_id}/uploads"
 
-    print(upload_url)
 
     res = requests.post(
         upload_url,
@@ -323,11 +322,11 @@ def upload_sourcedocs_from_dict(
         cookies={},
         auth=(token["user"], token["pass"]),
     )
-
-    print(res)
+    print(f"Creating upload at {upload_url} - {res.status_code} - {res.content}")
     upload_url_id = res.headers["Location"]
 
     # Step 2: Add source documents to upload
+    print(f"We will handle the following source documents: {list(reqs.keys())}")
     try:
         try:
             for request in reqs.keys():
@@ -341,12 +340,13 @@ def upload_sourcedocs_from_dict(
                     cookies={},
                     auth=(token["user"], token["pass"]),
                 )
+                res.raise_for_status()
                 print(f"Posting to {res.url} - {res.status_code} - {res.content}")
-        except:
-            print("Error: Cannot add source documents to upload")
+        except Exception as e:
+            print(f"Error: Cannot add source documents to upload - {e}")
 
     except Exception as e:
-        print("Error: No source documents found")
+        print(f"Error: No source documents found - {e}")
         return f"Error: {e}"
 
     # Step 3: Deliver upload
@@ -425,8 +425,9 @@ def upload_sourcedocs_from_dir(
             cookies={},
             auth=(token["user"], token["pass"]),
         )
-    except:
-        print("Error: unable to create an upload")
+        res.raise_for_status()
+    except Exception as e:
+        print(f"Error: unable to create an upload - {e}")
 
     upload_url_id = ""
     upload_url_id = res.headers["Location"]
