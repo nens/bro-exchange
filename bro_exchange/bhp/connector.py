@@ -328,26 +328,30 @@ def upload_sourcedocs_from_dict(
     # Step 2: Add source documents to upload
     print(f"We will handle the following source documents: {list(reqs.keys())}")
     try:
-        try:
-            for request in reqs.keys():
-                print(f"Uploading {request} to bronhouderportaal")
-                headers = {"Content-type": "application/xml"}
-                payload = reqs[request]
-                res = requests.post(
-                    upload_url_id + "/brondocumenten",
-                    data=payload,
-                    headers=headers,
-                    cookies={},
-                    auth=(token["user"], token["pass"]),
-                )
-                res.raise_for_status()
-                print(f"Posting to {res.url} - {res.status_code} - {res.content}")
-        except Exception as e:
-            print(f"Error: Cannot add source documents to upload - {e}")
+        for request in reqs.keys():
+            print(f"Uploading {request} to bronhouderportaal")
+            headers = {"Content-type": "application/xml"}
+            payload = reqs[request]
+            
+            # Ensure payload is bytes
+            if isinstance(payload, str):
+                payload = payload.encode("utf-8")
+            
+            brondoc_url = upload_url_id + "/brondocumenten"
+            print(f"Posting brondocument to: {brondoc_url}")
+            res = requests.post(
+                brondoc_url,
+                data=payload,
+                headers=headers,
+                cookies={},
+                auth=(token["user"], token["pass"]),
+            )
+            print(f"Brondocument response: {res.status_code} - {res.content}")
+            res.raise_for_status()
 
     except Exception as e:
-        print(f"Error: No source documents found - {e}")
-        return f"Error: {e}"
+        print(f"Error: Cannot add source documents to upload - {e}")
+        return {"status": "error", "message": f"Error: {e}"}
 
     # Step 3: Deliver upload
     upload_id = upload_url_id.split("/")[-1]
@@ -371,7 +375,7 @@ def upload_sourcedocs_from_dict(
     except Exception as e:
         print(f"Error: failed to deliver upload - {e}")
         print(f'leveringen post resulted in: {endresponse.content}')
-        return f"Error: {e}"
+        return {"status": "error", "message": f"Error: {e}"}
 
     return delivery
 
