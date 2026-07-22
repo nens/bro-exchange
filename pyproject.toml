@@ -3,7 +3,7 @@ name = "bro-exchange"
 version = "1.0.4"
 description = "This package contains tools for retrieving data from or sending data to the Dutch National Key Registry of the Subsurface (Basis Registratie Ondergrond)."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
     "lxml>=6.1.1",
     "requests>=2.34.2",
