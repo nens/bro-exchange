@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 from lxml import etree
 
@@ -8,6 +9,11 @@ from bro_exchange.broxml.mappings import (  # mappings
     ns_regreq_map_gmn1,
     ns_regreq_map_gmn2,
     xsi_regreq_map_gmn1,
+)
+from bro_exchange.broxml.request_helpers import (
+    check_required_kwargs,
+    coerce_srcdocdata,
+    normalize_optional_kwargs,
 )
 from bro_exchange.checks import check_missing_args
 
@@ -19,38 +25,45 @@ from .sourcedocs import (
 )
 
 
-class gmn_registration_request:
+def get_supported_gmn_srcdocs() -> dict[str, tuple[str, ...]]:
+    """Return supported GMN source-document names per request type."""
 
-    """
-    Class for generating gmw registration requests. Check
-    allowed_srcdos for currently available possibilities.
-    """
-
-    def __init__(self, srcdoc, **kwargs):
-        """
-
-        Parameters
-        ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated registration request xml to output directory
-
-        """
-
-        # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
-
-        self.allowed_srcdocs = [
+    return {
+        "registration": (
             "GMN_StartRegistration",
             "GMN_MeasuringPoint",
             "GMN_MeasuringPointEndDate",
             "GMN_Closure",
-        ]
+        ),
+        "replace": ("GMN_StartRegistration", "GMN_MeasuringPoint"),
+    }
+
+
+class gmn_registration_request:
+
+    """
+    Build a GMN registration request XML.
+
+    Supported srcdocs are available through `get_supported_gmn_srcdocs()["registration"]`.
+    """
+
+    def __init__(self, srcdoc: str, **kwargs: Any):
+        """
+        Parameters
+        ----------
+        srcdoc:
+            One of the supported GMN registration source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `qualityRegime` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
+            - `broId` (optional; required for specific srcdocs)
+        """
+
+        # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
+
+        self.allowed_srcdocs = list(get_supported_gmn_srcdocs()["registration"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -62,6 +75,8 @@ class gmn_registration_request:
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+
+        normalize_optional_kwargs(self.kwargs, ["deliveryAccountableParty", "broId"])
 
         # Request arguments:
         arglist = {
@@ -76,6 +91,10 @@ class gmn_registration_request:
         check_missing_args(
             self.kwargs, arglist, "gmw_registration with method initialize"
         )
+        check_required_kwargs(
+            self.kwargs, arglist, "gmw_registration with method initialize"
+        )
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -97,24 +116,18 @@ class gmn_registration_request:
         )
         requestReference.text = self.kwargs["requestReference"]
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
+        if "deliveryAccountableParty" in self.kwargs:
             deliveryAccountableParty = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmn2["brocom"]) + "deliveryAccountableParty",
             )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
+            deliveryAccountableParty.text = str(self.kwargs["deliveryAccountableParty"])
 
-        try:
-            self.kwargs["broId"]
+        if "broId" in self.kwargs:
             broId = etree.SubElement(
                 req, ("{%s}" % ns_regreq_map_gmn2["brocom"]) + "broId"
             )
-            broId.text = self.kwargs["broId"]
-        except:
-            pass
+            broId.text = str(self.kwargs["broId"])
 
         qualityRegime = etree.SubElement(
             req, ("{%s}" % ns_regreq_map_gmn2["brocom"]) + "qualityRegime"
@@ -123,7 +136,7 @@ class gmn_registration_request:
 
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == "GMN_StartRegistration":
-            if "broId" in list(self.kwargs.keys()):
+            if "broId" in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' not allowed in combination with given sourcedocument"
                 )
@@ -132,7 +145,7 @@ class gmn_registration_request:
                 req.append(sourceDocument)
 
         if self.srcdoc == "GMN_MeasuringPoint":
-            if "broId" not in list(self.kwargs.keys()):
+            if "broId" not in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' required in combination with given sourcedocument"
                 )
@@ -141,7 +154,7 @@ class gmn_registration_request:
                 req.append(sourceDocument)
 
         if self.srcdoc == "GMN_MeasuringPointEndDate":
-            if "broId" not in list(self.kwargs.keys()):
+            if "broId" not in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' required in combination with given sourcedocument"
                 )
@@ -152,7 +165,7 @@ class gmn_registration_request:
                 req.append(sourceDocument)
 
         if self.srcdoc == "GMN_Closure":
-            if "broId" not in list(self.kwargs.keys()):
+            if "broId" not in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' required in combination with given sourcedocument"
                 )
@@ -225,30 +238,29 @@ class gmn_registration_request:
 class gmn_replace_request:
 
     """
-    Class for generating gmw registration requests. Check
-    allowed_srcdos for currently available possibilities.
+    Build a GMN replace request XML.
+
+    Supported srcdocs are available through `get_supported_gmn_srcdocs()["replace"]`.
     """
 
-    def __init__(self, srcdoc, **kwargs):
+    def __init__(self, srcdoc: str, **kwargs: Any):
         """
-
         Parameters
         ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated registration request xml to output directory
-
+        srcdoc:
+            One of the supported GMN replace source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `broId` (required)
+            - `qualityRegime` (required)
+            - `correctionReason` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
         """
 
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
 
-        self.allowed_srcdocs = ["GMN_StartRegistration", "GMN_MeasuringPoint"]
+        self.allowed_srcdocs = list(get_supported_gmn_srcdocs()["replace"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -260,6 +272,8 @@ class gmn_replace_request:
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+
+        normalize_optional_kwargs(self.kwargs, ["deliveryAccountableParty"])
 
         # Request arguments:
         arglist = {
@@ -273,6 +287,8 @@ class gmn_replace_request:
 
         # Check wether all obligated registration request arguments for method 'initialize' are in kwargs
         check_missing_args(self.kwargs, arglist, "gmw_replace with method initialize")
+        check_required_kwargs(self.kwargs, arglist, "gmw_replace with method initialize")
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -294,24 +310,17 @@ class gmn_replace_request:
         )
         requestReference.text = self.kwargs["requestReference"]
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
+        if "deliveryAccountableParty" in self.kwargs:
             deliveryAccountableParty = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmn2["brocom"]) + "deliveryAccountableParty",
             )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
+            deliveryAccountableParty.text = str(self.kwargs["deliveryAccountableParty"])
 
-        try:
-            self.kwargs["broId"]
-            broId = etree.SubElement(
-                req, ("{%s}" % ns_regreq_map_gmn2["brocom"]) + "broId"
-            )
-            broId.text = self.kwargs["broId"]
-        except:
-            pass
+        broId = etree.SubElement(
+            req, ("{%s}" % ns_regreq_map_gmn2["brocom"]) + "broId"
+        )
+        broId.text = str(self.kwargs["broId"])
 
         qualityRegime = etree.SubElement(
             req, ("{%s}" % ns_regreq_map_gmn2["brocom"]) + "qualityRegime"
@@ -325,7 +334,7 @@ class gmn_replace_request:
 
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == "GMN_StartRegistration":
-            if "broId" not in list(self.kwargs.keys()):
+            if "broId" not in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' required in combination with given sourcedocument"
                 )
@@ -334,7 +343,7 @@ class gmn_replace_request:
                 req.append(sourceDocument)
 
         if self.srcdoc == "GMN_MeasuringPoint":
-            if "broId" not in list(self.kwargs.keys()):
+            if "broId" not in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' required in combination with given sourcedocument"
                 )

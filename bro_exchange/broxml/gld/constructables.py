@@ -5,6 +5,11 @@ import uuid as uuid_gen
 import pandas as pd
 from lxml import etree
 
+from bro_exchange.broxml.request_helpers import (
+    coerce_list_of_mapping_like,
+    coerce_mapping_like,
+    coerce_srcdocdata,
+)
 from bro_exchange.checks import check_missing_args
 from bro_exchange.broxml.mappings import (  # mappings
     codespace_map_gld1,
@@ -25,6 +30,11 @@ from bro_exchange.broxml.mappings import (  # mappings
 
 
 def gen_groundwatermonitoringnet(data, net, nsmap, count):
+    data = coerce_srcdocdata(data)
+    data["groundwaterMonitoringNets"] = coerce_list_of_mapping_like(
+        data["groundwaterMonitoringNets"], "groundwaterMonitoringNets"
+    )
+
     arglist = {"broId": "obligated"}
 
     check_missing_args(
@@ -56,6 +66,11 @@ def gen_groundwatermonitoringnet(data, net, nsmap, count):
 
 
 def gen_monitoringpoint(data, point, nsmap, count):
+    data = coerce_srcdocdata(data)
+    data["monitoringPoints"] = coerce_list_of_mapping_like(
+        data["monitoringPoints"], "monitoringPoints"
+    )
+
     arglist = {"broId": "obligated", "tubeNumber": "obligated"}
 
     check_missing_args(
@@ -100,6 +115,12 @@ def gen_monitoringpoint(data, point, nsmap, count):
 
 
 def gen_metadata_parameters(data, nsmap, codespacemap):
+    data = coerce_srcdocdata(data)
+    data["metadata"] = coerce_mapping_like(data["metadata"], "metadata")
+    data["metadata"]["parameters"] = coerce_mapping_like(
+        data["metadata"]["parameters"], "metadata.parameters"
+    )
+
     arglist = {"principalInvestigator": "optional", "observationType": "obligated"}
 
     check_missing_args(
@@ -211,6 +232,9 @@ def gen_metadata_parameters(data, nsmap, codespacemap):
 
 
 def gen_metadata(data, nsmap, codespacemap):
+    data = coerce_srcdocdata(data)
+    data["metadata"] = coerce_mapping_like(data["metadata"], "metadata")
+
     arglist = {
         "contact": "optional",  # Defaults to default values, however there are restricted arguments
         "dateStamp": "optional",  # derive it from timeseries

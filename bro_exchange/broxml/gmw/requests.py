@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 from lxml import etree
 
@@ -6,6 +7,11 @@ from bro_exchange.bhp.connector import deliver_requests, validate_request
 from bro_exchange.broxml.mappings import (  # mappings
     codespace_map_gmw1,
     ns_regreq_map_gmw1,
+)
+from bro_exchange.broxml.request_helpers import (
+    check_required_kwargs,
+    coerce_srcdocdata,
+    normalize_optional_kwargs,
 )
 from bro_exchange.checks import check_missing_args
 
@@ -27,43 +33,12 @@ from .sourcedocs import (
     gen_gmw_wellheadprotector,
 )
 
-# =============================================================================
-# General info
-# =============================================================================
 
-# https://schema.broservices.nl/xsd/isgmw/1.1/isgmw-messages.xsd
+def get_supported_gmw_srcdocs() -> dict[str, tuple[str, ...]]:
+    """Return supported GMW source-document names per request type."""
 
-
-# %%
-
-
-class gmw_registration_request:
-
-    """
-    Class for generating gmw registration requests. Check
-    allowed_srcdos for currently available possibilities.
-    """
-
-    def __init__(self, srcdoc, **kwargs):
-        """
-
-        Parameters
-        ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated registration request xml to output directory
-
-        """
-
-        # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
-
-        self.allowed_srcdocs = [
+    return {
+        "registration": (
             "GMW_Construction",
             "GMW_WellHeadProtector",
             "GMW_Lengthening",
@@ -80,7 +55,110 @@ class gmw_registration_request:
             "GMW_GroundLevelMeasuring",
             "GMW_PositionsMeasuring",
             "GMW_ConstructionWithHistory",
-        ]
+        ),
+        "replace": (
+            "GMW_Construction",
+            "GMW_WellHeadProtector",
+            "GMW_Lengthening",
+            "GMW_GroundLevel",
+            "GMW_Owner",
+            "GMW_Shortening",
+            "GMW_Positions",
+            "GMW_ElectrodeStatus",
+            "GMW_Maintainer",
+            "GMW_TubeStatus",
+            "GMW_Insertion",
+            "GMW_Shift",
+            "GMW_GroundLevelMeasuring",
+            "GMW_PositionsMeasuring",
+        ),
+        "move": (
+            "GMW_Construction",
+            "GMW_WellHeadProtector",
+            "GMW_Lengthening",
+            "GMW_GroundLevel",
+            "GMW_Owner",
+            "GMW_Shortening",
+            "GMW_Positions",
+            "GMW_ElectrodeStatus",
+            "GMW_Maintainer",
+            "GMW_TubeStatus",
+            "GMW_Insertion",
+            "GMW_Shift",
+            "GMW_GroundLevelMeasuring",
+            "GMW_PositionsMeasuring",
+            "GMW_Removal",
+        ),
+        "delete": (
+            "GMW_WellHeadProtector",
+            "GMW_Lengthening",
+            "GMW_GroundLevel",
+            "GMW_Owner",
+            "GMW_Shortening",
+            "GMW_Positions",
+            "GMW_ElectrodeStatus",
+            "GMW_Maintainer",
+            "GMW_TubeStatus",
+            "GMW_Insertion",
+            "GMW_Shift",
+            "GMW_GroundLevelMeasuring",
+            "GMW_PositionsMeasuring",
+            "GMW_Removal",
+        ),
+        "insert": (
+            "GMW_WellHeadProtector",
+            "GMW_Lengthening",
+            "GMW_GroundLevel",
+            "GMW_Owner",
+            "GMW_Shortening",
+            "GMW_Positions",
+            "GMW_ElectrodeStatus",
+            "GMW_Maintainer",
+            "GMW_TubeStatus",
+            "GMW_Insertion",
+            "GMW_Shift",
+            "GMW_GroundLevelMeasuring",
+            "GMW_PositionsMeasuring",
+        ),
+    }
+
+
+# =============================================================================
+# General info
+# =============================================================================
+
+# https://schema.broservices.nl/xsd/isgmw/1.1/isgmw-messages.xsd
+
+
+# %%
+
+
+class gmw_registration_request:
+
+    """
+    Build a GMW registration request XML.
+
+    Supported srcdocs are available through `get_supported_gmw_srcdocs()["registration"]`.
+    """
+
+    def __init__(self, srcdoc: str, **kwargs: Any):
+        """
+        Parameters
+        ----------
+        srcdoc:
+            One of the supported GMW registration source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `qualityRegime` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
+            - `broId` (optional; required for specific srcdocs)
+            - `underPrivilege` (optional)
+        """
+
+        # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
+
+        self.allowed_srcdocs = list(get_supported_gmw_srcdocs()["registration"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -93,8 +171,9 @@ class gmw_registration_request:
         self.delivery_info = None
         self.delivery_id = None
 
-        if self.kwargs.get("qualityRegime") is not None:
-            self.kwargs["underPrivilege"] = "ja"
+        normalize_optional_kwargs(
+            self.kwargs, ["deliveryAccountableParty", "broId", "underPrivilege"]
+        )
 
         # Request arguments:
         arglist = {
@@ -110,6 +189,10 @@ class gmw_registration_request:
         check_missing_args(
             self.kwargs, arglist, "gmw_registration with method initialize"
         )
+        check_required_kwargs(
+            self.kwargs, arglist, "gmw_registration with method initialize"
+        )
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -128,27 +211,21 @@ class gmw_registration_request:
         )
         requestReference.text = self.kwargs["requestReference"]
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
+        if "deliveryAccountableParty" in self.kwargs:
             deliveryAccountableParty = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "deliveryAccountableParty",
                 nsmap=ns_regreq_map_gmw1,
             )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
+            deliveryAccountableParty.text = str(self.kwargs["deliveryAccountableParty"])
 
-        try:
-            self.kwargs["broId"]
+        if "broId" in self.kwargs:
             broId = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "broId",
                 nsmap=ns_regreq_map_gmw1,
             )
-            broId.text = self.kwargs["broId"]
-        except:
-            pass
+            broId.text = str(self.kwargs["broId"])
 
         qualityRegime = etree.SubElement(
             req,
@@ -157,16 +234,13 @@ class gmw_registration_request:
         )
         qualityRegime.text = self.kwargs["qualityRegime"]
 
-        try:
-            self.kwargs["underPrivilege"]
+        if "underPrivilege" in self.kwargs:
             underPrivilege = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "underPrivilege",
                 nsmap=ns_regreq_map_gmw1,
             )
-            underPrivilege.text = self.kwargs["underPrivilege"]
-        except:
-            pass
+            underPrivilege.text = str(self.kwargs["underPrivilege"])
 
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == "GMW_Construction":
@@ -438,45 +512,30 @@ class gmw_registration_request:
 class gmw_replace_request:
 
     """
-    Class for generating gmw registration requests. Check
-    allowed_srcdos for currently available possibilities.
+    Build a GMW replace request XML.
+
+    Supported srcdocs are available through `get_supported_gmw_srcdocs()["replace"]`.
     """
 
-    def __init__(self, srcdoc, **kwargs):
+    def __init__(self, srcdoc: str, **kwargs: Any):
         """
-
         Parameters
         ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated registration request xml to output directory
-
+        srcdoc:
+            One of the supported GMW replace source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `broId` (required)
+            - `qualityRegime` (required)
+            - `correctionReason` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
+            - `underPrivilege` (optional)
         """
 
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
 
-        self.allowed_srcdocs = [
-            "GMW_Construction",
-            "GMW_WellHeadProtector",
-            "GMW_Lengthening",
-            "GMW_GroundLevel",
-            "GMW_Owner",
-            "GMW_Shortening",
-            "GMW_Positions",
-            "GMW_ElectrodeStatus",
-            "GMW_Maintainer",
-            "GMW_TubeStatus",
-            "GMW_Insertion",
-            "GMW_Shift",
-            "GMW_GroundLevelMeasuring",
-            "GMW_PositionsMeasuring",
-        ]
+        self.allowed_srcdocs = list(get_supported_gmw_srcdocs()["replace"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -488,6 +547,8 @@ class gmw_replace_request:
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+
+        normalize_optional_kwargs(self.kwargs, ["deliveryAccountableParty", "underPrivilege"])
 
         # Request arguments:
         arglist = {
@@ -504,6 +565,10 @@ class gmw_replace_request:
         check_missing_args(
             self.kwargs, arglist, "gmw_registration with method initialize"
         )
+        check_required_kwargs(
+            self.kwargs, arglist, "gmw_registration with method initialize"
+        )
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -522,16 +587,13 @@ class gmw_replace_request:
         )
         requestReference.text = self.kwargs["requestReference"]
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
+        if "deliveryAccountableParty" in self.kwargs:
             deliveryAccountableParty = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "deliveryAccountableParty",
                 nsmap=ns_regreq_map_gmw1,
             )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
+            deliveryAccountableParty.text = str(self.kwargs["deliveryAccountableParty"])
 
         broId = etree.SubElement(
             req,
@@ -547,16 +609,13 @@ class gmw_replace_request:
         )
         qualityRegime.text = self.kwargs["qualityRegime"]
 
-        try:
-            self.kwargs["underPrivilege"]
+        if "underPrivilege" in self.kwargs:
             underPrivilege = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "underPrivilege",
                 nsmap=ns_regreq_map_gmw1,
             )
-            underPrivilege.text = self.kwargs["underPrivilege"]
-        except:
-            pass
+            underPrivilege.text = str(self.kwargs["underPrivilege"])
 
         correctionReason = etree.SubElement(
             req,
@@ -808,46 +867,31 @@ class gmw_replace_request:
 class gmw_move_request:
 
     """
-    Class for generating gmw registration requests. Check
-    allowed_srcdos for currently available possibilities.
+    Build a GMW move request XML.
+
+    Supported srcdocs are available through `get_supported_gmw_srcdocs()["move"]`.
     """
 
-    def __init__(self, srcdoc, **kwargs):
+    def __init__(self, srcdoc: str, **kwargs: Any):
         """
-
         Parameters
         ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated registration request xml to output directory
-
+        srcdoc:
+            One of the supported GMW move source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `broId` (required)
+            - `qualityRegime` (required)
+            - `correctionReason` (required)
+            - `dateToBeCorrected` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
+            - `underPrivilege` (optional)
         """
 
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
 
-        self.allowed_srcdocs = [
-            "GMW_Construction",
-            "GMW_WellHeadProtector",
-            "GMW_Lengthening",
-            "GMW_GroundLevel",
-            "GMW_Owner",
-            "GMW_Shortening",
-            "GMW_Positions",
-            "GMW_ElectrodeStatus",
-            "GMW_Maintainer",
-            "GMW_TubeStatus",
-            "GMW_Insertion",
-            "GMW_Shift",
-            "GMW_GroundLevelMeasuring",
-            "GMW_PositionsMeasuring",
-            "GMW_Removal",
-        ]
+        self.allowed_srcdocs = list(get_supported_gmw_srcdocs()["move"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -859,6 +903,8 @@ class gmw_move_request:
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+
+        normalize_optional_kwargs(self.kwargs, ["deliveryAccountableParty", "underPrivilege"])
 
         # Request arguments:
         arglist = {
@@ -876,6 +922,10 @@ class gmw_move_request:
         check_missing_args(
             self.kwargs, arglist, "gmw_registration with method initialize"
         )
+        check_required_kwargs(
+            self.kwargs, arglist, "gmw_registration with method initialize"
+        )
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -894,16 +944,13 @@ class gmw_move_request:
         )
         requestReference.text = self.kwargs["requestReference"]
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
+        if "deliveryAccountableParty" in self.kwargs:
             deliveryAccountableParty = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "deliveryAccountableParty",
                 nsmap=ns_regreq_map_gmw1,
             )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
+            deliveryAccountableParty.text = str(self.kwargs["deliveryAccountableParty"])
 
         broId = etree.SubElement(
             req,
@@ -919,16 +966,13 @@ class gmw_move_request:
         )
         qualityRegime.text = self.kwargs["qualityRegime"]
 
-        try:
-            self.kwargs["underPrivilege"]
+        if "underPrivilege" in self.kwargs:
             underPrivilege = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "underPrivilege",
                 nsmap=ns_regreq_map_gmw1,
             )
-            underPrivilege.text = self.kwargs["underPrivilege"]
-        except:
-            pass
+            underPrivilege.text = str(self.kwargs["underPrivilege"])
 
         correctionReason = etree.SubElement(
             req,
@@ -1206,45 +1250,30 @@ class gmw_move_request:
 class gmw_delete_request:
 
     """
-    Class for generating gmw registration requests. Check
-    allowed_srcdos for currently available possibilities.
+    Build a GMW delete request XML.
+
+    Supported srcdocs are available through `get_supported_gmw_srcdocs()["delete"]`.
     """
 
-    def __init__(self, srcdoc, **kwargs):
+    def __init__(self, srcdoc: str, **kwargs: Any):
         """
-
         Parameters
         ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated registration request xml to output directory
-
+        srcdoc:
+            One of the supported GMW delete source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `broId` (required)
+            - `qualityRegime` (required)
+            - `correctionReason` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
+            - `underPrivilege` (optional)
         """
 
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
 
-        self.allowed_srcdocs = [
-            "GMW_WellHeadProtector",
-            "GMW_Lengthening",
-            "GMW_GroundLevel",
-            "GMW_Owner",
-            "GMW_Shortening",
-            "GMW_Positions",
-            "GMW_ElectrodeStatus",
-            "GMW_Maintainer",
-            "GMW_TubeStatus",
-            "GMW_Insertion",
-            "GMW_Shift",
-            "GMW_GroundLevelMeasuring",
-            "GMW_PositionsMeasuring",
-            "GMW_Removal",
-        ]
+        self.allowed_srcdocs = list(get_supported_gmw_srcdocs()["delete"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -1256,6 +1285,8 @@ class gmw_delete_request:
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+
+        normalize_optional_kwargs(self.kwargs, ["deliveryAccountableParty", "underPrivilege"])
 
         # Request arguments:
         arglist = {
@@ -1272,6 +1303,10 @@ class gmw_delete_request:
         check_missing_args(
             self.kwargs, arglist, "gmw_registration with method initialize"
         )
+        check_required_kwargs(
+            self.kwargs, arglist, "gmw_registration with method initialize"
+        )
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -1290,16 +1325,13 @@ class gmw_delete_request:
         )
         requestReference.text = self.kwargs["requestReference"]
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
+        if "deliveryAccountableParty" in self.kwargs:
             deliveryAccountableParty = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "deliveryAccountableParty",
                 nsmap=ns_regreq_map_gmw1,
             )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
+            deliveryAccountableParty.text = str(self.kwargs["deliveryAccountableParty"])
 
         broId = etree.SubElement(
             req,
@@ -1315,16 +1347,13 @@ class gmw_delete_request:
         )
         qualityRegime.text = self.kwargs["qualityRegime"]
 
-        try:
-            self.kwargs["underPrivilege"]
+        if "underPrivilege" in self.kwargs:
             underPrivilege = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "underPrivilege",
                 nsmap=ns_regreq_map_gmw1,
             )
-            underPrivilege.text = self.kwargs["underPrivilege"]
-        except:
-            pass
+            underPrivilege.text = str(self.kwargs["underPrivilege"])
 
         correctionReason = etree.SubElement(
             req,
@@ -1576,44 +1605,30 @@ class gmw_delete_request:
 class gmw_insert_request:
 
     """
-    Class for generating gmw registration requests. Check
-    allowed_srcdos for currently available possibilities.
+    Build a GMW insert request XML.
+
+    Supported srcdocs are available through `get_supported_gmw_srcdocs()["insert"]`.
     """
 
-    def __init__(self, srcdoc, **kwargs):
+    def __init__(self, srcdoc: str, **kwargs: Any):
         """
-
         Parameters
         ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated registration request xml to output directory
-
+        srcdoc:
+            One of the supported GMW insert source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `broId` (required)
+            - `qualityRegime` (required)
+            - `correctionReason` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
+            - `underPrivilege` (optional)
         """
 
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
 
-        self.allowed_srcdocs = [
-            "GMW_WellHeadProtector",
-            "GMW_Lengthening",
-            "GMW_GroundLevel",
-            "GMW_Owner",
-            "GMW_Shortening",
-            "GMW_Positions",
-            "GMW_ElectrodeStatus",
-            "GMW_Maintainer",
-            "GMW_TubeStatus",
-            "GMW_Insertion",
-            "GMW_Shift",
-            "GMW_GroundLevelMeasuring",
-            "GMW_PositionsMeasuring",
-        ]
+        self.allowed_srcdocs = list(get_supported_gmw_srcdocs()["insert"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -1625,6 +1640,8 @@ class gmw_insert_request:
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+
+        normalize_optional_kwargs(self.kwargs, ["deliveryAccountableParty", "underPrivilege"])
 
         # Request arguments:
         arglist = {
@@ -1641,6 +1658,10 @@ class gmw_insert_request:
         check_missing_args(
             self.kwargs, arglist, "gmw_registration with method initialize"
         )
+        check_required_kwargs(
+            self.kwargs, arglist, "gmw_registration with method initialize"
+        )
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -1659,16 +1680,13 @@ class gmw_insert_request:
         )
         requestReference.text = self.kwargs["requestReference"]
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
+        if "deliveryAccountableParty" in self.kwargs:
             deliveryAccountableParty = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "deliveryAccountableParty",
                 nsmap=ns_regreq_map_gmw1,
             )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
+            deliveryAccountableParty.text = str(self.kwargs["deliveryAccountableParty"])
 
         broId = etree.SubElement(
             req,
@@ -1684,16 +1702,13 @@ class gmw_insert_request:
         )
         qualityRegime.text = self.kwargs["qualityRegime"]
 
-        try:
-            self.kwargs["underPrivilege"]
+        if "underPrivilege" in self.kwargs:
             underPrivilege = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gmw1["ns1"]) + "underPrivilege",
                 nsmap=ns_regreq_map_gmw1,
             )
-            underPrivilege.text = self.kwargs["underPrivilege"]
-        except:
-            pass
+            underPrivilege.text = str(self.kwargs["underPrivilege"])
 
         correctionReason = etree.SubElement(
             req,
