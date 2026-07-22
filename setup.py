@@ -23,7 +23,7 @@ setup(
     maintainer="Steven Hosper, Jelle Zitman",
     maintainer_email="steven.hosper@nelen-schuurmans.nl, jelle.zitman@nelen-schuurmans.nl",
     packages=find_packages(exclude=["tests", "examples"]),
-    install_requires=["requests>=2.24.0", "lxml>=4.6.1", "uuid"],
+    install_requires=["requests>=2.24.0", "lxml>=4.6.1"],
     keywords=[
         "python",
         "BRO",
