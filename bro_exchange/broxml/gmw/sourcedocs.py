@@ -1,5 +1,10 @@
 from lxml import etree
 
+from bro_exchange.broxml.request_helpers import (
+    coerce_list_of_mapping_like,
+    coerce_mapping_like,
+    coerce_srcdocdata,
+)
 from bro_exchange.checks import check_missing_args
 
 from .constructables import (
@@ -23,6 +28,8 @@ from .constructables import (
 
 
 def gen_gmw_construction(data, nsmap, codespacemap, sourcedoctype):
+    data = coerce_srcdocdata(data)
+
     arglist = {
         "objectIdAccountableParty": "obligated",
         "deliveryContext": "obligated",
@@ -50,6 +57,19 @@ def gen_gmw_construction(data, nsmap, codespacemap, sourcedoctype):
         "deliveredVerticalPosition",
         "monitoringTubes",
     ]
+
+    if "deliveredLocation" in data:
+        data["deliveredLocation"] = coerce_mapping_like(
+            data["deliveredLocation"], "deliveredLocation"
+        )
+    if "deliveredVerticalPosition" in data:
+        data["deliveredVerticalPosition"] = coerce_mapping_like(
+            data["deliveredVerticalPosition"], "deliveredVerticalPosition"
+        )
+    if "monitoringTubes" in data:
+        data["monitoringTubes"] = coerce_list_of_mapping_like(
+            data["monitoringTubes"], "monitoringTubes"
+        )
 
     # Check wether all obligated arguments are in data
     check_missing_args(data, arglist, "gen_gmw_construction")
@@ -447,6 +467,8 @@ def gen_gmw_owner(data, nsmap, codespacemap, sourcedoctype):
 
 
 def gen_gmw_positions(data, nsmap, codespacemap, sourcedoctype):
+    data = coerce_srcdocdata(data)
+
     arglist = {
         "eventDate": "obligated",
         "wellStability": "obligated",
@@ -458,6 +480,15 @@ def gen_gmw_positions(data, nsmap, codespacemap, sourcedoctype):
 
     # Note: mapSheetCode is a valid optional argument that hasn't been included yet
     constructables = ["eventDate", "deliveredVerticalPosition", "monitoringTubes"]
+
+    if "deliveredVerticalPosition" in data:
+        data["deliveredVerticalPosition"] = coerce_mapping_like(
+            data["deliveredVerticalPosition"], "deliveredVerticalPosition"
+        )
+    if "monitoringTubes" in data:
+        data["monitoringTubes"] = coerce_list_of_mapping_like(
+            data["monitoringTubes"], "monitoringTubes"
+        )
 
     # Check wether all obligated arguments are in data
     check_missing_args(data, arglist, "gen_gmw_positions")
@@ -1081,6 +1112,8 @@ def gen_gmw_groundlevelmeasuring(data, nsmap, codespacemap, sourcedoctype):
 
 
 def gen_gmw_positionsmeasuring(data, nsmap, codespacemap, sourcedoctype):
+    data = coerce_srcdocdata(data)
+
     arglist = {
         "eventDate": "obligated",
         "numberOfMonitoringTubes": "obligated",
@@ -1090,6 +1123,15 @@ def gen_gmw_positionsmeasuring(data, nsmap, codespacemap, sourcedoctype):
 
     # Note: mapSheetCode is a valid optional argument that hasn't been included yet
     constructables = ["eventDate", "deliveredVerticalPosition", "monitoringTubes"]
+
+    if "deliveredVerticalPosition" in data:
+        data["deliveredVerticalPosition"] = coerce_mapping_like(
+            data["deliveredVerticalPosition"], "deliveredVerticalPosition"
+        )
+    if "monitoringTubes" in data:
+        data["monitoringTubes"] = coerce_list_of_mapping_like(
+            data["monitoringTubes"], "monitoringTubes"
+        )
 
     # Check wether all obligated arguments are in data
     check_missing_args(data, arglist, "gen_gmw_positionsmeasuring")

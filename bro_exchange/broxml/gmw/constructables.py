@@ -2,6 +2,10 @@ import uuid
 
 from lxml import etree
 
+from bro_exchange.broxml.request_helpers import (
+    coerce_list_of_mapping_like,
+    coerce_mapping_like,
+)
 from bro_exchange.checks import check_missing_args
 
 # =============================================================================
@@ -76,6 +80,10 @@ def gen_deliveredlocation(data, nsmap, codespacemap):
         "horizontalPositioningMethod": "obligated",
     }
 
+    data["deliveredLocation"] = coerce_mapping_like(
+        data["deliveredLocation"], "deliveredLocation"
+    )
+
     check_missing_args(data["deliveredLocation"], arglist, "gen_deliveredlocation")
 
     deliveredLocation = etree.Element(
@@ -122,6 +130,10 @@ def gen_deliveredverticalposition(data, nsmap, codespacemap):
         "groundLevelPosition": "obligated",
         "groundLevelPositioningMethod": "obligated",
     }
+
+    data["deliveredVerticalPosition"] = coerce_mapping_like(
+        data["deliveredVerticalPosition"], "deliveredVerticalPosition"
+    )
 
     check_missing_args(
         data["deliveredVerticalPosition"], arglist, "gen_deliveredverticalposition"
@@ -539,6 +551,10 @@ def gen_monitoringtube(data, tube, nsmap, codespacemap, sourcedoctype):
         }
     elif sourcedoctype in ["GMW_TubeStatus", "tubeStatus"]:
         arglist = {"tubeNumber": "obligated", "tubeStatus": "obligated"}
+
+    data["monitoringTubes"] = coerce_list_of_mapping_like(
+        data["monitoringTubes"], "monitoringTubes"
+    )
 
     check_missing_args(
         data["monitoringTubes"][tube],
