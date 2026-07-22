@@ -1,5 +1,6 @@
 from lxml import etree
 
+from bro_exchange.broxml.request_helpers import coerce_srcdocdata
 from bro_exchange.checks import check_missing_args
 from bro_exchange.broxml.mappings import (  # mappings
     codespace_map_gmn1,
@@ -15,6 +16,8 @@ from .constructables import (
 
 
 def gen_gmn_startregistartion(data):
+    data = coerce_srcdocdata(data)
+
     arglist = {
         "objectIdAccountableParty": "obligated",
         "name": "obligated",
@@ -81,6 +84,8 @@ def gen_gmn_startregistartion(data):
 
 
 def gen_gmn_measuringpoint(data):
+    data = coerce_srcdocdata(data)
+
     arglist = {
         "eventDate": "obligated",
         "measuringPoint": "obligated",
@@ -134,6 +139,8 @@ def gen_gmn_measuringpoint(data):
 
 
 def gen_gmn_measuringpoint_enddate(data):
+    data = coerce_srcdocdata(data)
+
     arglist = {
         "eventDate": "obligated",
         "measuringPoint": "obligated",
@@ -172,6 +179,8 @@ def gen_gmn_measuringpoint_enddate(data):
 
 
 def gen_gmn_closure(data):
+    data = coerce_srcdocdata(data)
+
     arglist = {
         "endDateMonitoring": "obligated",
     }

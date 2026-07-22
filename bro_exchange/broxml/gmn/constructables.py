@@ -2,6 +2,11 @@
 
 from lxml import etree
 
+from bro_exchange.broxml.request_helpers import (
+    coerce_list_of_mapping_like,
+    coerce_mapping_like,
+    coerce_srcdocdata,
+)
 from bro_exchange.checks import check_missing_args
 
 # %%
@@ -129,9 +134,19 @@ def gen_measuringpoint(data, nsmap, mp=None):
 
     """
 
+    data = coerce_srcdocdata(data)
+
     arglist = {"measuringPointCode": "obligated", "monitoringTube": "obligated"}
 
     if mp is not None:
+        data["measuringPoints"] = coerce_list_of_mapping_like(
+            data["measuringPoints"], "measuringPoints"
+        )
+        data["measuringPoints"][mp]["monitoringTube"] = coerce_mapping_like(
+            data["measuringPoints"][mp]["monitoringTube"],
+            "measuringPoints.monitoringTube",
+        )
+
         check_missing_args(
             data["measuringPoints"][mp],
             arglist,
@@ -168,6 +183,11 @@ def gen_measuringpoint(data, nsmap, mp=None):
         return measuringpoint
 
     else:
+        data["measuringPoint"] = coerce_mapping_like(data["measuringPoint"], "measuringPoint")
+        data["measuringPoint"]["monitoringTube"] = coerce_mapping_like(
+            data["measuringPoint"]["monitoringTube"], "measuringPoint.monitoringTube"
+        )
+
         check_missing_args(
             data["measuringPoint"],
             arglist,
