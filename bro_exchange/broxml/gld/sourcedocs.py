@@ -3,6 +3,7 @@ import uuid as uuid_gen
 import pandas as pd
 from lxml import etree
 
+from bro_exchange.broxml.request_helpers import coerce_srcdocdata
 from bro_exchange.checks import check_missing_args
 
 from .constructables import (
@@ -24,6 +25,8 @@ from .constructables import (
 
 
 def gen_gld_startregistration(data, nsmap, codespacemap):
+    data = coerce_srcdocdata(data)
+
     count = 2
 
     arglist = {
@@ -105,6 +108,8 @@ def gen_gld_startregistration(data, nsmap, codespacemap):
 
 
 def gen_gld_addition(data, nsmap, codespacemap):
+    data = coerce_srcdocdata(data)
+
     count = 2
 
     arglist = {

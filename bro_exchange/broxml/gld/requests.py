@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 from lxml import etree
 
@@ -10,9 +11,26 @@ from bro_exchange.broxml.mappings import (  # mappings
     ns_regreq_map_gld3,
     xsi_regreq_map_gld1,
 )
+from bro_exchange.broxml.request_helpers import (
+    check_required_kwargs,
+    coerce_srcdocdata,
+    has_value,
+    normalize_optional_kwargs,
+)
 from bro_exchange.checks import check_missing_args
 
 from .sourcedocs import gen_gld_startregistration, gen_gld_addition
+
+
+def get_supported_gld_srcdocs() -> dict[str, tuple[str, ...]]:
+    """Return supported GLD source-document names per request type."""
+
+    return {
+        "registration": ("GLD_StartRegistration", "GLD_Addition", "GLD_Closure"),
+        "replace": ("GLD_StartRegistration", "GLD_Addition"),
+        "delete": ("GLD_Addition", "GLD_Closure"),
+    }
+
 
 # =============================================================================
 # General info
@@ -27,30 +45,28 @@ from .sourcedocs import gen_gld_startregistration, gen_gld_addition
 class gld_registration_request:
 
     """
-    Class for generating gld registration requests. Check
-    allowed_srcdos for currently available possibilities.
+    Build a GLD registration request XML.
+
+    Supported srcdocs are available through `get_supported_gld_srcdocs()["registration"]`.
     """
 
-    def __init__(self, srcdoc, **kwargs):
+    def __init__(self, srcdoc: str, **kwargs: Any):
         """
-
         Parameters
         ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated registration request xml to output directory
-
+        srcdoc:
+            One of the supported GLD registration source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `qualityRegime` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
+            - `broId` (optional; only required for specific srcdocs)
         """
 
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
 
-        self.allowed_srcdocs = ["GLD_StartRegistration", "GLD_Addition", "GLD_Closure"]
+        self.allowed_srcdocs = list(get_supported_gld_srcdocs()["registration"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -62,6 +78,8 @@ class gld_registration_request:
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+
+        normalize_optional_kwargs(self.kwargs, ["deliveryAccountableParty", "broId"])
 
         # Request arguments:
         arglist = {
@@ -76,6 +94,10 @@ class gld_registration_request:
         check_missing_args(
             self.kwargs, arglist, "gmw_registration with method initialize"
         )
+        check_required_kwargs(
+            self.kwargs, arglist, "gmw_registration with method initialize"
+        )
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -111,33 +133,33 @@ class gld_registration_request:
         )
         requestReference.text = self.kwargs["requestReference"]
         
-        deliveryAccountableParty = etree.SubElement(
-            req,
-            ("{%s}" % ns_regreq_map_gld2["brocom"]) + "deliveryAccountableParty",
-            nsmap=ns_regreq_map_gld2,
-        )
-        deliveryAccountableParty.text = str(self.kwargs.get("deliveryAccountableParty", "Unknown"))
+        if "deliveryAccountableParty" in self.kwargs:
+            deliveryAccountableParty = etree.SubElement(
+                req,
+                ("{%s}" % ns_regreq_map_gld2["brocom"]) + "deliveryAccountableParty",
+                nsmap=ns_regreq_map_gld2,
+            )
+            deliveryAccountableParty.text = str(self.kwargs["deliveryAccountableParty"])
 
         bro_id = self.kwargs.get("broId", None)
-        if bro_id:
+        if has_value(bro_id):
             broId = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gld2["brocom"]) + "broId",
                 nsmap=ns_regreq_map_gld2,
             )
-            broId.text = bro_id
-        
-        quality_regime = self.kwargs.get("qualityRegime", "IMBRO/A") ## If qualityRegime is not in kwargs data, use IMBRO/A to ensure delivery is possible
+            broId.text = str(bro_id)
+
         qualityRegime = etree.SubElement(
             req,
             ("{%s}" % ns_regreq_map_gld2["brocom"]) + "qualityRegime",
             nsmap=ns_regreq_map_gld2,
         )
-        qualityRegime.text = quality_regime if quality_regime else "IMBRO/A" ## If qualityRegime is None, use IMBRO/A to ensure delivery is possible
+        qualityRegime.text = str(self.kwargs["qualityRegime"])
 
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == "GLD_StartRegistration":
-            if "broId" in list(self.kwargs.keys()):
+            if "broId" in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' not allowed in combination with given sourcedocument"
                 )
@@ -148,7 +170,7 @@ class gld_registration_request:
                 req.append(sourceDocument)
 
         elif self.srcdoc == "GLD_Addition":
-            if "broId" not in list(self.kwargs.keys()):
+            if "broId" not in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' required in combination with given sourcedocument"
                 )
@@ -228,30 +250,29 @@ class gld_replace_request:
     # gebruikt zijn (betekend ook niet gml id van oude observatie)
 
     """
-    Class for generating gld replace requests. Check
-    allowed_srcdos for currently available possibilities.
+    Build a GLD replace request XML.
+
+    Supported srcdocs are available through `get_supported_gld_srcdocs()["replace"]`.
     """
 
-    def __init__(self, srcdoc, **kwargs):
+    def __init__(self, srcdoc: str, **kwargs: Any):
         """
-
         Parameters
         ----------
-        srcdoc : string
-            sourcedoc type (check allowed srcdoc types)
-        **kwargs : -
-            request-specific attribute data (method-specific)
-            sourcedocument-specific attribute data
-
-        Returns
-        -------
-        None, saves generated replace request xml to output directory
-
+        srcdoc:
+            One of the supported GLD replace source document names.
+        **kwargs:
+            - `requestReference` (required)
+            - `qualityRegime` (required)
+            - `correctionReason` (required)
+            - `srcdocdata` (required): dict, `SourceDocData`, or dataclass instance.
+            - `deliveryAccountableParty` (optional)
+            - `broId` (required for current supported srcdocs)
         """
 
         # NOTE: IN PROGRESS, MORE SOURCEDOCUMENTS TYPES WILL BE INCLUDED
 
-        self.allowed_srcdocs = ["GLD_StartRegistration", "GLD_Addition"]
+        self.allowed_srcdocs = list(get_supported_gld_srcdocs()["replace"])
 
         if srcdoc not in self.allowed_srcdocs:
             raise Exception("Sourcedocument type not allowed")
@@ -263,6 +284,8 @@ class gld_replace_request:
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+
+        normalize_optional_kwargs(self.kwargs, ["deliveryAccountableParty", "broId"])
 
         # Request arguments:
         arglist = {
@@ -278,6 +301,10 @@ class gld_replace_request:
         check_missing_args(
             self.kwargs, arglist, "gmw_registration with method initialize"
         )
+        check_required_kwargs(
+            self.kwargs, arglist, "gmw_registration with method initialize"
+        )
+        self.kwargs["srcdocdata"] = coerce_srcdocdata(self.kwargs["srcdocdata"])
 
         self.requestreference = self.kwargs["requestReference"]
 
@@ -302,27 +329,23 @@ class gld_replace_request:
         )
         requestReference.text = self.kwargs["requestReference"]
 
-        try:
-            self.kwargs["deliveryAccountableParty"]
+        delivery_accountable_party = self.kwargs.get("deliveryAccountableParty")
+        if has_value(delivery_accountable_party):
             deliveryAccountableParty = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gld2["brocom"]) + "deliveryAccountableParty",
                 nsmap=ns_regreq_map_gld2,
             )
-            deliveryAccountableParty.text = self.kwargs["deliveryAccountableParty"]
-        except:
-            pass
+            deliveryAccountableParty.text = str(delivery_accountable_party)
 
-        try:
-            self.kwargs["broId"]
+        bro_id = self.kwargs.get("broId")
+        if has_value(bro_id):
             broId = etree.SubElement(
                 req,
                 ("{%s}" % ns_regreq_map_gld2["brocom"]) + "broId",
                 nsmap=ns_regreq_map_gld2,
             )
-            broId.text = self.kwargs["broId"]
-        except:
-            pass
+            broId.text = str(bro_id)
 
         qualityRegime = etree.SubElement(
             req,
@@ -342,7 +365,7 @@ class gld_replace_request:
 
         # Create sourcedocument and add to registrationrequest:
         if self.srcdoc == "GLD_StartRegistration":
-            if "broId" not in list(self.kwargs.keys()):
+            if "broId" not in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' required in combination with given sourcedocument"
                 )
@@ -353,7 +376,7 @@ class gld_replace_request:
                 req.append(sourceDocument)
 
         elif self.srcdoc == "GLD_Addition":
-            if "broId" not in list(self.kwargs.keys()):
+            if "broId" not in self.kwargs:
                 raise Exception(
                     "Registration request argument 'broId' required in combination with given sourcedocument"
                 )
@@ -425,11 +448,17 @@ class gld_replace_request:
 class gld_delete_request:
 
     """
-    Class for generating gld replace requests. Check
-    allowed_srcdos for currently available possibilities.
+    Convert an existing GLD request XML into a delete request XML.
+
+    Supported srcdocs are available through `get_supported_gld_srcdocs()["delete"]`.
     """
 
-    def __init__(self, srcdoc, correctionReason):
+    def __init__(
+        self,
+        srcdoc: bytes | str,
+        correctionReason: str,
+        requestReference: str | None = None,
+    ):
         """
 
         Parameters
@@ -444,13 +473,16 @@ class gld_delete_request:
         """
         print("BRO Exchange: GLD Delete Request needs to be updated.")
 
-        self.allowed_srcdocs = ["GLD_Addition"]
+        self.allowed_srcdocs = list(get_supported_gld_srcdocs()["delete"])
         self.srcdoc = etree.fromstring(srcdoc)
         self.correctionReason = correctionReason
+        self.request = None
+        self.requesttree = None
         self.validation_info = None
         self.validation_report = None
         self.delivery_info = None
         self.delivery_id = None
+        self.validation_status = None
 
         check = "unvalid"
 
@@ -463,7 +495,12 @@ class gld_delete_request:
         if check != "valid":
             raise Exception("Sourcedocument type not allowed")
 
-        self.requestreference = self.kwargs["requestReference"]
+        self.requestreference = requestReference
+        if self.requestreference is None:
+            for element in list(self.srcdoc.iter()):
+                if "requestReference" in element.tag and element.text:
+                    self.requestreference = element.text
+                    break
 
     def generate(self):
         correctionreason_there = False
