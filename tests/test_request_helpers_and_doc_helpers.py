@@ -83,6 +83,9 @@ def test_supported_srcdoc_helpers_return_expected_keys():
     assert set(gmn_requests_module.get_supported_gmn_srcdocs().keys()) == {
         "registration",
         "replace",
+        "move",
+        "insert",
+        "delete",
     }
     assert set(gmw_requests_module.get_supported_gmw_srcdocs().keys()) == {
         "registration",

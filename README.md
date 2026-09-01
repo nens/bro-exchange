@@ -1,5 +1,8 @@
 # bro-exchange
 
+[![Test](https://github.com/nens/bro-exchange/actions/workflows/test.yml/badge.svg)](https://github.com/nens/bro-exchange/actions/workflows/test.yml)
+[![PyPI version](https://img.shields.io/pypi/v/bro-exchange.svg)](https://pypi.org/project/bro-exchange/)
+
 This package contains tools for retrieving data from or sending data to the
 Dutch National Key Registry of the Subsurface (Basis Registratie Ondergrond).
 The following components:
@@ -7,10 +10,11 @@ The following components:
 - Groundwatermonitoringnetwork (GMN)
 - Groundwaterleveldossier (GLD)
 - Formationresistancedossier (FRD)
+- Grondwateranalyserapport (GAR)
 
 ## Installation
 
- `pip install git+https://github.com/nens/bro-exchange#egg=bro-exchange`
+`pip install bro-exchange`
 
 ## Usage
 
@@ -33,17 +37,11 @@ oriented requests are included in examples\innamewebservice
 
 ## Development
 
-Local dev installation:
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development and release workflow.
 
-    $ pip3 install ruff
-	$ python3 -m venv .
-	$ bin/pip install -e .
+Quick start (uses [uv](https://docs.astral.sh/uv/)):
 
-Syntax checks:
-
-	$ ruff check .
-	$ ruff check . --fix
-
-Formatting ("black"):
-
-	$ ruff format .
+    $ uv sync --all-extras
+    $ uv run pytest
+    $ uv run ruff check .
+    $ uv run ruff format .
