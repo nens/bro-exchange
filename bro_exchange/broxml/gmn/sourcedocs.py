@@ -138,6 +138,58 @@ def gen_gmn_measuringpoint(data):
     return sourceDocument
 
 
+def gen_gmn_tubereference(data):
+    data = coerce_srcdocdata(data)
+
+    arglist = {
+        "eventDate": "obligated",
+        "measuringPoint": "obligated",
+    }
+
+    constructables = ["eventDate", "measuringPoint"]
+
+    # Check wether all obligated arguments are in data
+    check_missing_args(data, arglist, "gen_gmn_tubereference")
+
+    sourceDocument = etree.Element("sourceDocument")
+    GMN_TubeReference = etree.SubElement(
+        sourceDocument,
+        "GMN_TubeReference",
+        attrib={("{%s}" % ns_regreq_map_gmn2["gml"]) + "id": "id_0001"},
+    )
+
+    GMN_TubeReference_subelements = {}
+    for arg in data.keys():
+        if arg not in constructables:
+            if arg in codespace_map_gmn1.keys():
+                GMN_TubeReference_subelements[arg] = etree.SubElement(
+                    GMN_TubeReference, arg, codeSpace=codespace_map_gmn1[arg]
+                )
+                GMN_TubeReference_subelements[arg].text = str(data[arg])
+            else:
+                GMN_TubeReference_subelements[arg] = etree.SubElement(
+                    GMN_TubeReference, arg
+                )
+                GMN_TubeReference_subelements[arg].text = str(data[arg])
+
+        else:
+            if arg == "eventDate":
+                GMN_TubeReference_subelements[arg] = gen_eventdate(
+                    data, ns_regreq_map_gmn2
+                )
+                GMN_TubeReference.append(GMN_TubeReference_subelements[arg])
+
+            elif arg == "measuringPoint":
+                GMN_TubeReference_subelements[
+                    f"measuringPoint{str(0)}"
+                ] = gen_measuringpoint(data, ns_regreq_map_gmn2)
+                GMN_TubeReference.append(
+                    GMN_TubeReference_subelements[f"measuringPoint{str(0)}"]
+                )
+
+    return sourceDocument
+
+
 def gen_gmn_measuringpoint_enddate(data):
     data = coerce_srcdocdata(data)
 

@@ -136,3 +136,39 @@ frd_nsmap = {
     None: ns_isfrd,
     'gml': ns_gml
 }
+
+
+# =============================================================================
+# GAR
+# =============================================================================
+
+# %% ns_mappings
+
+ns_regreq_map_gar1 = {"xmlns": "http://www.broservices.nl/xsd/isgar/1.0"}
+
+ns_regreq_map_gar2 = {
+    "garcom": "http://www.broservices.nl/xsd/garcommon/1.0",
+    "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
+    "gml": "http://www.opengis.net/gml/3.2",
+    "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+}
+
+xsi_regreq_map_gar1 = {
+    "schemaLocation": "http://www.broservices.nl/xsd/isgar/1.0 https://schema.broservices.nl/xsd/isgar/1.0/isgar-messages.xsd"
+}
+
+# %% attribute mappings
+
+codespace_map_gar1 = {
+    "qualityControlMethod": "urn:bro:gar:QualityControlMethod",
+    "samplingStandard": "urn:bro:gar:SamplingStandard",
+    "pumpType": "urn:bro:gar:PumpType",
+    "primaryColour": "urn:bro:gar:Colour",
+    "secondaryColour": "urn:bro:gar:Colour",
+    "colourStrength": "urn:bro:gar:ColourStrength",
+    "qualityControlStatus": "urn:bro:gar:QualityControlStatus",
+    "analyticalTechnique": "urn:bro:gar:AnalyticalTechnique",
+    "valuationMethod": "urn:bro:gar:ValuationMethod",
+    "limitSymbol": "urn:bro:gar:LimitSymbol",
+    "correctionReason": "urn:bro:gar:CorrectionReason",
+}
