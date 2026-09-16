@@ -323,7 +323,12 @@ def upload_sourcedocs_from_dict(
         auth=(token["user"], token["pass"]),
     )
     print(f"Creating upload at {upload_url} - {res.status_code} - {res.content}")
-    upload_url_id = res.headers["Location"]
+
+    # Does not always have a location, if error is with authorization.
+    upload_url_id = res.headers.get("Location")
+    if not upload_url_id:
+        print(f"Error: No Location header found in response - {res.status_code} - {res.content}")
+        return {"status": "error", "message": f"Error {res.status_code}: {res.content}"}
 
     # Step 2: Add source documents to upload
     print(f"We will handle the following source documents: {list(reqs.keys())}")
