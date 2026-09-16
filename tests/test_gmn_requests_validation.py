@@ -69,3 +69,103 @@ def test_gmn_replace_rejects_empty_required_bro_id():
             correctionReason="other",
             srcdocdata={},
         )
+
+
+_TUBE_REFERENCE_DATA = {
+    "eventDate": ("2024-01-01", "date"),
+    "measuringPoint": {
+        "measuringPointCode": "MP1",
+        "monitoringTube": {"broId": "GMW000000123456", "tubeNumber": "1"},
+    },
+}
+
+
+def test_gmn_move_request_rejects_unsupported_srcdoc():
+    with pytest.raises(Exception, match="not allowed"):
+        gmn_requests_module.gmn_move_request(
+            "GMN_TubeReference_Nope",
+            requestReference="gmn-move-001",
+            broId="GMN000000000001",
+            qualityRegime="IMBRO",
+            correctionReason="eigenCorrectie",
+            dateToBeCorrected="2024-02-01",
+            srcdocdata=_TUBE_REFERENCE_DATA,
+        )
+
+
+def test_gmn_move_request_requires_date_to_be_corrected():
+    with pytest.raises(Exception, match="dateToBeCorrected"):
+        gmn_requests_module.gmn_move_request(
+            "GMN_TubeReference",
+            requestReference="gmn-move-002",
+            broId="GMN000000000001",
+            qualityRegime="IMBRO",
+            correctionReason="eigenCorrectie",
+            srcdocdata=_TUBE_REFERENCE_DATA,
+        )
+
+
+def test_gmn_move_request_generates_expected_root_and_sourcedoc():
+    request = gmn_requests_module.gmn_move_request(
+        "GMN_TubeReference",
+        requestReference="gmn-move-003",
+        broId="GMN000000000001",
+        qualityRegime="IMBRO",
+        correctionReason="eigenCorrectie",
+        dateToBeCorrected="2024-02-01",
+        srcdocdata=_TUBE_REFERENCE_DATA,
+    )
+    request.generate()
+    root = request.requesttree.getroot()
+
+    assert root.tag == "moveRequest"
+    assert root.find("sourceDocument/GMN_TubeReference") is not None
+    assert root.find("dateToBeCorrected") is not None
+
+
+def test_gmn_insert_request_generates_expected_root():
+    request = gmn_requests_module.gmn_insert_request(
+        "GMN_TubeReference",
+        requestReference="gmn-insert-001",
+        broId="GMN000000000001",
+        qualityRegime="IMBRO",
+        correctionReason="eigenCorrectie",
+        srcdocdata=_TUBE_REFERENCE_DATA,
+    )
+    request.generate()
+    root = request.requesttree.getroot()
+
+    assert root.tag == "insertRequest"
+    assert root.find("sourceDocument/GMN_TubeReference") is not None
+    assert root.find("dateToBeCorrected") is None
+
+
+def test_gmn_delete_request_generates_expected_root_for_closure():
+    request = gmn_requests_module.gmn_delete_request(
+        "GMN_Closure",
+        requestReference="gmn-delete-001",
+        broId="GMN000000000001",
+        qualityRegime="IMBRO",
+        correctionReason="eigenCorrectie",
+        srcdocdata={"endDateMonitoring": ("2024-01-01", "date")},
+    )
+    request.generate()
+    root = request.requesttree.getroot()
+
+    assert root.tag == "deleteRequest"
+    assert root.find("sourceDocument/GMN_Closure") is not None
+
+
+def test_gmn_registration_supports_tube_reference():
+    request = gmn_requests_module.gmn_registration_request(
+        "GMN_TubeReference",
+        requestReference="gmn-reg-003",
+        qualityRegime="IMBRO",
+        broId="GMN000000000001",
+        srcdocdata=_TUBE_REFERENCE_DATA,
+    )
+    request.generate()
+    root = request.requesttree.getroot()
+
+    assert root.find("sourceDocument/GMN_TubeReference") is not None
+

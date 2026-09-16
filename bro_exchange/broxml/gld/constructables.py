@@ -1,4 +1,5 @@
 import datetime
+import math
 import pytz
 import uuid as uuid_gen
 
@@ -737,14 +738,18 @@ def gen_point(data, rec, nsmap, codespacemap, count):
     )
     time.text = rec["time"]
 
-    if rec["value"] != "None":
+    _val = rec["value"]
+    _is_missing = _val == "None" or (
+        isinstance(_val, float) and math.isnan(_val)
+    )
+    if not _is_missing:
         value = etree.SubElement(
             MeasurementTVP,
             ("{%s}" % nsmap["wml2"]) + "value",
             nsmap=nsmap,
             attrib={"uom": "m"},
         )
-        value.text = str(rec["value"])
+        value.text = str(_val)
     else:
         # Note, mogelijk nog aanpassen
         value = etree.SubElement(
